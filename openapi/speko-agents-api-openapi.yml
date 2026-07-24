@@ -1,0 +1,383 @@
+openapi: 3.1.0
+info:
+  title: Speko Agents API
+  version: 1.0.0
+  description: Public REST API for the Speko voice gateway. Routes, transcribes, synthesizes, and completes via the highest-scoring provider for your routing intent, with transparent server-side failover.
+  contact:
+    email: abat@speko.ai
+servers:
+- url: https://api.speko.dev
+  description: Production
+security:
+- bearerAuth: []
+tags:
+- name: Agents
+paths:
+  /v1/agents:
+    get:
+      summary: List agents
+      description: Returns every agent belonging to the authenticated organization. Agents are scoped per-org — IDs from another org will never appear here.
+      operationId: listAgents
+      tags:
+      - Agents
+      responses:
+        '200':
+          description: Agents owned by the authenticated organization.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Agent'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      summary: Create an agent
+      description: Persists a reusable voice persona — `systemPrompt`, optional `voice`, routing `intent`, and optional `llmOptions` — keyed by `name` within the authenticated organization. Pass the returned `id` as `agentId` on `POST /v1/sessions` to seed a session from this agent.
+      operationId: createAgent
+      tags:
+      - Agents
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAgentRequest'
+      responses:
+        '201':
+          description: Agent created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/agents/{id}:
+    get:
+      summary: Get an agent
+      description: Fetch a single agent by id. Scoped to the authenticated organization — agents owned by another org always return 404.
+      operationId: getAgent
+      tags:
+      - Agents
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: Agent id, prefixed `agent_`.
+      responses:
+        '200':
+          description: Agent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/AgentNotFound'
+    patch:
+      summary: Update an agent
+      description: Partial update — every field on the body is optional and only supplied keys are written.
+      operationId: updateAgent
+      tags:
+      - Agents
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: Agent id, prefixed `agent_`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAgentRequest'
+      responses:
+        '200':
+          description: Agent updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/AgentNotFound'
+    delete:
+      summary: Delete an agent
+      description: Removes the agent and its registered tools. The organization's only remaining agent cannot be deleted and returns 409.
+      operationId: deleteAgent
+      tags:
+      - Agents
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: Agent id, prefixed `agent_`.
+      responses:
+        '200':
+          description: Agent deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - deleted
+                properties:
+                  deleted:
+                    type: boolean
+                    enum:
+                    - true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/AgentNotFound'
+        '409':
+          $ref: '#/components/responses/AgentDeleteConflict'
+components:
+  schemas:
+    AgentIntent:
+      type: object
+      description: 'Routing defaults stored on an agent row. Hydrated into a session''s `RoutingIntent` when the session is created with `agentId` and no inline `intent`. Note: agents accept a smaller `optimizeFor` enum than the per-session `RoutingIntent`.'
+      required:
+      - language
+      properties:
+        language:
+          type: string
+          minLength: 2
+          description: BCP-47 language tag, e.g. `en`, `en-US`, `es-MX`.
+          examples:
+          - en-US
+        optimizeFor:
+          type: string
+          enum:
+          - latency
+          - quality
+          - cost
+    AgentLlmOptions:
+      type: object
+      description: Optional LLM tuning defaults stored on an agent. Strict object — only these three keys are accepted.
+      additionalProperties: false
+      properties:
+        temperature:
+          type: number
+          minimum: 0
+          maximum: 2
+        maxTokens:
+          type: integer
+          minimum: 1
+        model:
+          type: string
+          description: Pin a specific LLM model id. When omitted, the router picks per intent.
+    UpdateAgentRequest:
+      type: object
+      description: Partial update — every field is optional. Only supplied keys are written.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+          description: Human-readable display name. Does not need to be unique — agents are identified by `id`.
+        systemPrompt:
+          type: string
+          minLength: 1
+        voice:
+          type: string
+        intent:
+          $ref: '#/components/schemas/AgentIntent'
+        llmOptions:
+          $ref: '#/components/schemas/AgentLlmOptions'
+        stackPreferences:
+          $ref: '#/components/schemas/AgentStackPreferences'
+    AgentStackPreferences:
+      type: object
+      description: Per-agent stack preferences. Empty / missing layers leave the router unconstrained for that layer; failover stays active within the allowed set.
+      additionalProperties: false
+      properties:
+        allowedProviders:
+          type: object
+          description: Per-pipeline-layer provider allowlists (e.g. STT must be Deepgram or AssemblyAI). Each entry is either `"<vendor>"` (vendor wildcard — allow any model from that vendor) or `"<vendor>:<model>"` (allow only that specific model). Failover stays active across all entries in the layer.
+          additionalProperties: false
+          properties:
+            stt:
+              type: array
+              items:
+                type: string
+                description: Allowed STT provider entry. Either a vendor id (e.g. `"deepgram"` — any Deepgram model) or `"<vendor>:<model>"` (e.g. `"deepgram:nova-3"` — only Nova-3, no fallback to other Deepgram models within the vendor). Both forms can be mixed in the same array.
+                examples:
+                - deepgram
+                - deepgram:nova-3
+                - assemblyai
+              description: Allowed STT provider entries. Empty / absent = no constraint.
+            llm:
+              type: array
+              items:
+                type: string
+                description: Allowed LLM provider entry. Either a vendor id (e.g. `"openai"` — any OpenAI model) or `"<vendor>:<model>"` (e.g. `"openai:gpt-5"` — only that model). Both forms can be mixed in the same array.
+                examples:
+                - openai
+                - openai:gpt-5
+                - anthropic
+              description: Allowed LLM provider entries. Empty / absent = no constraint.
+            tts:
+              type: array
+              items:
+                type: string
+                description: Allowed TTS provider entry. Either a vendor id (e.g. `"elevenlabs"` — any ElevenLabs model) or `"<vendor>:<model>"` (e.g. `"elevenlabs:eleven_flash_v2_5"` — only that model). Both forms can be mixed in the same array.
+                examples:
+                - elevenlabs
+                - elevenlabs:eleven_flash_v2_5
+                - cartesia
+              description: Allowed TTS provider entries. Empty / absent = no constraint.
+    Error:
+      type: object
+      required:
+      - error
+      - code
+      properties:
+        error:
+          type: string
+          description: Human-readable message.
+        code:
+          type: string
+          description: Machine-readable code.
+    CreateAgentRequest:
+      type: object
+      required:
+      - name
+      - systemPrompt
+      - intent
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+          description: Human-readable display name. Does not need to be unique — agents are identified by `id`.
+        systemPrompt:
+          type: string
+          minLength: 1
+          description: Initial agent instructions used as the session-level `systemPrompt` default.
+        voice:
+          type: string
+          description: Default TTS voice id. Omit to let the router pick per provider.
+        intent:
+          $ref: '#/components/schemas/AgentIntent'
+        llmOptions:
+          $ref: '#/components/schemas/AgentLlmOptions'
+        stackPreferences:
+          $ref: '#/components/schemas/AgentStackPreferences'
+    Agent:
+      type: object
+      description: Reusable voice persona — `systemPrompt` + optional `voice` + routing `intent` defaults, plus optional `llmOptions`. Pass the `id` as `agentId` on `POST /v1/sessions` to seed a session from this agent.
+      required:
+      - id
+      - organizationId
+      - name
+      - systemPrompt
+      - voice
+      - intent
+      - llmOptions
+      - createdAt
+      - updatedAt
+      - stackPreferences
+      properties:
+        id:
+          type: string
+          description: Agent id, prefixed `agent_`.
+          examples:
+          - agent_01HW...
+        organizationId:
+          type: string
+          description: Owning organization. Always equal to the authenticated org — agents are never visible across orgs.
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+          description: Human-readable name. Unique within an organization.
+        systemPrompt:
+          type: string
+          minLength: 1
+          description: Initial agent instructions. Hydrated as the session's `systemPrompt` default when no per-call value is supplied.
+        voice:
+          type:
+          - string
+          - 'null'
+          description: Default TTS voice id. `null` when unset — the router picks a sane default per provider.
+        intent:
+          $ref: '#/components/schemas/AgentIntent'
+        llmOptions:
+          oneOf:
+          - $ref: '#/components/schemas/AgentLlmOptions'
+          - type: 'null'
+          description: Optional LLM tuning defaults. `null` when unset.
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        stackPreferences:
+          oneOf:
+          - $ref: '#/components/schemas/AgentStackPreferences'
+          - type: 'null'
+          description: Per-agent stack preferences. `null` when the agent has no preferences set.
+  responses:
+    ValidationError:
+      description: Request body or query parameters failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              value:
+                error: Invalid request body
+                code: VALIDATION_ERROR
+    AgentDeleteConflict:
+      description: The organization's only remaining agent cannot be deleted.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              value:
+                error: Cannot delete the only agent in this organization
+                code: LAST_AGENT
+    Unauthorized:
+      description: Missing or invalid bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              value:
+                error: Unauthorized
+                code: UNAUTHORIZED
+    AgentNotFound:
+      description: No agent with this id exists in the authenticated organization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              value:
+                error: not found
+                code: NOT_FOUND
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: API key (sk_live_...)

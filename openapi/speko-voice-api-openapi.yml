@@ -1,0 +1,982 @@
+openapi: 3.1.0
+info:
+  title: Speko Agents Voice API
+  version: 1.0.0
+  description: Public REST API for the Speko voice gateway. Routes, transcribes, synthesizes, and completes via the highest-scoring provider for your routing intent, with transparent server-side failover.
+  contact:
+    email: abat@speko.ai
+servers:
+- url: https://api.speko.dev
+  description: Production
+security:
+- bearerAuth: []
+tags:
+- name: Voice
+paths:
+  /v1/sessions:
+    post:
+      summary: Create a real-time voice session
+      description: Mints browser-safe media transport credentials, persists the pipeline config, and dispatches an agent worker. Use the returned `transportToken` and `transportUrl` with `@spekoai/client` to join from a browser.
+      operationId: createSession
+      tags:
+      - Voice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSessionRequest'
+      responses:
+        '201':
+          description: Session created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSessionResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/SessionCreateFailed'
+    get:
+      summary: List voice sessions
+      description: Returns sessions visible to the calling key, newest first. Supports cursor pagination and filtering by `status`, `kind`, and `agent`. All filters combine via AND.
+      operationId: listSessions
+      tags:
+      - Voice
+      parameters:
+      - in: query
+        name: cursor
+        required: false
+        schema:
+          type: string
+        description: Opaque cursor returned by a prior call. Omit on the first page.
+      - in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+        description: Max number of entries to return.
+      - in: query
+        name: status
+        required: false
+        schema:
+          type: string
+        description: Filter by session lifecycle status (e.g. `active`, `ended`, `failed`).
+      - in: query
+        name: kind
+        required: false
+        schema:
+          type: string
+        description: Filter by session kind.
+      - in: query
+        name: agent
+        required: false
+        schema:
+          type: string
+        description: Filter to sessions started against this agent. Matches sessions whose `pipelineConfig.agentId` equals this value. Combines with other filters via AND.
+      responses:
+        '200':
+          description: Page of session entries.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionEntries'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/transcribe:
+    post:
+      summary: Transcribe audio (speech to text)
+      description: 'Routes the request to the best STT provider for your `(language, region, optimizeFor)` intent, with automatic failover to runner-up providers before the first event is emitted. Body is binary audio. Routing intent goes in the `x-speko-intent` header (JSON). The response is a Server-Sent Events stream: `meta`, `transcript`, `done`, and `error`.'
+      operationId: transcribe
+      tags:
+      - Voice
+      parameters:
+      - in: header
+        name: x-speko-intent
+        required: true
+        schema:
+          type: string
+        description: 'JSON-encoded `RoutingIntent`. Example: `{"language":"en-US","region":"global"}`.'
+      - in: header
+        name: x-speko-constraints
+        required: false
+        schema:
+          type: string
+        description: 'Optional JSON-encoded `PipelineConstraints`. Each `allowedProviders` entry is either `"<vendor>"` (any model from that vendor) or `"<vendor>:<model>"` (a specific model). Example: `{"allowedProviders":{"stt":["deepgram:nova-3"]}}`.'
+      - in: header
+        name: x-speko-stt-options
+        required: false
+        schema:
+          type: string
+        description: 'Optional JSON-encoded STT options. Example: `{"keywords":["Speko","Ava Martinez"]}`.'
+      - in: header
+        name: Content-Type
+        required: false
+        schema:
+          type: string
+        description: Audio MIME type, e.g. `audio/wav`, `audio/mpeg`, `audio/pcm;rate=16000`.
+      requestBody:
+        required: true
+        description: Binary audio. WAV, MP3, or raw PCM accepted.
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+          audio/wav:
+            schema:
+              type: string
+              format: binary
+          audio/mpeg:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: Transcript event stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                description: 'SSE events: `meta` with provider/model, zero or more `transcript` events, final `done` containing a `TranscribeResponse`, or `error` after streaming has started.'
+        '400':
+          $ref: '#/components/responses/InvalidAudio'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/TranscribeFailed'
+  /v1/voices:
+    get:
+      summary: List TTS voices
+      description: 'Returns the curated catalog of TTS voices grouped by provider, plus the list of TTS providers Speko routes to. ElevenLabs is included in `providers` with `voicesFetchedLive: true` because its voice library is account-scoped — fetch it directly from `https://api.elevenlabs.io/v1/voices` with the org''s key.'
+      operationId: listVoices
+      tags:
+      - Voice
+      parameters:
+      - name: provider
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter to a single provider's voices. Accepts either the routing key (`cartesia`, `xai`, `alibaba`, `openai`, `inworld`, `elevenlabs`) or the catalog suffix form (`xai-tts`, `alibaba-tts`, `openai-tts`).
+      responses:
+        '200':
+          description: Voice catalog
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoicesListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/synthesize:
+    post:
+      summary: Synthesize speech (text to speech)
+      description: Routes the request to the best TTS provider for your intent, with automatic failover before the first audio chunk. Returns chunked binary audio. The `Content-Type` header (mirrored in `X-Speko-Audio-Format`) tells you the format.
+      operationId: synthesize
+      tags:
+      - Voice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SynthesizeRequest'
+      responses:
+        '200':
+          description: Chunked audio bytes
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              description: Audio MIME type, e.g. `audio/pcm;rate=24000` or `audio/mpeg`.
+            X-Speko-Audio-Format:
+              schema:
+                type: string
+              description: Mirrors `Content-Type` for client-side dispatch.
+            X-Speko-Provider:
+              schema:
+                type: string
+              description: Provider that actually handled the request.
+            X-Speko-Model:
+              schema:
+                type: string
+              description: Specific model used.
+            X-Speko-Failover-Count:
+              schema:
+                type: integer
+              description: Number of providers tried before success.
+            X-Speko-Scores-Run-Id:
+              schema:
+                type: string
+              description: Benchmark snapshot id used for routing.
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/SynthesizeFailed'
+  /v1/complete:
+    post:
+      summary: Generate an LLM completion
+      description: 'Single-turn LLM call routed to the best provider for your intent, with automatic failover before the first event is emitted. The response is a Server-Sent Events stream: `meta`, `delta`, `tool_call`, `server_tool_call`, `done`, and `error`.'
+      operationId: complete
+      tags:
+      - Voice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompleteRequest'
+      responses:
+        '200':
+          description: Completion event stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                description: 'SSE events: `meta`, zero or more `delta` and tool events, final `done` containing a `CompleteResponse`, or `error` after streaming has started.'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/CompleteFailed'
+  /v1/sessions/{id}/recording:
+    get:
+      summary: Get a signed URL for the session recording
+      description: Returns a 302 redirect to a short-lived (5 minute) signed Google Cloud Storage URL for the mixed-mono Opus recording of this session. Follow the redirect to download the file — clients should pass the equivalent of `curl -L`. The signed URL is single-use within its TTL window; refetch this endpoint to get a fresh one. Recordings are retained for 30 days after the session ends, then deleted by a GCS lifecycle policy.
+      operationId: getSessionRecording
+      tags:
+      - Voice
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Session id.
+      responses:
+        '302':
+          description: Redirect to a signed GCS URL valid for 5 minutes. The URL is returned in the `Location` header; the response body is empty.
+          headers:
+            Location:
+              description: Short-lived signed GCS URL. Follow to download the recording.
+              schema:
+                type: string
+                format: uri
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: 'No recording exists for this session — either the id is unknown to the calling organization, recording was suppressed (`recordingStatus: "suppressed"`), the session is still in flight (`pending` / `uploading`), or the upload failed (`failed`). Inspect the parent session entry to disambiguate.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                default:
+                  value:
+                    error: recording not available
+                    code: RECORDING_NOT_AVAILABLE
+  /v1/sessions/{id}/turns:
+    post:
+      summary: Ingest finalized transcript turns
+      description: 'Append finalized STT and LLM turns to a session''s transcript. Worker-only — the agent worker batches and debounces (~200ms) finalized turns and POSTs them here. Interim STT partials are not accepted; only finalized turns are persisted. Idempotent on `(session_id, index)`: re-posting a turn with the same index replaces the existing entry, so retries on transient errors are safe.'
+      operationId: postSessionTurns
+      tags:
+      - Voice
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Session id.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostSessionTurnsRequest'
+      responses:
+        '202':
+          description: Turns accepted for persistence. Response body is empty.
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Session id is unknown to the calling organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                default:
+                  value:
+                    error: session not found
+                    code: SESSION_NOT_FOUND
+  /v1/sessions/{id}/transcript:
+    get:
+      summary: Get a session's full transcript
+      description: Returns every finalized STT and LLM turn captured during the session, sorted by `index` ascending. The dashboard's session detail page surfaces these under the Transcript card. S2S sessions don't currently produce transcripts (the audio path bypasses our STT/LLM components) — expect an empty `entries` array for those. Interim STT partials are never returned; only finalized turns make it into this response.
+      operationId: getSessionTranscript
+      tags:
+      - Voice
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: Session id.
+      responses:
+        '200':
+          description: Full transcript for the session, ordered by `index`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionTranscript'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Session id is unknown to the calling organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                default:
+                  value:
+                    error: session not found
+                    code: SESSION_NOT_FOUND
+components:
+  schemas:
+    ChatMessage:
+      type: object
+      required:
+      - role
+      - content
+      properties:
+        role:
+          type: string
+          enum:
+          - system
+          - user
+          - assistant
+          - tool
+        content:
+          type: string
+        toolCalls:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatToolCall'
+        toolCallId:
+          type: string
+          description: 'Required on `role: tool`; pairs with a prior assistant tool call id.'
+        isError:
+          type: boolean
+          description: Marks a tool message as an error result.
+    Error:
+      type: object
+      required:
+      - error
+      - code
+      properties:
+        error:
+          type: string
+          description: Human-readable message.
+        code:
+          type: string
+          description: Machine-readable code.
+    RoutingIntent:
+      type: object
+      required:
+      - language
+      properties:
+        language:
+          type: string
+          pattern: ^[a-z]{2}(-[A-Z]{2})?$
+          description: BCP-47 language tag, e.g. `en`, `en-US`, `es-MX`.
+          examples:
+          - en-US
+        region:
+          type: string
+          enum:
+          - global
+          - us-east4
+          - europe-west3
+          - asia-southeast1
+          default: global
+          description: Region whose streaming-latency measurements should be used. `global` falls through to batch-mode rows when no per-region data matches.
+        optimizeFor:
+          type: string
+          enum:
+          - balanced
+          - accuracy
+          - latency
+          - cost
+          default: balanced
+    SynthesizeRequest:
+      type: object
+      required:
+      - text
+      - intent
+      properties:
+        text:
+          type: string
+          minLength: 1
+          maxLength: 50000
+        intent:
+          $ref: '#/components/schemas/RoutingIntent'
+        voice:
+          type: string
+          description: Provider-specific voice id. Speko falls back to a sane default per provider when omitted.
+        model:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Optional upstream model name (e.g. `eleven_multilingual_v2`, `sonic-2`, `gpt-4o-mini-tts`, `qwen3-tts-flash`). When set, overrides the selector's chosen model on the primary candidate only — failover candidates still use the selector's model so a model intended for provider A is not sent to provider B.
+        speed:
+          type: number
+          minimum: 0.5
+          maximum: 2
+        constraints:
+          $ref: '#/components/schemas/PipelineConstraints'
+    VoicesListResponse:
+      type: object
+      required:
+      - voices
+      - providers
+      properties:
+        voices:
+          type: array
+          items:
+            $ref: '#/components/schemas/VoiceCatalogEntry'
+        providers:
+          type: array
+          items:
+            $ref: '#/components/schemas/VoicesProviderEntry'
+    SessionEntries:
+      type: object
+      required:
+      - entries
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/SessionEntry'
+        nextCursor:
+          type: string
+          nullable: true
+          description: Cursor to pass to the next call. Null/absent when there are no more pages.
+    TurnIngest:
+      type: object
+      required:
+      - index
+      - source
+      - text
+      - startedAt
+      properties:
+        index:
+          type: integer
+          minimum: 0
+          description: Monotonically increasing position of this turn within the session, starting at 0. The `(session_id, index)` pair is the idempotency key — re-posting a turn with the same index replaces the prior entry.
+        source:
+          type: string
+          enum:
+          - user
+          - agent
+          - system
+          description: Who produced this turn. `user` = finalized STT from the caller. `agent` = finalized LLM output spoken by the agent. `system` = synthetic entries (e.g. session boundary markers).
+        text:
+          type: string
+          minLength: 1
+          maxLength: 16384
+          description: Finalized transcript text. Interim STT partials are not accepted.
+        startedAt:
+          type: string
+          format: date-time
+          description: Wall-clock time at which the turn began, ISO 8601.
+        endedAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: Wall-clock time at which the turn ended, ISO 8601. Null while the turn is still considered open (e.g. a streaming agent reply that hasn't fully closed).
+        provider:
+          type: string
+          nullable: true
+          description: Provider that produced this turn (e.g. `deepgram`, `openai`). Null for `system` turns.
+        model:
+          type: string
+          nullable: true
+          description: Specific model id within the provider (e.g. `nova-3`, `gpt-4o-mini`). Null for `system` turns.
+    SessionEntry:
+      type: object
+      required:
+      - sessionId
+      - createdAt
+      properties:
+        sessionId:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+          description: Lifecycle status of the session.
+        kind:
+          type: string
+          description: Session kind.
+        pipelineConfig:
+          type: object
+          description: Snapshot of the pipeline config the session was minted with.
+          properties:
+            agentId:
+              type: string
+              nullable: true
+              description: The agent the session was started against, if any. Filtered on by the `?agent=` query param.
+        recordingObjectPath:
+          type: string
+          nullable: true
+          description: GCS object path of the recorded audio file, when a recording exists. Null while the recording is still being produced, when recording is suppressed for the organization, or when the upload failed. Use `GET /v1/sessions/{id}/recording` to fetch a short-lived signed URL — never construct one yourself.
+        recordingDurationMs:
+          type: integer
+          nullable: true
+          description: Duration of the finalized recording in milliseconds. Null until `recordingStatus` is `ready`.
+        recordingStatus:
+          type: string
+          nullable: true
+          enum:
+          - pending
+          - uploading
+          - ready
+          - failed
+          - suppressed
+          description: Lifecycle of this session's recording. `pending` after the call ends and before the agent worker has finished assembling the file. `uploading` while the file is being pushed to GCS. `ready` once it is fully persisted and downloadable via the signed-URL endpoint. `failed` if the upload errored — the recording is unrecoverable. `suppressed` for organizations whose `recordingEnabled` flag is false; no file was ever produced. Null on legacy sessions that predate the recording feature.
+    ChatTool:
+      type: object
+      required:
+      - name
+      - description
+      - parameters
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        parameters:
+          type: object
+          additionalProperties: true
+          description: JSON Schema parameters object.
+        executionMode:
+          type: string
+          enum:
+          - inline
+          - webhook
+          - builtin
+          description: Where the tool runs. Omit for inline execution.
+        source:
+          type: object
+          additionalProperties: true
+          description: Webhook, builtin, or inline execution source config.
+    PipelineConstraints:
+      type: object
+      properties:
+        allowedProviders:
+          type: object
+          description: Restrict candidate pool per modality. Router still ranks by score. Each entry is either `"<vendor>"` (vendor wildcard — allow any model from that vendor) or `"<vendor>:<model>"` (allow only that specific model). Failover stays active across all entries in the layer.
+          properties:
+            stt:
+              type: array
+              items:
+                type: string
+                description: Allowed STT provider entry. Either a vendor id (e.g. `"deepgram"` — any Deepgram model) or `"<vendor>:<model>"` (e.g. `"deepgram:nova-3"` — only Nova-3, no fallback to other Deepgram models within the vendor). Both forms can be mixed in the same array.
+                examples:
+                - deepgram
+                - deepgram:nova-3
+                - assemblyai
+            llm:
+              type: array
+              items:
+                type: string
+                description: Allowed LLM provider entry. Either a vendor id (e.g. `"openai"` — any OpenAI model) or `"<vendor>:<model>"` (e.g. `"openai:gpt-5"` — only that model). Both forms can be mixed in the same array.
+                examples:
+                - openai
+                - openai:gpt-5
+                - anthropic
+            tts:
+              type: array
+              items:
+                type: string
+                description: Allowed TTS provider entry. Either a vendor id (e.g. `"elevenlabs"` — any ElevenLabs model) or `"<vendor>:<model>"` (e.g. `"elevenlabs:eleven_flash_v2_5"` — only that model). Both forms can be mixed in the same array.
+                examples:
+                - elevenlabs
+                - elevenlabs:eleven_flash_v2_5
+                - cartesia
+            s2s:
+              type: array
+              items:
+                type: string
+                description: Allowed S2S provider entry. Either a vendor id (e.g. `"openai"` — any OpenAI realtime model) or `"<vendor>:<model>"` (e.g. `"openai:gpt-realtime"` — only that model). Both forms can be mixed in the same array.
+                examples:
+                - openai
+                - openai:gpt-realtime
+    SessionTranscript:
+      type: object
+      required:
+      - entries
+      properties:
+        entries:
+          type: array
+          description: Finalized turns for this session, ordered by `index` ascending.
+          items:
+            $ref: '#/components/schemas/TurnEntry'
+    VoiceCatalogEntry:
+      type: object
+      required:
+      - vendor
+      - id
+      - name
+      properties:
+        vendor:
+          type: string
+          description: Routing-key vendor (matches `allowedProviders.tts` entries).
+        id:
+          type: string
+          description: Voice id passed through to the provider's TTS API.
+        name:
+          type: string
+          description: Human-readable label.
+    CreateSessionResponse:
+      type: object
+      required:
+      - sessionId
+      - transportToken
+      - transportUrl
+      - conversationToken
+      - livekitUrl
+      - roomName
+      - identity
+      - expiresAt
+      properties:
+        sessionId:
+          type: string
+          format: uuid
+        transportToken:
+          type: string
+          description: Browser-safe media transport token.
+        transportUrl:
+          type: string
+          format: uri
+          description: Media transport URL.
+        conversationToken:
+          type: string
+          deprecated: true
+          description: Compatibility alias for `transportToken`.
+        livekitUrl:
+          type: string
+          format: uri
+          deprecated: true
+          description: Compatibility alias for `transportUrl`.
+        roomName:
+          type: string
+          examples:
+          - speko_...
+        identity:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+    PostSessionTurnsRequest:
+      type: object
+      required:
+      - turns
+      properties:
+        turns:
+          type: array
+          minItems: 1
+          maxItems: 200
+          description: Batch of finalized turns to ingest. Workers should debounce (~200ms) and batch — single-turn POSTs are accepted but inefficient at scale.
+          items:
+            $ref: '#/components/schemas/TurnIngest'
+    TurnEntry:
+      type: object
+      required:
+      - id
+      - index
+      - source
+      - text
+      - startedAt
+      properties:
+        id:
+          type: string
+          description: Server-assigned id for this turn entry. Stable across reads.
+        index:
+          type: integer
+          minimum: 0
+          description: Monotonically increasing position of this turn within the session, starting at 0.
+        source:
+          type: string
+          enum:
+          - user
+          - agent
+          - system
+          description: Who produced this turn.
+        text:
+          type: string
+          minLength: 1
+          maxLength: 16384
+          description: Finalized transcript text.
+        startedAt:
+          type: string
+          format: date-time
+          description: Wall-clock time at which the turn began, ISO 8601.
+        endedAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: Wall-clock time at which the turn ended, ISO 8601. Null if the turn is still open.
+        provider:
+          type: string
+          nullable: true
+          description: Provider that produced this turn. Null for `system` turns.
+        model:
+          type: string
+          nullable: true
+          description: Specific model id within the provider. Null for `system` turns.
+    CompleteRequest:
+      type: object
+      required:
+      - messages
+      - intent
+      properties:
+        messages:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+        intent:
+          $ref: '#/components/schemas/RoutingIntent'
+        temperature:
+          type: number
+          minimum: 0
+          maximum: 2
+        maxTokens:
+          type: integer
+          minimum: 1
+        systemPrompt:
+          type: string
+          description: Forwarded via the canonical system-prompt slot. Don't *also* prepend the same content as a `system` message.
+        constraints:
+          $ref: '#/components/schemas/PipelineConstraints'
+        reasoningEffort:
+          type: string
+          enum:
+          - none
+          - minimal
+          - low
+          - medium
+          - high
+          - xhigh
+        tools:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatTool'
+        toolChoice:
+          oneOf:
+          - type: string
+            enum:
+            - auto
+            - none
+            - required
+          - type: object
+            additionalProperties: true
+        parallelToolCalls:
+          type: boolean
+        maxToolHops:
+          type: integer
+          minimum: 1
+          maximum: 16
+    ChatToolCall:
+      type: object
+      required:
+      - id
+      - name
+      - args
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        args:
+          type: string
+          description: JSON-encoded tool arguments.
+    CreateSessionRequest:
+      type: object
+      description: Cascade-mode session creation body. Exactly one of `agentId` or `intent` must be supplied. When `agentId` is given, the persisted agent's `systemPrompt`, `voice`, `intent`, and `llmOptions` seed the session as defaults; any per-call field on this body still overrides the agent's stored value.
+      properties:
+        agentId:
+          type: string
+          description: Optional pointer to a persisted `agent` row whose fields seed this session. When supplied, the agent's `systemPrompt`, `voice`, `intent`, and `llmOptions` become defaults; any per-call field on this body overrides the agent's stored value. When absent, `intent` is required.
+        intent:
+          $ref: '#/components/schemas/RoutingIntent'
+        constraints:
+          $ref: '#/components/schemas/PipelineConstraints'
+        voice:
+          type: string
+          description: Force a specific TTS voice id.
+        systemPrompt:
+          type: string
+          description: Initial agent instructions.
+        llm:
+          type: object
+          properties:
+            temperature:
+              type: number
+              minimum: 0
+              maximum: 2
+            maxTokens:
+              type: integer
+              minimum: 1
+        ttsOptions:
+          type: object
+          properties:
+            sampleRate:
+              type: integer
+              minimum: 1
+            speed:
+              type: number
+              minimum: 0.5
+              maximum: 2
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Arbitrary key/value pairs stored on the session row.
+        ttlSeconds:
+          type: integer
+          default: 900
+          minimum: 1
+          maximum: 86400
+          description: Token TTL.
+        identity:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: Transport participant identity. Defaults to `user_<uuid>`.
+    VoicesProviderEntry:
+      type: object
+      required:
+      - key
+      - name
+      - models
+      - voicesFetchedLive
+      properties:
+        key:
+          type: string
+        name:
+          type: string
+        models:
+          type: array
+          items:
+            type: string
+        voicesFetchedLive:
+          type: boolean
+          description: '`true` when the provider''s voice library is account-scoped and must be fetched live from the provider (currently ElevenLabs).'
+  responses:
+    SynthesizeFailed:
+      description: No TTS provider available for the intent, no default voice for chosen provider, or every candidate failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              value:
+                error: All providers failed
+                code: SYNTHESIZE_FAILED
+    SessionCreateFailed:
+      description: Token mint failed, agent dispatch failed, or DB insert failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              value:
+                error: Failed to dispatch voice agent
+                code: SESSION_CREATE_FAILED
+    InvalidAudio:
+      description: Empty body, missing/invalid `x-speko-intent` header, or malformed `x-speko-constraints`.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              value:
+                error: Audio body is empty.
+                code: INVALID_AUDIO
+    ValidationError:
+      description: Request body or query parameters failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              value:
+                error: Invalid request body
+                code: VALIDATION_ERROR
+    TranscribeFailed:
+      description: No STT provider available for the intent, or every candidate failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              value:
+                error: All providers failed
+                code: TRANSCRIBE_FAILED
+    Unauthorized:
+      description: Missing or invalid bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              value:
+                error: Unauthorized
+                code: UNAUTHORIZED
+    CompleteFailed:
+      description: No LLM provider available for the intent, or every candidate failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              value:
+                error: All providers failed
+                code: COMPLETE_FAILED
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: API key (sk_live_...)

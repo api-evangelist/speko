@@ -1,0 +1,118 @@
+openapi: 3.1.0
+info:
+  title: Speko Agents Providers API
+  version: 1.0.0
+  description: Public REST API for the Speko voice gateway. Routes, transcribes, synthesizes, and completes via the highest-scoring provider for your routing intent, with transparent server-side failover.
+  contact:
+    email: abat@speko.ai
+servers:
+- url: https://api.speko.dev
+  description: Production
+security:
+- bearerAuth: []
+tags:
+- name: Providers
+paths:
+  /v1/providers/known:
+    get:
+      summary: List known providers
+      description: Returns every (vendor, model) pair the router knows about per pipeline layer, plus one vendor-wildcard row per vendor. The `id` field on each entry is the verbatim string callers put into `allowedProviders` on session create, transcribe, synthesize, complete, or `stackPreferences` on an agent. Use this to populate UI pickers or validate user-supplied allowlists.
+      operationId: getKnownProviders
+      tags:
+      - Providers
+      responses:
+        '200':
+          description: Per-modality lists of allowlist-eligible entries.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnownProviders'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    KnownProviders:
+      type: object
+      description: Per-modality lists of allowlist-eligible entries. Each layer's array contains one vendor-wildcard row per known vendor plus one row per known (vendor, model) pair. Use the `id` field as the verbatim string for `allowedProviders`.
+      required:
+      - stt
+      - llm
+      - tts
+      properties:
+        stt:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderModelEntry'
+        llm:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderModelEntry'
+        tts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderModelEntry'
+    Error:
+      type: object
+      required:
+      - error
+      - code
+      properties:
+        error:
+          type: string
+          description: Human-readable message.
+        code:
+          type: string
+          description: Machine-readable code.
+    ProviderModelEntry:
+      type: object
+      description: A single allowlist-eligible entry returned by `/v1/providers/known`. The `id` is the verbatim string callers put into `allowedProviders` — either a vendor wildcard (`"deepgram"`) or a specific (vendor, model) pair (`"deepgram:nova-3"`).
+      required:
+      - id
+      - vendor
+      - vendorName
+      - model
+      - benchmarked
+      properties:
+        id:
+          type: string
+          description: Verbatim string for `allowedProviders` entries. `"<vendor>"` for vendor-wildcard rows, `"<vendor>:<model>"` for model-specific rows.
+          examples:
+          - deepgram
+          - deepgram:nova-3
+        vendor:
+          type: string
+          description: Lowercase vendor id.
+          examples:
+          - deepgram
+        vendorName:
+          type: string
+          description: Human-readable vendor name.
+          examples:
+          - Deepgram
+        model:
+          type:
+          - string
+          - 'null'
+          description: Model id within the vendor, or `null` for the vendor-wildcard row.
+          examples:
+          - nova-3
+        benchmarked:
+          type: boolean
+          description: Whether the router has benchmark data for this entry. `false` entries are visible but cannot win selection — including them in `allowedProviders` without a benchmarked fallback will fail to route.
+  responses:
+    Unauthorized:
+      description: Missing or invalid bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              value:
+                error: Unauthorized
+                code: UNAUTHORIZED
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: API key (sk_live_...)

@@ -1,0 +1,62 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/speko-openapi-original.json
+entities:
+- name: Organization
+  description: Top-level tenant; every resource is org-scoped.
+- name: Agent
+  description: Reusable voice persona (system prompt, voice, routing intent, llm options).
+  id_field: id
+- name: Session
+  description: A voice pipeline instance (browser or phone) with transport credentials.
+  id_field: sessionId
+- name: Call
+  description: A telephony/agent call with events, report, recording, and transfers.
+  id_field: id / call_id
+- name: PhoneNumber
+  description: Managed or SIP-imported number, optionally routed to an agent.
+  id_field: id
+- name: ScheduledCallback
+  description: A callback created from call analysis.
+  id_field: id
+- name: Voice
+  description: TTS voice catalog entry grouped by provider (read-only).
+- name: Provider
+  description: Known STT/LLM/TTS provider entry used for routing.
+relationships:
+- from: Agent
+  to: Organization
+  type: belongs_to
+  via: organizationId
+- from: PhoneNumber
+  to: Organization
+  type: belongs_to
+  via: organizationId
+- from: PhoneNumber
+  to: Agent
+  type: has_one
+  via: agentId
+- from: Call
+  to: Agent
+  type: belongs_to
+  via: agent_id
+- from: CallReport
+  to: Session
+  type: belongs_to
+  via: session_id
+- from: ScheduledCallback
+  to: Agent
+  type: belongs_to
+  via: agent_id
+- from: ScheduledCallback
+  to: PhoneNumber
+  type: belongs_to
+  via: phone_number_id
+- from: ScheduledCallback
+  to: Session
+  type: belongs_to
+  via: source_session_id
+- from: Session
+  to: Agent
+  type: belongs_to
+  via: agentId

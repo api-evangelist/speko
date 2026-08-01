@@ -1,0 +1,38 @@
+generated: '2026-07-21'
+method: searched
+status: published
+source: https://docs.speko.dev/quickstart/mcp
+server:
+  name: speko
+  transport: http
+  url: https://mcp.speko.ai/mcp
+  auth:
+  - oauth
+  - api-key (Authorization: Bearer sk_live_...)
+  bridge:
+    package: "@spekoai/mcp"
+    install: npx @spekoai/mcp@latest init
+    repository: https://github.com/SpekoAI/mcp-bridge
+    server_repo: https://github.com/SpekoAI/mcp
+  clients:
+  - Claude Code
+  - Codex
+  - OpenCode
+  - Cursor
+tool_groups:
+- name: Organizations
+  description: Usage inspection and credit-balance monitoring.
+- name: Agents
+  description: Create, update, deploy, and roll back voice agents.
+- name: Sessions & Calls
+  description: Session creation and transcript/recording access.
+- name: Phone Numbers & Knowledge Bases
+  description: Provision and manage numbers and knowledge bases.
+- name: Evals
+  description: Evaluation tooling for voice agents.
+- name: Deployment & Migration
+  description: Config-conversion helpers.
+  tools:
+  - inspect_workspace
+  - parse_external_config
+  - build_session_config

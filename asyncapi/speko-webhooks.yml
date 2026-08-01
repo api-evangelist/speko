@@ -1,0 +1,36 @@
+generated: '2026-07-21'
+method: searched
+spec_type: Webhooks
+source:
+- https://docs.speko.dev/guides/phone-agents
+- https://docs.speko.dev/guides/tool-calling
+- openapi/speko-openapi-original.json
+summary: >-
+  Speko publishes a webhook (outbound event) surface but no AsyncAPI document.
+  Voice agents fire lifecycle webhooks during phone calls, invoke registered
+  webhook tools mid-call, and post a call report to a configured URL after the
+  call ends. There is no streaming/AsyncAPI channel spec to capture.
+webhooks:
+- name: call-lifecycle
+  direction: outbound
+  detail: >-
+    Inbound and outbound PSTN calls emit lifecycle webhooks over the call
+    (see the phone-agents guide); call events are also readable via
+    GET /v1/calls/{id}/events (listCallEvents).
+- name: tool-call
+  direction: outbound
+  detail: >-
+    A voice agent invokes registered webhook tools mid-call. Tools are
+    registered once in the dashboard and fired from any voice session
+    (see the tool-calling guide).
+- name: post-call-report
+  direction: outbound
+  detail: >-
+    After a call, Speko posts the analyzed CallReport to a configured URL;
+    CallReport exposes post_call_webhook_status.
+- name: scheduled-callback
+  direction: outbound
+  detail: >-
+    Callbacks created from call analysis can be dispatched
+    (POST /v1/callbacks/{id}/dispatch, dispatchScheduledCallback).
+asyncapi_document: null

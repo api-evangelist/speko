@@ -1,0 +1,4452 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Speko API",
+    "version": "1.0.0",
+    "description": "Public REST API for the Speko voice gateway. Routes, transcribes, synthesizes, and completes via the highest-scoring provider for your routing intent, with transparent server-side failover.",
+    "contact": {
+      "email": "abat@speko.ai"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.speko.dev",
+      "description": "Production"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/v1/sessions": {
+      "post": {
+        "summary": "Create a real-time voice session",
+        "description": "Mints browser-safe media transport credentials, persists the pipeline config, and dispatches an agent worker. Use the returned `transportToken` and `transportUrl` with `@spekoai/client` to join from a browser.",
+        "operationId": "createSession",
+        "tags": [
+          "Voice"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSessionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Session created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateSessionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/SessionCreateFailed"
+          }
+        }
+      },
+      "get": {
+        "summary": "List voice sessions",
+        "description": "Returns sessions visible to the calling key, newest first. Supports cursor pagination and filtering by `status`, `kind`, and `agent`. All filters combine via AND.",
+        "operationId": "listSessions",
+        "tags": [
+          "Voice"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Opaque cursor returned by a prior call. Omit on the first page."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "description": "Max number of entries to return."
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by session lifecycle status (e.g. `active`, `ended`, `failed`)."
+          },
+          {
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by session kind."
+          },
+          {
+            "in": "query",
+            "name": "agent",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter to sessions started against this agent. Matches sessions whose `pipelineConfig.agentId` equals this value. Combines with other filters via AND."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Page of session entries.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionEntries"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/sessions/phone": {
+      "post": {
+        "summary": "Place an outbound phone call",
+        "description": "Creates a voice session, dispatches the configured agent worker, and dials the destination over LiveKit SIP. Supply either `agentId` or `intent`.",
+        "operationId": "createPhoneSession",
+        "tags": [
+          "Telephony"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoiceDialRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Call dialing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoiceDialResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/AgentNotFound"
+          }
+        }
+      }
+    },
+    "/v1/transcribe": {
+      "post": {
+        "summary": "Transcribe audio (speech to text)",
+        "description": "Routes the request to the best STT provider for your `(language, region, optimizeFor)` intent, with automatic failover to runner-up providers before the first event is emitted. Body is binary audio. Routing intent goes in the `x-speko-intent` header (JSON). The response is a Server-Sent Events stream: `meta`, `transcript`, `done`, and `error`.",
+        "operationId": "transcribe",
+        "tags": [
+          "Voice"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-speko-intent",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "JSON-encoded `RoutingIntent`. Example: `{\"language\":\"en-US\",\"region\":\"global\"}`."
+          },
+          {
+            "in": "header",
+            "name": "x-speko-constraints",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Optional JSON-encoded `PipelineConstraints`. Each `allowedProviders` entry is either `\"<vendor>\"` (any model from that vendor) or `\"<vendor>:<model>\"` (a specific model). Example: `{\"allowedProviders\":{\"stt\":[\"deepgram:nova-3\"]}}`."
+          },
+          {
+            "in": "header",
+            "name": "x-speko-stt-options",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Optional JSON-encoded STT options. Example: `{\"keywords\":[\"Speko\",\"Ava Martinez\"]}`."
+          },
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Audio MIME type, e.g. `audio/wav`, `audio/mpeg`, `audio/pcm;rate=16000`."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Binary audio. WAV, MP3, or raw PCM accepted.",
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "audio/wav": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "audio/mpeg": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Transcript event stream",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "string",
+                  "description": "SSE events: `meta` with provider/model, zero or more `transcript` events, final `done` containing a `TranscribeResponse`, or `error` after streaming has started."
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidAudio"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/TranscribeFailed"
+          }
+        }
+      }
+    },
+    "/v1/voices": {
+      "get": {
+        "summary": "List TTS voices",
+        "description": "Returns the curated catalog of TTS voices grouped by provider, plus the list of TTS providers Speko routes to. ElevenLabs is included in `providers` with `voicesFetchedLive: true` because its voice library is account-scoped — fetch it directly from `https://api.elevenlabs.io/v1/voices` with the org's key.",
+        "operationId": "listVoices",
+        "tags": [
+          "Voice"
+        ],
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter to a single provider's voices. Accepts either the routing key (`cartesia`, `xai`, `alibaba`, `openai`, `inworld`, `elevenlabs`) or the catalog suffix form (`xai-tts`, `alibaba-tts`, `openai-tts`)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Voice catalog",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoicesListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/synthesize": {
+      "post": {
+        "summary": "Synthesize speech (text to speech)",
+        "description": "Routes the request to the best TTS provider for your intent, with automatic failover before the first audio chunk. Returns chunked binary audio. The `Content-Type` header (mirrored in `X-Speko-Audio-Format`) tells you the format.",
+        "operationId": "synthesize",
+        "tags": [
+          "Voice"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SynthesizeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chunked audio bytes",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Audio MIME type, e.g. `audio/pcm;rate=24000` or `audio/mpeg`."
+              },
+              "X-Speko-Audio-Format": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Mirrors `Content-Type` for client-side dispatch."
+              },
+              "X-Speko-Provider": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Provider that actually handled the request."
+              },
+              "X-Speko-Model": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Specific model used."
+              },
+              "X-Speko-Failover-Count": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Number of providers tried before success."
+              },
+              "X-Speko-Scores-Run-Id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Benchmark snapshot id used for routing."
+              }
+            },
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/SynthesizeFailed"
+          }
+        }
+      }
+    },
+    "/v1/complete": {
+      "post": {
+        "summary": "Generate an LLM completion",
+        "description": "Single-turn LLM call routed to the best provider for your intent, with automatic failover before the first event is emitted. The response is a Server-Sent Events stream: `meta`, `delta`, `tool_call`, `server_tool_call`, `done`, and `error`.",
+        "operationId": "complete",
+        "tags": [
+          "Voice"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompleteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Completion event stream",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "string",
+                  "description": "SSE events: `meta`, zero or more `delta` and tool events, final `done` containing a `CompleteResponse`, or `error` after streaming has started."
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/CompleteFailed"
+          }
+        }
+      }
+    },
+    "/v1/agents": {
+      "get": {
+        "summary": "List agents",
+        "description": "Returns every agent belonging to the authenticated organization. Agents are scoped per-org — IDs from another org will never appear here.",
+        "operationId": "listAgents",
+        "tags": [
+          "Agents"
+        ],
+        "responses": {
+          "200": {
+            "description": "Agents owned by the authenticated organization.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Agent"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create an agent",
+        "description": "Persists a reusable voice persona — `systemPrompt`, optional `voice`, routing `intent`, and optional `llmOptions` — keyed by `name` within the authenticated organization. Pass the returned `id` as `agentId` on `POST /v1/sessions` to seed a session from this agent.",
+        "operationId": "createAgent",
+        "tags": [
+          "Agents"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAgentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Agent created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agent"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/agents/{id}": {
+      "get": {
+        "summary": "Get an agent",
+        "description": "Fetch a single agent by id. Scoped to the authenticated organization — agents owned by another org always return 404.",
+        "operationId": "getAgent",
+        "tags": [
+          "Agents"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Agent id, prefixed `agent_`."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agent"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/AgentNotFound"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update an agent",
+        "description": "Partial update — every field on the body is optional and only supplied keys are written.",
+        "operationId": "updateAgent",
+        "tags": [
+          "Agents"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Agent id, prefixed `agent_`."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAgentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Agent updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agent"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/AgentNotFound"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an agent",
+        "description": "Removes the agent and its registered tools. The organization's only remaining agent cannot be deleted and returns 409.",
+        "operationId": "deleteAgent",
+        "tags": [
+          "Agents"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Agent id, prefixed `agent_`."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "deleted"
+                  ],
+                  "properties": {
+                    "deleted": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/AgentNotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/AgentDeleteConflict"
+          }
+        }
+      }
+    },
+    "/v1/agents/{id}/calls": {
+      "get": {
+        "summary": "List calls for an agent",
+        "description": "Returns recent calls whose session pipeline config references this agent. Results are newest first and support cursor pagination.",
+        "operationId": "listAgentCalls",
+        "tags": [
+          "Telephony"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Agent id."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Use `next_cursor` from the previous page."
+          },
+          {
+            "in": "query",
+            "name": "since",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Only include calls created at or after this timestamp."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Page of calls",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentCallListPage"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/AgentNotFound"
+          }
+        }
+      }
+    },
+    "/v1/providers/known": {
+      "get": {
+        "summary": "List known providers",
+        "description": "Returns every (vendor, model) pair the router knows about per pipeline layer, plus one vendor-wildcard row per vendor. The `id` field on each entry is the verbatim string callers put into `allowedProviders` on session create, transcribe, synthesize, complete, or `stackPreferences` on an agent. Use this to populate UI pickers or validate user-supplied allowlists.",
+        "operationId": "getKnownProviders",
+        "tags": [
+          "Providers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Per-modality lists of allowlist-eligible entries.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KnownProviders"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/phone-numbers": {
+      "get": {
+        "summary": "List phone numbers",
+        "description": "Returns managed and customer SIP-trunk phone numbers registered to the authenticated organization.",
+        "operationId": "listPhoneNumbers",
+        "tags": [
+          "Telephony"
+        ],
+        "responses": {
+          "200": {
+            "description": "Organization phone numbers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PhoneNumber"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "summary": "Buy a managed phone number",
+        "description": "Orders a platform-managed phone number and registers it for inbound and/or outbound calling. Business verification and sufficient credits are required.",
+        "operationId": "createPhoneNumber",
+        "tags": [
+          "Telephony"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PhoneNumberCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Phone number",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhoneNumber"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/phone-numbers/available": {
+      "get": {
+        "summary": "Search available managed numbers",
+        "description": "Searches the platform-managed phone-number pool. Business verification and the buy-phone-numbers feature flag are required.",
+        "operationId": "searchAvailablePhoneNumbers",
+        "tags": [
+          "Telephony"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "areaCode",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{3}$"
+            }
+          },
+          {
+            "in": "query",
+            "name": "locality",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Available numbers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AvailablePhoneNumber"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/phone-numbers/import": {
+      "post": {
+        "summary": "Import a SIP trunk phone number",
+        "description": "Registers a customer-owned phone number from an installed SIP connection or a legacy outbound trunk id.",
+        "operationId": "importSipTrunkPhoneNumber",
+        "tags": [
+          "Telephony"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PhoneNumberImportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Phone number",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhoneNumber"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/phone-numbers/kyb": {
+      "get": {
+        "summary": "Get phone-number business verification",
+        "description": "Returns the latest business verification submission and optional 10DLC-derived prefill.",
+        "operationId": "getPhoneNumberKyb",
+        "tags": [
+          "Telephony"
+        ],
+        "responses": {
+          "200": {
+            "description": "Business verification state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhoneNumberKybOverview"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/phone-numbers/kyb/draft": {
+      "put": {
+        "summary": "Save phone-number business verification draft",
+        "operationId": "savePhoneNumberKybDraft",
+        "tags": [
+          "Telephony"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PhoneNumberKybDraftRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Saved draft",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhoneNumberKybSubmission"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/phone-numbers/kyb/submit": {
+      "post": {
+        "summary": "Submit phone-number business verification",
+        "operationId": "submitPhoneNumberKyb",
+        "tags": [
+          "Telephony"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PhoneNumberKybSubmitRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Submitted verification",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhoneNumberKybSubmission"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/phone-numbers/{id}": {
+      "get": {
+        "summary": "Get a phone number",
+        "operationId": "getPhoneNumber",
+        "tags": [
+          "Telephony"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Phone number",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhoneNumber"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a phone number",
+        "operationId": "updatePhoneNumber",
+        "tags": [
+          "Telephony"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PhoneNumberUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Phone number",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhoneNumber"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Release a phone number",
+        "operationId": "deletePhoneNumber",
+        "tags": [
+          "Telephony"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Release result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "released"
+                  ],
+                  "properties": {
+                    "released": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/calls/{id}": {
+      "get": {
+        "summary": "Get call detail",
+        "description": "Returns the call session, transcript, report if available, transfer attempts, and recording metadata.",
+        "operationId": "getCall",
+        "tags": [
+          "Telephony"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Call detail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CallDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/calls/{id}/events": {
+      "get": {
+        "summary": "List call events",
+        "operationId": "listCallEvents",
+        "tags": [
+          "Telephony"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Call events",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CallEventsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/calls/{id}/report": {
+      "get": {
+        "summary": "Get call report",
+        "operationId": "getCallReport",
+        "tags": [
+          "Telephony"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Call report",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CallReport"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/calls/{id}/report/finalize": {
+      "post": {
+        "summary": "Finalize call report",
+        "description": "Runs or re-runs analysis for a call and optionally retries post-call webhook delivery.",
+        "operationId": "finalizeCallReport",
+        "tags": [
+          "Telephony"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FinalizeCallReportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Finalization result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinalizeCallReportResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/calls/{id}/recording": {
+      "get": {
+        "summary": "Get call recording URL",
+        "operationId": "getCallRecording",
+        "tags": [
+          "Telephony"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Signed recording URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "url"
+                  ],
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/calls/{id}/transfers/blind": {
+      "post": {
+        "summary": "Start blind transfer",
+        "operationId": "blindTransferCall",
+        "tags": [
+          "Telephony"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BlindTransferRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Transfer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CallTransfer"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/calls/{id}/transfers/warm": {
+      "post": {
+        "summary": "Start warm transfer",
+        "operationId": "warmTransferCall",
+        "tags": [
+          "Telephony"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WarmTransferRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Transfer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CallTransferResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/calls/{id}/transfers/{transferId}/complete": {
+      "post": {
+        "summary": "Complete warm transfer",
+        "operationId": "completeWarmTransfer",
+        "tags": [
+          "Telephony"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          },
+          {
+            "in": "path",
+            "name": "transferId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompleteWarmTransferRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Transfer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CallTransfer"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/calls/{id}/transfers/{transferId}/cancel": {
+      "post": {
+        "summary": "Cancel warm transfer",
+        "operationId": "cancelWarmTransfer",
+        "tags": [
+          "Telephony"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          },
+          {
+            "in": "path",
+            "name": "transferId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelWarmTransferRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Transfer response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CallTransferResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/callbacks": {
+      "get": {
+        "summary": "List scheduled callbacks",
+        "operationId": "listScheduledCallbacks",
+        "tags": [
+          "Telephony"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/ScheduledCallbackStatus"
+            }
+          },
+          {
+            "in": "query",
+            "name": "source_session_id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Scheduled callbacks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScheduledCallbacksResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/callbacks/{id}": {
+      "get": {
+        "summary": "Get scheduled callback",
+        "operationId": "getScheduledCallback",
+        "tags": [
+          "Telephony"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Scheduled callback",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScheduledCallback"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/callbacks/{id}/cancel": {
+      "post": {
+        "summary": "Cancel scheduled callback",
+        "operationId": "cancelScheduledCallback",
+        "tags": [
+          "Telephony"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reason": {
+                    "type": "string",
+                    "maxLength": 500
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Scheduled callback",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScheduledCallback"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/callbacks/{id}/dispatch": {
+      "post": {
+        "summary": "Dispatch scheduled callback now",
+        "operationId": "dispatchScheduledCallback",
+        "tags": [
+          "Telephony"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Scheduled callback",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScheduledCallback"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/sessions/{id}/recording": {
+      "get": {
+        "summary": "Get a signed URL for the session recording",
+        "description": "Returns a 302 redirect to a short-lived (5 minute) signed Google Cloud Storage URL for the mixed-mono Opus recording of this session. Follow the redirect to download the file — clients should pass the equivalent of `curl -L`. The signed URL is single-use within its TTL window; refetch this endpoint to get a fresh one. Recordings are retained for 30 days after the session ends, then deleted by a GCS lifecycle policy.",
+        "operationId": "getSessionRecording",
+        "tags": [
+          "Voice"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Session id."
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to a signed GCS URL valid for 5 minutes. The URL is returned in the `Location` header; the response body is empty.",
+            "headers": {
+              "Location": {
+                "description": "Short-lived signed GCS URL. Follow to download the recording.",
+                "schema": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "description": "No recording exists for this session — either the id is unknown to the calling organization, recording was suppressed (`recordingStatus: \"suppressed\"`), the session is still in flight (`pending` / `uploading`), or the upload failed (`failed`). Inspect the parent session entry to disambiguate.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "error": "recording not available",
+                      "code": "RECORDING_NOT_AVAILABLE"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{id}/turns": {
+      "post": {
+        "summary": "Ingest finalized transcript turns",
+        "description": "Append finalized STT and LLM turns to a session's transcript. Worker-only — the agent worker batches and debounces (~200ms) finalized turns and POSTs them here. Interim STT partials are not accepted; only finalized turns are persisted. Idempotent on `(session_id, index)`: re-posting a turn with the same index replaces the existing entry, so retries on transient errors are safe.",
+        "operationId": "postSessionTurns",
+        "tags": [
+          "Voice"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Session id."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostSessionTurnsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Turns accepted for persistence. Response body is empty."
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "description": "Session id is unknown to the calling organization.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "error": "session not found",
+                      "code": "SESSION_NOT_FOUND"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{id}/transcript": {
+      "get": {
+        "summary": "Get a session's full transcript",
+        "description": "Returns every finalized STT and LLM turn captured during the session, sorted by `index` ascending. The dashboard's session detail page surfaces these under the Transcript card. S2S sessions don't currently produce transcripts (the audio path bypasses our STT/LLM components) — expect an empty `entries` array for those. Interim STT partials are never returned; only finalized turns make it into this response.",
+        "operationId": "getSessionTranscript",
+        "tags": [
+          "Voice"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Session id."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Full transcript for the session, ordered by `index`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionTranscript"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "description": "Session id is unknown to the calling organization.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "error": "session not found",
+                      "code": "SESSION_NOT_FOUND"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "API key (sk_live_...)"
+      }
+    },
+    "parameters": {
+      "Id": {
+        "in": "path",
+        "name": "id",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Resource id."
+      }
+    },
+    "schemas": {
+      "RoutingIntent": {
+        "type": "object",
+        "required": [
+          "language"
+        ],
+        "properties": {
+          "language": {
+            "type": "string",
+            "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+            "description": "BCP-47 language tag, e.g. `en`, `en-US`, `es-MX`.",
+            "examples": [
+              "en-US"
+            ]
+          },
+          "region": {
+            "type": "string",
+            "enum": [
+              "global",
+              "us-east4",
+              "europe-west3",
+              "asia-southeast1"
+            ],
+            "default": "global",
+            "description": "Region whose streaming-latency measurements should be used. `global` falls through to batch-mode rows when no per-region data matches."
+          },
+          "optimizeFor": {
+            "type": "string",
+            "enum": [
+              "balanced",
+              "accuracy",
+              "latency",
+              "cost"
+            ],
+            "default": "balanced"
+          }
+        }
+      },
+      "PipelineConstraints": {
+        "type": "object",
+        "properties": {
+          "allowedProviders": {
+            "type": "object",
+            "description": "Restrict candidate pool per modality. Router still ranks by score. Each entry is either `\"<vendor>\"` (vendor wildcard — allow any model from that vendor) or `\"<vendor>:<model>\"` (allow only that specific model). Failover stays active across all entries in the layer.",
+            "properties": {
+              "stt": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "description": "Allowed STT provider entry. Either a vendor id (e.g. `\"deepgram\"` — any Deepgram model) or `\"<vendor>:<model>\"` (e.g. `\"deepgram:nova-3\"` — only Nova-3, no fallback to other Deepgram models within the vendor). Both forms can be mixed in the same array.",
+                  "examples": [
+                    "deepgram",
+                    "deepgram:nova-3",
+                    "assemblyai"
+                  ]
+                }
+              },
+              "llm": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "description": "Allowed LLM provider entry. Either a vendor id (e.g. `\"openai\"` — any OpenAI model) or `\"<vendor>:<model>\"` (e.g. `\"openai:gpt-5\"` — only that model). Both forms can be mixed in the same array.",
+                  "examples": [
+                    "openai",
+                    "openai:gpt-5",
+                    "anthropic"
+                  ]
+                }
+              },
+              "tts": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "description": "Allowed TTS provider entry. Either a vendor id (e.g. `\"elevenlabs\"` — any ElevenLabs model) or `\"<vendor>:<model>\"` (e.g. `\"elevenlabs:eleven_flash_v2_5\"` — only that model). Both forms can be mixed in the same array.",
+                  "examples": [
+                    "elevenlabs",
+                    "elevenlabs:eleven_flash_v2_5",
+                    "cartesia"
+                  ]
+                }
+              },
+              "s2s": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "description": "Allowed S2S provider entry. Either a vendor id (e.g. `\"openai\"` — any OpenAI realtime model) or `\"<vendor>:<model>\"` (e.g. `\"openai:gpt-realtime\"` — only that model). Both forms can be mixed in the same array.",
+                  "examples": [
+                    "openai",
+                    "openai:gpt-realtime"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "JsonObject": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "E164": {
+        "type": "string",
+        "pattern": "^\\+[1-9]\\d{6,14}$",
+        "examples": [
+          "+12015551234"
+        ]
+      },
+      "TelephonyOptions": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "type": "string",
+            "description": "Optional SIP routing region hint forwarded as `X-Speko-Region`."
+          },
+          "amd": {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "type": "string",
+                "enum": [
+                  "agent",
+                  "carrier",
+                  "disabled"
+                ],
+                "default": "agent"
+              },
+              "timeoutSeconds": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 60
+              }
+            }
+          }
+        }
+      },
+      "VoiceDialRequest": {
+        "type": "object",
+        "required": [
+          "to"
+        ],
+        "properties": {
+          "to": {
+            "$ref": "#/components/schemas/E164"
+          },
+          "from": {
+            "$ref": "#/components/schemas/E164"
+          },
+          "agentId": {
+            "type": "string",
+            "description": "Persisted agent to run. Required unless `intent` is supplied."
+          },
+          "intent": {
+            "$ref": "#/components/schemas/RoutingIntent"
+          },
+          "constraints": {
+            "$ref": "#/components/schemas/PipelineConstraints"
+          },
+          "voice": {
+            "type": "string"
+          },
+          "systemPrompt": {
+            "type": "string"
+          },
+          "firstMessage": {
+            "type": "string"
+          },
+          "llm": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "ttsOptions": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "sttOptions": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "telephony": {
+            "$ref": "#/components/schemas/TelephonyOptions"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/JsonObject"
+          }
+        }
+      },
+      "VoiceDialResponse": {
+        "type": "object",
+        "required": [
+          "sessionId",
+          "callControlId",
+          "roomName",
+          "status",
+          "to",
+          "from"
+        ],
+        "properties": {
+          "sessionId": {
+            "type": "string"
+          },
+          "callControlId": {
+            "type": "string",
+            "description": "LiveKit SIP participant identity for the outbound leg."
+          },
+          "roomName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "dialing",
+              "dialing-stub"
+            ]
+          },
+          "to": {
+            "$ref": "#/components/schemas/E164"
+          },
+          "from": {
+            "$ref": "#/components/schemas/E164"
+          }
+        }
+      },
+      "PhoneNumberDirection": {
+        "type": "string",
+        "enum": [
+          "inbound",
+          "outbound",
+          "both"
+        ]
+      },
+      "PhoneNumberSetupStatus": {
+        "type": "object",
+        "required": [
+          "status",
+          "inboundReady",
+          "outboundReady",
+          "agentReady",
+          "forwardingRequired",
+          "sipConnectionReady",
+          "issues"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "action_required",
+              "suspended"
+            ]
+          },
+          "inboundReady": {
+            "type": "boolean"
+          },
+          "outboundReady": {
+            "type": "boolean"
+          },
+          "agentReady": {
+            "type": "boolean"
+          },
+          "forwardingRequired": {
+            "type": "boolean"
+          },
+          "sipConnectionReady": {
+            "type": "boolean"
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "PhoneNumber": {
+        "type": "object",
+        "required": [
+          "id",
+          "organizationId",
+          "e164",
+          "source",
+          "direction",
+          "setupStatus",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "e164": {
+            "$ref": "#/components/schemas/E164"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "managed",
+              "sip_trunk"
+            ]
+          },
+          "providerResourceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "telnyxPhoneNumberId": {
+            "type": "string",
+            "nullable": true,
+            "deprecated": true
+          },
+          "sipTrunkId": {
+            "type": "string",
+            "nullable": true,
+            "deprecated": true
+          },
+          "sipConnectionInstallationId": {
+            "type": "string",
+            "nullable": true
+          },
+          "sipProviderName": {
+            "type": "string",
+            "nullable": true
+          },
+          "direction": {
+            "$ref": "#/components/schemas/PhoneNumberDirection"
+          },
+          "dispatchMetadataTemplate": {
+            "type": "object",
+            "additionalProperties": true,
+            "nullable": true
+          },
+          "agentId": {
+            "type": "string",
+            "nullable": true
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          },
+          "sms10dlcProfileId": {
+            "type": "string",
+            "nullable": true
+          },
+          "smsCampaignId": {
+            "type": "string",
+            "nullable": true
+          },
+          "smsAssignmentStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "smsAssignmentUpdatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "setupStatus": {
+            "$ref": "#/components/schemas/PhoneNumberSetupStatus"
+          },
+          "nextChargeAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastChargedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "suspendedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PhoneNumberCreateRequest": {
+        "type": "object",
+        "required": [
+          "e164"
+        ],
+        "properties": {
+          "e164": {
+            "$ref": "#/components/schemas/E164"
+          },
+          "direction": {
+            "$ref": "#/components/schemas/PhoneNumberDirection"
+          },
+          "dispatchMetadataTemplate": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "agentId": {
+            "type": "string"
+          }
+        }
+      },
+      "PhoneNumberImportRequest": {
+        "type": "object",
+        "required": [
+          "e164"
+        ],
+        "properties": {
+          "e164": {
+            "$ref": "#/components/schemas/E164"
+          },
+          "sipConnectionInstallationId": {
+            "type": "string",
+            "description": "Installed SIP connection integration id. Preferred for new imports."
+          },
+          "sipTrunkId": {
+            "type": "string",
+            "description": "Legacy outbound trunk id. Required when `sipConnectionInstallationId` is omitted."
+          },
+          "sipProviderName": {
+            "type": "string"
+          },
+          "direction": {
+            "$ref": "#/components/schemas/PhoneNumberDirection"
+          },
+          "dispatchMetadataTemplate": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "agentId": {
+            "type": "string"
+          }
+        }
+      },
+      "PhoneNumberUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "direction": {
+            "$ref": "#/components/schemas/PhoneNumberDirection"
+          },
+          "dispatchMetadataTemplate": {
+            "type": "object",
+            "additionalProperties": true,
+            "nullable": true
+          },
+          "label": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 120
+          },
+          "agentId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "AvailablePhoneNumber": {
+        "type": "object",
+        "required": [
+          "e164",
+          "friendlyName",
+          "monthlyCostUsd",
+          "upfrontCostUsd",
+          "features",
+          "region"
+        ],
+        "properties": {
+          "e164": {
+            "$ref": "#/components/schemas/E164"
+          },
+          "friendlyName": {
+            "type": "string"
+          },
+          "monthlyCostUsd": {
+            "type": "number"
+          },
+          "upfrontCostUsd": {
+            "type": "number"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "region": {
+            "$ref": "#/components/schemas/JsonObject"
+          }
+        }
+      },
+      "PhoneNumberKybBusinessProfile": {
+        "type": "object",
+        "required": [
+          "legalName",
+          "displayName",
+          "entityType",
+          "country",
+          "website",
+          "address",
+          "useCase",
+          "expectedUsage"
+        ],
+        "properties": {
+          "legalName": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "entityType": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "registrationId": {
+            "type": "string"
+          },
+          "website": {
+            "type": "string",
+            "format": "uri"
+          },
+          "address": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "useCase": {
+            "type": "string"
+          },
+          "expectedUsage": {
+            "type": "string"
+          }
+        }
+      },
+      "PhoneNumberKybAuthorizedRepresentative": {
+        "type": "object",
+        "required": [
+          "name",
+          "title",
+          "email"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "phone": {
+            "$ref": "#/components/schemas/E164"
+          }
+        }
+      },
+      "PhoneNumberKybDraftRequest": {
+        "type": "object",
+        "required": [
+          "businessProfile",
+          "authorizedRepresentative"
+        ],
+        "properties": {
+          "businessProfile": {
+            "$ref": "#/components/schemas/PhoneNumberKybBusinessProfile"
+          },
+          "authorizedRepresentative": {
+            "$ref": "#/components/schemas/PhoneNumberKybAuthorizedRepresentative"
+          },
+          "attestationAccepted": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "PhoneNumberKybSubmitRequest": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PhoneNumberKybDraftRequest"
+          },
+          {
+            "type": "object",
+            "required": [
+              "attestationAccepted"
+            ],
+            "properties": {
+              "attestationAccepted": {
+                "type": "boolean",
+                "enum": [
+                  true
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "PhoneNumberKybSubmission": {
+        "type": "object",
+        "required": [
+          "id",
+          "organizationId",
+          "status",
+          "attestationAccepted",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "submitted",
+              "approved",
+              "rejected",
+              "revoked"
+            ]
+          },
+          "businessProfile": {
+            "$ref": "#/components/schemas/PhoneNumberKybBusinessProfile"
+          },
+          "authorizedRepresentative": {
+            "$ref": "#/components/schemas/PhoneNumberKybAuthorizedRepresentative"
+          },
+          "attestationAccepted": {
+            "type": "boolean"
+          },
+          "attestedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "submittedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "rejectionReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "slackNotificationStatus": {
+            "type": "string",
+            "enum": [
+              "not_queued",
+              "queued",
+              "enqueue_failed"
+            ]
+          },
+          "slackNotificationJobId": {
+            "type": "string",
+            "nullable": true
+          },
+          "slackNotificationError": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PhoneNumberKybOverview": {
+        "type": "object",
+        "required": [
+          "status",
+          "submission",
+          "prefill"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "missing",
+              "draft",
+              "submitted",
+              "approved",
+              "rejected",
+              "revoked"
+            ]
+          },
+          "submission": {
+            "$ref": "#/components/schemas/PhoneNumberKybSubmission"
+          },
+          "prefill": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "businessProfile": {
+                "$ref": "#/components/schemas/PhoneNumberKybBusinessProfile"
+              },
+              "authorizedRepresentative": {
+                "$ref": "#/components/schemas/PhoneNumberKybAuthorizedRepresentative"
+              }
+            }
+          }
+        }
+      },
+      "AgentCallListEntry": {
+        "type": "object",
+        "required": [
+          "id",
+          "call_id",
+          "resource_uri",
+          "agent_id",
+          "status",
+          "kind",
+          "created_at"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "call_id": {
+            "type": "string"
+          },
+          "resource_uri": {
+            "type": "string"
+          },
+          "agent_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "room_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "language": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ended_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "duration_seconds": {
+            "type": "integer",
+            "nullable": true
+          },
+          "recording_status": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "AgentCallListPage": {
+        "type": "object",
+        "required": [
+          "calls",
+          "entries",
+          "next_cursor"
+        ],
+        "properties": {
+          "calls": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgentCallListEntry"
+            }
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgentCallListEntry"
+            }
+          },
+          "next_cursor": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "CallTranscriptEntry": {
+        "type": "object",
+        "required": [
+          "id",
+          "index",
+          "source",
+          "text",
+          "started_at",
+          "metadata"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "index": {
+            "type": "integer"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "user",
+              "agent",
+              "system"
+            ]
+          },
+          "text": {
+            "type": "string"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ended_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "provider": {
+            "type": "string",
+            "nullable": true
+          },
+          "model": {
+            "type": "string",
+            "nullable": true
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/JsonObject"
+          }
+        }
+      },
+      "CallReport": {
+        "type": "object",
+        "required": [
+          "session_id",
+          "summary",
+          "outcome",
+          "transcript",
+          "cost_micro_usd"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string"
+          },
+          "organization_id": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "structured_data": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "transcript": {
+            "type": "object",
+            "properties": {
+              "entries": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CallTranscriptEntry"
+                }
+              }
+            }
+          },
+          "cost_micro_usd": {
+            "type": "string"
+          },
+          "cost_breakdown": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JsonObject"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "scheduled_callback": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "analysis_status": {
+            "type": "string",
+            "enum": [
+              "heuristic",
+              "completed",
+              "failed"
+            ]
+          },
+          "post_call_webhook_status": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CallTransfer": {
+        "type": "object",
+        "required": [
+          "id",
+          "session_id",
+          "organization_id",
+          "kind",
+          "status",
+          "transfer_to",
+          "metadata",
+          "created_at",
+          "updated_at"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "session_id": {
+            "type": "string"
+          },
+          "organization_id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "blind",
+              "warm"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "screening",
+              "bridging",
+              "completed",
+              "failed",
+              "cancelled"
+            ]
+          },
+          "transfer_to": {
+            "type": "string"
+          },
+          "from_room_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "consultation_room_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "caller_participant_identity": {
+            "type": "string",
+            "nullable": true
+          },
+          "recipient_participant_identity": {
+            "type": "string",
+            "nullable": true
+          },
+          "outbound_trunk_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "screening_prompt": {
+            "type": "string",
+            "nullable": true
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true
+          },
+          "failure_cause": {
+            "type": "string",
+            "nullable": true
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completed_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "CallTransferResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CallTransfer"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "routing_attempts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CallTransfer"
+                }
+              },
+              "next_transfer": {
+                "$ref": "#/components/schemas/CallTransfer"
+              },
+              "fallback": {
+                "$ref": "#/components/schemas/JsonObject"
+              }
+            }
+          }
+        ]
+      },
+      "CallDetail": {
+        "type": "object",
+        "required": [
+          "id",
+          "call_id",
+          "resource_uri",
+          "status",
+          "kind",
+          "created_at",
+          "transcript"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "call_id": {
+            "type": "string"
+          },
+          "resource_uri": {
+            "type": "string"
+          },
+          "agent_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "room_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "language": {
+            "type": "string"
+          },
+          "pipeline_config": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ended_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "duration_seconds": {
+            "type": "integer",
+            "nullable": true
+          },
+          "recording_status": {
+            "type": "string",
+            "nullable": true
+          },
+          "recording_duration_ms": {
+            "type": "integer",
+            "nullable": true
+          },
+          "recording_resource_uri": {
+            "type": "string"
+          },
+          "report": {
+            "$ref": "#/components/schemas/CallReport"
+          },
+          "transfers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CallTransfer"
+            }
+          },
+          "transcript": {
+            "type": "object",
+            "properties": {
+              "entries": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CallTranscriptEntry"
+                }
+              }
+            }
+          },
+          "span_tree": {
+            "$ref": "#/components/schemas/JsonObject"
+          }
+        }
+      },
+      "CallEvent": {
+        "type": "object",
+        "required": [
+          "id",
+          "organization_id",
+          "provider",
+          "event_type",
+          "occurred_at",
+          "payload",
+          "created_at"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "session_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "organization_id": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "event_type": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "failure_cause": {
+            "type": "string",
+            "nullable": true
+          },
+          "sip_status_code": {
+            "type": "integer",
+            "nullable": true
+          },
+          "sip_status": {
+            "type": "string",
+            "nullable": true
+          },
+          "occurred_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CallEventsResponse": {
+        "type": "object",
+        "required": [
+          "events"
+        ],
+        "properties": {
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CallEvent"
+            }
+          }
+        }
+      },
+      "FinalizeCallReportRequest": {
+        "type": "object",
+        "properties": {
+          "forceAnalysis": {
+            "type": "boolean"
+          },
+          "retryWebhook": {
+            "type": "boolean"
+          }
+        }
+      },
+      "FinalizeCallReportResponse": {
+        "type": "object",
+        "required": [
+          "session_id",
+          "summary",
+          "outcome",
+          "cost_micro_usd",
+          "webhook"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "cost_micro_usd": {
+            "type": "string"
+          },
+          "webhook": {
+            "$ref": "#/components/schemas/JsonObject"
+          }
+        }
+      },
+      "BlindTransferRequest": {
+        "type": "object",
+        "required": [
+          "to"
+        ],
+        "properties": {
+          "to": {
+            "type": "string"
+          },
+          "participantIdentity": {
+            "type": "string"
+          },
+          "playDialtone": {
+            "type": "boolean"
+          },
+          "ringingTimeout": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 120
+          },
+          "headers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "WarmTransferRequest": {
+        "type": "object",
+        "properties": {
+          "to": {
+            "$ref": "#/components/schemas/E164"
+          },
+          "destinations": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 10,
+            "items": {
+              "$ref": "#/components/schemas/JsonObject"
+            }
+          },
+          "from": {
+            "$ref": "#/components/schemas/E164"
+          },
+          "participantIdentity": {
+            "type": "string"
+          },
+          "outboundTrunkId": {
+            "type": "string"
+          },
+          "screeningPrompt": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "ringingTimeout": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 120
+          },
+          "waitUntilAnswered": {
+            "type": "boolean"
+          },
+          "fallback": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "voicemailDetection": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/JsonObject"
+          }
+        }
+      },
+      "CompleteWarmTransferRequest": {
+        "type": "object",
+        "properties": {
+          "recipientParticipantIdentity": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          }
+        }
+      },
+      "CancelWarmTransferRequest": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "tryNext": {
+            "type": "boolean"
+          },
+          "voicemailDetected": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ScheduledCallbackStatus": {
+        "type": "string",
+        "enum": [
+          "scheduled",
+          "dispatching",
+          "dispatched",
+          "cancelled",
+          "failed"
+        ]
+      },
+      "ScheduledCallback": {
+        "type": "object",
+        "required": [
+          "id",
+          "organization_id",
+          "to_number",
+          "scheduled_at",
+          "status",
+          "pipeline_config",
+          "metadata",
+          "created_at",
+          "updated_at"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "organization_id": {
+            "type": "string"
+          },
+          "source_session_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "created_session_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "agent_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone_number_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "to_number": {
+            "$ref": "#/components/schemas/E164"
+          },
+          "from_number": {
+            "type": "string",
+            "nullable": true
+          },
+          "scheduled_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ScheduledCallbackStatus"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "instructions": {
+            "type": "string",
+            "nullable": true
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true
+          },
+          "pipeline_config": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "failure_cause": {
+            "type": "string",
+            "nullable": true
+          },
+          "attempted_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "dispatched_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "cancelled_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ScheduledCallbacksResponse": {
+        "type": "object",
+        "required": [
+          "callbacks"
+        ],
+        "properties": {
+          "callbacks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScheduledCallback"
+            }
+          }
+        }
+      },
+      "ChatToolCall": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "args"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "args": {
+            "type": "string",
+            "description": "JSON-encoded tool arguments."
+          }
+        }
+      },
+      "ChatTool": {
+        "type": "object",
+        "required": [
+          "name",
+          "description",
+          "parameters"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "JSON Schema parameters object."
+          },
+          "executionMode": {
+            "type": "string",
+            "enum": [
+              "inline",
+              "webhook",
+              "builtin"
+            ],
+            "description": "Where the tool runs. Omit for inline execution."
+          },
+          "source": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Webhook, builtin, or inline execution source config."
+          }
+        }
+      },
+      "ChatMessage": {
+        "type": "object",
+        "required": [
+          "role",
+          "content"
+        ],
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "system",
+              "user",
+              "assistant",
+              "tool"
+            ]
+          },
+          "content": {
+            "type": "string"
+          },
+          "toolCalls": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChatToolCall"
+            }
+          },
+          "toolCallId": {
+            "type": "string",
+            "description": "Required on `role: tool`; pairs with a prior assistant tool call id."
+          },
+          "isError": {
+            "type": "boolean",
+            "description": "Marks a tool message as an error result."
+          }
+        }
+      },
+      "CreateSessionRequest": {
+        "type": "object",
+        "description": "Cascade-mode session creation body. Exactly one of `agentId` or `intent` must be supplied. When `agentId` is given, the persisted agent's `systemPrompt`, `voice`, `intent`, and `llmOptions` seed the session as defaults; any per-call field on this body still overrides the agent's stored value.",
+        "properties": {
+          "agentId": {
+            "type": "string",
+            "description": "Optional pointer to a persisted `agent` row whose fields seed this session. When supplied, the agent's `systemPrompt`, `voice`, `intent`, and `llmOptions` become defaults; any per-call field on this body overrides the agent's stored value. When absent, `intent` is required."
+          },
+          "intent": {
+            "$ref": "#/components/schemas/RoutingIntent"
+          },
+          "constraints": {
+            "$ref": "#/components/schemas/PipelineConstraints"
+          },
+          "voice": {
+            "type": "string",
+            "description": "Force a specific TTS voice id."
+          },
+          "systemPrompt": {
+            "type": "string",
+            "description": "Initial agent instructions."
+          },
+          "llm": {
+            "type": "object",
+            "properties": {
+              "temperature": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 2
+              },
+              "maxTokens": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          },
+          "ttsOptions": {
+            "type": "object",
+            "properties": {
+              "sampleRate": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "speed": {
+                "type": "number",
+                "minimum": 0.5,
+                "maximum": 2
+              }
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Arbitrary key/value pairs stored on the session row."
+          },
+          "ttlSeconds": {
+            "type": "integer",
+            "default": 900,
+            "minimum": 1,
+            "maximum": 86400,
+            "description": "Token TTL."
+          },
+          "identity": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Transport participant identity. Defaults to `user_<uuid>`."
+          }
+        }
+      },
+      "CreateSessionResponse": {
+        "type": "object",
+        "required": [
+          "sessionId",
+          "transportToken",
+          "transportUrl",
+          "conversationToken",
+          "livekitUrl",
+          "roomName",
+          "identity",
+          "expiresAt"
+        ],
+        "properties": {
+          "sessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "transportToken": {
+            "type": "string",
+            "description": "Browser-safe media transport token."
+          },
+          "transportUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Media transport URL."
+          },
+          "conversationToken": {
+            "type": "string",
+            "deprecated": true,
+            "description": "Compatibility alias for `transportToken`."
+          },
+          "livekitUrl": {
+            "type": "string",
+            "format": "uri",
+            "deprecated": true,
+            "description": "Compatibility alias for `transportUrl`."
+          },
+          "roomName": {
+            "type": "string",
+            "examples": [
+              "speko_..."
+            ]
+          },
+          "identity": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "TranscribeResponse": {
+        "type": "object",
+        "required": [
+          "text",
+          "provider",
+          "model",
+          "failoverCount"
+        ],
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string",
+            "description": "Provider that actually ran (post-failover)."
+          },
+          "model": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 1
+          },
+          "failoverCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "scoresRunId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "VoiceCatalogEntry": {
+        "type": "object",
+        "required": [
+          "vendor",
+          "id",
+          "name"
+        ],
+        "properties": {
+          "vendor": {
+            "type": "string",
+            "description": "Routing-key vendor (matches `allowedProviders.tts` entries)."
+          },
+          "id": {
+            "type": "string",
+            "description": "Voice id passed through to the provider's TTS API."
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable label."
+          }
+        }
+      },
+      "VoicesProviderEntry": {
+        "type": "object",
+        "required": [
+          "key",
+          "name",
+          "models",
+          "voicesFetchedLive"
+        ],
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "models": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "voicesFetchedLive": {
+            "type": "boolean",
+            "description": "`true` when the provider's voice library is account-scoped and must be fetched live from the provider (currently ElevenLabs)."
+          }
+        }
+      },
+      "VoicesListResponse": {
+        "type": "object",
+        "required": [
+          "voices",
+          "providers"
+        ],
+        "properties": {
+          "voices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VoiceCatalogEntry"
+            }
+          },
+          "providers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VoicesProviderEntry"
+            }
+          }
+        }
+      },
+      "SynthesizeRequest": {
+        "type": "object",
+        "required": [
+          "text",
+          "intent"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50000
+          },
+          "intent": {
+            "$ref": "#/components/schemas/RoutingIntent"
+          },
+          "voice": {
+            "type": "string",
+            "description": "Provider-specific voice id. Speko falls back to a sane default per provider when omitted."
+          },
+          "model": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "description": "Optional upstream model name (e.g. `eleven_multilingual_v2`, `sonic-2`, `gpt-4o-mini-tts`, `qwen3-tts-flash`). When set, overrides the selector's chosen model on the primary candidate only — failover candidates still use the selector's model so a model intended for provider A is not sent to provider B."
+          },
+          "speed": {
+            "type": "number",
+            "minimum": 0.5,
+            "maximum": 2
+          },
+          "constraints": {
+            "$ref": "#/components/schemas/PipelineConstraints"
+          }
+        }
+      },
+      "CompleteRequest": {
+        "type": "object",
+        "required": [
+          "messages",
+          "intent"
+        ],
+        "properties": {
+          "messages": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/ChatMessage"
+            }
+          },
+          "intent": {
+            "$ref": "#/components/schemas/RoutingIntent"
+          },
+          "temperature": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 2
+          },
+          "maxTokens": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "systemPrompt": {
+            "type": "string",
+            "description": "Forwarded via the canonical system-prompt slot. Don't *also* prepend the same content as a `system` message."
+          },
+          "constraints": {
+            "$ref": "#/components/schemas/PipelineConstraints"
+          },
+          "reasoningEffort": {
+            "type": "string",
+            "enum": [
+              "none",
+              "minimal",
+              "low",
+              "medium",
+              "high",
+              "xhigh"
+            ]
+          },
+          "tools": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChatTool"
+            }
+          },
+          "toolChoice": {
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "auto",
+                  "none",
+                  "required"
+                ]
+              },
+              {
+                "type": "object",
+                "additionalProperties": true
+              }
+            ]
+          },
+          "parallelToolCalls": {
+            "type": "boolean"
+          },
+          "maxToolHops": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 16
+          }
+        }
+      },
+      "CompleteResponse": {
+        "type": "object",
+        "required": [
+          "text",
+          "provider",
+          "model",
+          "usage",
+          "failoverCount"
+        ],
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "usage": {
+            "type": "object",
+            "required": [
+              "promptTokens",
+              "completionTokens"
+            ],
+            "properties": {
+              "promptTokens": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "completionTokens": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          },
+          "failoverCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "scoresRunId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "toolCalls": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChatToolCall"
+            }
+          }
+        }
+      },
+      "AgentIntent": {
+        "type": "object",
+        "description": "Routing defaults stored on an agent row. Hydrated into a session's `RoutingIntent` when the session is created with `agentId` and no inline `intent`. Note: agents accept a smaller `optimizeFor` enum than the per-session `RoutingIntent`.",
+        "required": [
+          "language"
+        ],
+        "properties": {
+          "language": {
+            "type": "string",
+            "minLength": 2,
+            "description": "BCP-47 language tag, e.g. `en`, `en-US`, `es-MX`.",
+            "examples": [
+              "en-US"
+            ]
+          },
+          "optimizeFor": {
+            "type": "string",
+            "enum": [
+              "latency",
+              "quality",
+              "cost"
+            ]
+          }
+        }
+      },
+      "AgentLlmOptions": {
+        "type": "object",
+        "description": "Optional LLM tuning defaults stored on an agent. Strict object — only these three keys are accepted.",
+        "additionalProperties": false,
+        "properties": {
+          "temperature": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 2
+          },
+          "maxTokens": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "model": {
+            "type": "string",
+            "description": "Pin a specific LLM model id. When omitted, the router picks per intent."
+          }
+        }
+      },
+      "Agent": {
+        "type": "object",
+        "description": "Reusable voice persona — `systemPrompt` + optional `voice` + routing `intent` defaults, plus optional `llmOptions`. Pass the `id` as `agentId` on `POST /v1/sessions` to seed a session from this agent.",
+        "required": [
+          "id",
+          "organizationId",
+          "name",
+          "systemPrompt",
+          "voice",
+          "intent",
+          "llmOptions",
+          "createdAt",
+          "updatedAt",
+          "stackPreferences"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Agent id, prefixed `agent_`.",
+            "examples": [
+              "agent_01HW..."
+            ]
+          },
+          "organizationId": {
+            "type": "string",
+            "description": "Owning organization. Always equal to the authenticated org — agents are never visible across orgs."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "description": "Human-readable name. Unique within an organization."
+          },
+          "systemPrompt": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Initial agent instructions. Hydrated as the session's `systemPrompt` default when no per-call value is supplied."
+          },
+          "voice": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Default TTS voice id. `null` when unset — the router picks a sane default per provider."
+          },
+          "intent": {
+            "$ref": "#/components/schemas/AgentIntent"
+          },
+          "llmOptions": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AgentLlmOptions"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Optional LLM tuning defaults. `null` when unset."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "stackPreferences": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AgentStackPreferences"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Per-agent stack preferences. `null` when the agent has no preferences set."
+          }
+        }
+      },
+      "CreateAgentRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "systemPrompt",
+          "intent"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "description": "Human-readable display name. Does not need to be unique — agents are identified by `id`."
+          },
+          "systemPrompt": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Initial agent instructions used as the session-level `systemPrompt` default."
+          },
+          "voice": {
+            "type": "string",
+            "description": "Default TTS voice id. Omit to let the router pick per provider."
+          },
+          "intent": {
+            "$ref": "#/components/schemas/AgentIntent"
+          },
+          "llmOptions": {
+            "$ref": "#/components/schemas/AgentLlmOptions"
+          },
+          "stackPreferences": {
+            "$ref": "#/components/schemas/AgentStackPreferences"
+          }
+        }
+      },
+      "UpdateAgentRequest": {
+        "type": "object",
+        "description": "Partial update — every field is optional. Only supplied keys are written.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "description": "Human-readable display name. Does not need to be unique — agents are identified by `id`."
+          },
+          "systemPrompt": {
+            "type": "string",
+            "minLength": 1
+          },
+          "voice": {
+            "type": "string"
+          },
+          "intent": {
+            "$ref": "#/components/schemas/AgentIntent"
+          },
+          "llmOptions": {
+            "$ref": "#/components/schemas/AgentLlmOptions"
+          },
+          "stackPreferences": {
+            "$ref": "#/components/schemas/AgentStackPreferences"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "error",
+          "code"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Human-readable message."
+          },
+          "code": {
+            "type": "string",
+            "description": "Machine-readable code."
+          }
+        }
+      },
+      "AgentStackPreferences": {
+        "type": "object",
+        "description": "Per-agent stack preferences. Empty / missing layers leave the router unconstrained for that layer; failover stays active within the allowed set.",
+        "additionalProperties": false,
+        "properties": {
+          "allowedProviders": {
+            "type": "object",
+            "description": "Per-pipeline-layer provider allowlists (e.g. STT must be Deepgram or AssemblyAI). Each entry is either `\"<vendor>\"` (vendor wildcard — allow any model from that vendor) or `\"<vendor>:<model>\"` (allow only that specific model). Failover stays active across all entries in the layer.",
+            "additionalProperties": false,
+            "properties": {
+              "stt": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "description": "Allowed STT provider entry. Either a vendor id (e.g. `\"deepgram\"` — any Deepgram model) or `\"<vendor>:<model>\"` (e.g. `\"deepgram:nova-3\"` — only Nova-3, no fallback to other Deepgram models within the vendor). Both forms can be mixed in the same array.",
+                  "examples": [
+                    "deepgram",
+                    "deepgram:nova-3",
+                    "assemblyai"
+                  ]
+                },
+                "description": "Allowed STT provider entries. Empty / absent = no constraint."
+              },
+              "llm": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "description": "Allowed LLM provider entry. Either a vendor id (e.g. `\"openai\"` — any OpenAI model) or `\"<vendor>:<model>\"` (e.g. `\"openai:gpt-5\"` — only that model). Both forms can be mixed in the same array.",
+                  "examples": [
+                    "openai",
+                    "openai:gpt-5",
+                    "anthropic"
+                  ]
+                },
+                "description": "Allowed LLM provider entries. Empty / absent = no constraint."
+              },
+              "tts": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "description": "Allowed TTS provider entry. Either a vendor id (e.g. `\"elevenlabs\"` — any ElevenLabs model) or `\"<vendor>:<model>\"` (e.g. `\"elevenlabs:eleven_flash_v2_5\"` — only that model). Both forms can be mixed in the same array.",
+                  "examples": [
+                    "elevenlabs",
+                    "elevenlabs:eleven_flash_v2_5",
+                    "cartesia"
+                  ]
+                },
+                "description": "Allowed TTS provider entries. Empty / absent = no constraint."
+              }
+            }
+          }
+        }
+      },
+      "ProviderModelEntry": {
+        "type": "object",
+        "description": "A single allowlist-eligible entry returned by `/v1/providers/known`. The `id` is the verbatim string callers put into `allowedProviders` — either a vendor wildcard (`\"deepgram\"`) or a specific (vendor, model) pair (`\"deepgram:nova-3\"`).",
+        "required": [
+          "id",
+          "vendor",
+          "vendorName",
+          "model",
+          "benchmarked"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Verbatim string for `allowedProviders` entries. `\"<vendor>\"` for vendor-wildcard rows, `\"<vendor>:<model>\"` for model-specific rows.",
+            "examples": [
+              "deepgram",
+              "deepgram:nova-3"
+            ]
+          },
+          "vendor": {
+            "type": "string",
+            "description": "Lowercase vendor id.",
+            "examples": [
+              "deepgram"
+            ]
+          },
+          "vendorName": {
+            "type": "string",
+            "description": "Human-readable vendor name.",
+            "examples": [
+              "Deepgram"
+            ]
+          },
+          "model": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Model id within the vendor, or `null` for the vendor-wildcard row.",
+            "examples": [
+              "nova-3"
+            ]
+          },
+          "benchmarked": {
+            "type": "boolean",
+            "description": "Whether the router has benchmark data for this entry. `false` entries are visible but cannot win selection — including them in `allowedProviders` without a benchmarked fallback will fail to route."
+          }
+        }
+      },
+      "KnownProviders": {
+        "type": "object",
+        "description": "Per-modality lists of allowlist-eligible entries. Each layer's array contains one vendor-wildcard row per known vendor plus one row per known (vendor, model) pair. Use the `id` field as the verbatim string for `allowedProviders`.",
+        "required": [
+          "stt",
+          "llm",
+          "tts"
+        ],
+        "properties": {
+          "stt": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProviderModelEntry"
+            }
+          },
+          "llm": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProviderModelEntry"
+            }
+          },
+          "tts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProviderModelEntry"
+            }
+          }
+        }
+      },
+      "SessionEntries": {
+        "type": "object",
+        "required": [
+          "entries"
+        ],
+        "properties": {
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SessionEntry"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true,
+            "description": "Cursor to pass to the next call. Null/absent when there are no more pages."
+          }
+        }
+      },
+      "SessionEntry": {
+        "type": "object",
+        "required": [
+          "sessionId",
+          "createdAt"
+        ],
+        "properties": {
+          "sessionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "description": "Lifecycle status of the session."
+          },
+          "kind": {
+            "type": "string",
+            "description": "Session kind."
+          },
+          "pipelineConfig": {
+            "type": "object",
+            "description": "Snapshot of the pipeline config the session was minted with.",
+            "properties": {
+              "agentId": {
+                "type": "string",
+                "nullable": true,
+                "description": "The agent the session was started against, if any. Filtered on by the `?agent=` query param."
+              }
+            }
+          },
+          "recordingObjectPath": {
+            "type": "string",
+            "nullable": true,
+            "description": "GCS object path of the recorded audio file, when a recording exists. Null while the recording is still being produced, when recording is suppressed for the organization, or when the upload failed. Use `GET /v1/sessions/{id}/recording` to fetch a short-lived signed URL — never construct one yourself."
+          },
+          "recordingDurationMs": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Duration of the finalized recording in milliseconds. Null until `recordingStatus` is `ready`."
+          },
+          "recordingStatus": {
+            "type": "string",
+            "nullable": true,
+            "enum": [
+              "pending",
+              "uploading",
+              "ready",
+              "failed",
+              "suppressed"
+            ],
+            "description": "Lifecycle of this session's recording. `pending` after the call ends and before the agent worker has finished assembling the file. `uploading` while the file is being pushed to GCS. `ready` once it is fully persisted and downloadable via the signed-URL endpoint. `failed` if the upload errored — the recording is unrecoverable. `suppressed` for organizations whose `recordingEnabled` flag is false; no file was ever produced. Null on legacy sessions that predate the recording feature."
+          }
+        }
+      },
+      "TurnIngest": {
+        "type": "object",
+        "required": [
+          "index",
+          "source",
+          "text",
+          "startedAt"
+        ],
+        "properties": {
+          "index": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Monotonically increasing position of this turn within the session, starting at 0. The `(session_id, index)` pair is the idempotency key — re-posting a turn with the same index replaces the prior entry."
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "user",
+              "agent",
+              "system"
+            ],
+            "description": "Who produced this turn. `user` = finalized STT from the caller. `agent` = finalized LLM output spoken by the agent. `system` = synthetic entries (e.g. session boundary markers)."
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 16384,
+            "description": "Finalized transcript text. Interim STT partials are not accepted."
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Wall-clock time at which the turn began, ISO 8601."
+          },
+          "endedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Wall-clock time at which the turn ended, ISO 8601. Null while the turn is still considered open (e.g. a streaming agent reply that hasn't fully closed)."
+          },
+          "provider": {
+            "type": "string",
+            "nullable": true,
+            "description": "Provider that produced this turn (e.g. `deepgram`, `openai`). Null for `system` turns."
+          },
+          "model": {
+            "type": "string",
+            "nullable": true,
+            "description": "Specific model id within the provider (e.g. `nova-3`, `gpt-4o-mini`). Null for `system` turns."
+          }
+        }
+      },
+      "TurnEntry": {
+        "type": "object",
+        "required": [
+          "id",
+          "index",
+          "source",
+          "text",
+          "startedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Server-assigned id for this turn entry. Stable across reads."
+          },
+          "index": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Monotonically increasing position of this turn within the session, starting at 0."
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "user",
+              "agent",
+              "system"
+            ],
+            "description": "Who produced this turn."
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 16384,
+            "description": "Finalized transcript text."
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Wall-clock time at which the turn began, ISO 8601."
+          },
+          "endedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Wall-clock time at which the turn ended, ISO 8601. Null if the turn is still open."
+          },
+          "provider": {
+            "type": "string",
+            "nullable": true,
+            "description": "Provider that produced this turn. Null for `system` turns."
+          },
+          "model": {
+            "type": "string",
+            "nullable": true,
+            "description": "Specific model id within the provider. Null for `system` turns."
+          }
+        }
+      },
+      "PostSessionTurnsRequest": {
+        "type": "object",
+        "required": [
+          "turns"
+        ],
+        "properties": {
+          "turns": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 200,
+            "description": "Batch of finalized turns to ingest. Workers should debounce (~200ms) and batch — single-turn POSTs are accepted but inefficient at scale.",
+            "items": {
+              "$ref": "#/components/schemas/TurnIngest"
+            }
+          }
+        }
+      },
+      "SessionTranscript": {
+        "type": "object",
+        "required": [
+          "entries"
+        ],
+        "properties": {
+          "entries": {
+            "type": "array",
+            "description": "Finalized turns for this session, ordered by `index` ascending.",
+            "items": {
+              "$ref": "#/components/schemas/TurnEntry"
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Missing or invalid bearer token.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "default": {
+                "value": {
+                  "error": "Unauthorized",
+                  "code": "UNAUTHORIZED"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Request body or query parameters failed validation.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "default": {
+                "value": {
+                  "error": "Invalid request body",
+                  "code": "VALIDATION_ERROR"
+                }
+              }
+            }
+          }
+        }
+      },
+      "InvalidAudio": {
+        "description": "Empty body, missing/invalid `x-speko-intent` header, or malformed `x-speko-constraints`.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "default": {
+                "value": {
+                  "error": "Audio body is empty.",
+                  "code": "INVALID_AUDIO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "TranscribeFailed": {
+        "description": "No STT provider available for the intent, or every candidate failed.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "default": {
+                "value": {
+                  "error": "All providers failed",
+                  "code": "TRANSCRIBE_FAILED"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SynthesizeFailed": {
+        "description": "No TTS provider available for the intent, no default voice for chosen provider, or every candidate failed.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "default": {
+                "value": {
+                  "error": "All providers failed",
+                  "code": "SYNTHESIZE_FAILED"
+                }
+              }
+            }
+          }
+        }
+      },
+      "CompleteFailed": {
+        "description": "No LLM provider available for the intent, or every candidate failed.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "default": {
+                "value": {
+                  "error": "All providers failed",
+                  "code": "COMPLETE_FAILED"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SessionCreateFailed": {
+        "description": "Token mint failed, agent dispatch failed, or DB insert failed.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "default": {
+                "value": {
+                  "error": "Failed to dispatch voice agent",
+                  "code": "SESSION_CREATE_FAILED"
+                }
+              }
+            }
+          }
+        }
+      },
+      "AgentNotFound": {
+        "description": "No agent with this id exists in the authenticated organization.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "default": {
+                "value": {
+                  "error": "not found",
+                  "code": "NOT_FOUND"
+                }
+              }
+            }
+          }
+        }
+      },
+      "AgentDeleteConflict": {
+        "description": "The organization's only remaining agent cannot be deleted.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "default": {
+                "value": {
+                  "error": "Cannot delete the only agent in this organization",
+                  "code": "LAST_AGENT"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

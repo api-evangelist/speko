@@ -1,0 +1,44 @@
+generated: '2026-07-21'
+method: searched
+source: https://github.com/SpekoAI
+packages:
+- language: javascript
+  registry: npm
+  name: "@spekoai/sdk"
+  url: https://www.npmjs.com/package/@spekoai/sdk
+  install: npm install @spekoai/sdk
+  repository: https://github.com/SpekoAI/typescript-sdk
+  description: Official Speko TypeScript HTTP SDK - one API for every voice AI provider (STT, TTS, LLM routing + failover).
+  official: true
+- language: javascript
+  registry: npm
+  name: "@spekoai/client"
+  url: https://www.npmjs.com/package/@spekoai/client
+  install: npm install @spekoai/client
+  repository: https://github.com/SpekoAI/client
+  description: Speko browser SDK - real-time voice AI conversations in the browser.
+  official: true
+- language: python
+  registry: pypi
+  name: spekoai
+  url: https://pypi.org/project/spekoai/
+  install: pip install spekoai
+  repository: https://github.com/SpekoAI/python-sdk
+  description: Official Speko Python SDK (sync + async) - one API for every voice AI provider.
+  official: true
+- language: javascript
+  registry: npm
+  name: "@spekoai/adapter-livekit"
+  url: https://github.com/SpekoAI/typescript-adapter-livekit
+  install: npm install @spekoai/adapter-livekit
+  repository: https://github.com/SpekoAI/typescript-adapter-livekit
+  description: LiveKit Agents adapter - STT/LLM/TTS routing + failover inside a LiveKit worker.
+  official: true
+- language: javascript
+  registry: npm
+  name: "@spekoai/mcp"
+  url: https://github.com/SpekoAI/mcp-bridge
+  install: npx @spekoai/mcp@latest init
+  repository: https://github.com/SpekoAI/mcp-bridge
+  description: Installer and local stdio bridge for Speko's hosted MCP server.
+  official: true

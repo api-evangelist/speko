@@ -1,0 +1,29 @@
+generated: '2026-07-21'
+method: probed
+source: live probes of /.well-known/ on Speko hosts
+hosts:
+- host: https://api.speko.dev
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://docs.speko.dev
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://speko.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+notes: No /.well-known/ discovery documents published on any Speko host as of the probe date. Auth is bearer API key (no OIDC/OAuth AS metadata).

@@ -1,0 +1,41 @@
+generated: '2026-07-21'
+method: searched
+source:
+- openapi/speko-openapi-original.json
+- https://docs.speko.dev/api-reference/introduction
+authentication:
+  style: bearer-api-key
+  header: 'Authorization: Bearer sk_live_...'
+  cross_link: authentication/speko-authentication.yml
+idempotency:
+  supported: true
+  mechanism: natural-key
+  detail: >-
+    POST /v1/sessions/{id}/turns (postSessionTurns) is idempotent on the
+    (session_id, index) pair - re-posting a turn with the same index replaces
+    the prior entry rather than appending. Turn index starts at 0 per session.
+  header: null
+pagination:
+  style: cursor
+  params:
+    cursor: Opaque cursor returned by a prior call; omit on the first page.
+    limit: Max number of entries to return.
+  response_fields:
+    cursor: Opaque cursor for the next page (e.g. AgentCallListPage, ScheduledCallbacksResponse).
+routing_intent:
+  header: x-speko-intent
+  detail: >-
+    One-shot endpoints (transcribe/synthesize/complete) take routing intent as a
+    JSON x-speko-intent header ((language, region, optimizeFor)); Speko picks the
+    highest-scoring provider and fails over to runner-ups.
+versioning:
+  style: uri-path
+  current: v1
+  cross_link: lifecycle/speko-lifecycle.yml
+error_envelope:
+  shape: '{ error, code }'
+  media_type: application/json
+  cross_link: errors/speko-problem-types.yml
+rate_limiting:
+  signaled: unknown
+  note: No rate-limit headers documented in the OpenAPI or reference.

@@ -1,0 +1,16 @@
+generated: '2026-07-21'
+method: generated
+source: openapi/speko-openapi-original.json
+skills:
+- file: speko-one-shot-voice.md
+  name: Transcribe, complete, and synthesize with automatic provider routing
+  api: openapi/speko-openapi-original.json
+  operations: [transcribe, complete, synthesize, listVoices]
+- file: speko-create-agent-and-session.md
+  name: Create a voice agent and start a browser session
+  api: openapi/speko-openapi-original.json
+  operations: [createAgent, createSession, postSessionTurns, getSessionTranscript]
+- file: speko-outbound-phone-call.md
+  name: Place an outbound phone call and pull the call report
+  api: openapi/speko-openapi-original.json
+  operations: [createPhoneSession, getCall, listCallEvents, getCallReport]

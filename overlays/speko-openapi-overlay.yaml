@@ -1,0 +1,22 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Speko API
+  version: 1.0.0
+extends: openapi/speko-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-network: https://apis.io/provider/speko
+    x-apievangelist-category: voice-ai-gateway
+    x-apievangelist-notes: >-
+      One API for the whole voice stack (STT + LLM + TTS + telephony), routed to
+      the best provider per call with transparent server-side failover. Bearer
+      API-key auth (sk_live_...), cursor pagination, custom {error, code} envelope.
+- target: $.info
+  update:
+    x-idempotency: >-
+      postSessionTurns is idempotent on (session_id, index) - re-posting a turn
+      with the same index replaces the prior entry.
+- target: $.components.securitySchemes.bearerAuth
+  update:
+    x-auth-docs: https://docs.speko.dev/api-reference/introduction

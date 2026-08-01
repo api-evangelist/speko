@@ -1,22 +1,189 @@
 aid: speko
 name: Speko
-description: Speko is a company surfaced as a portfolio company of y-combinator and added to the API Evangelist
-  network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  Speko is a voice-AI gateway - "one API for the whole voice stack." It
+  continuously benchmarks speech-to-text, LLM, and text-to-speech providers and
+  routes every call to the best provider for your language, latency, and cost
+  intent, with transparent server-side failover. Developers ship voice agents in
+  minutes over one REST API (no provider keys required, or bring your own),
+  deploying to phone numbers, web widgets, or one-shot transcribe/synthesize/
+  complete calls. Speko is a Y Combinator (S26) company based in San Francisco,
+  founded by Beknazar Abdikamalov. The platform advertises SOC 2 Type II, HIPAA,
+  and GDPR posture and ships TypeScript and Python SDKs, a browser SDK, a LiveKit
+  adapter, and a hosted MCP server.
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://speko.ai/favicon.ico
 url: https://raw.githubusercontent.com/api-evangelist/speko/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - y-combinator
-x-tier: stub
-x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
-- Company
-apis: []
+- Voice
+- Voice AI
+- Speech to Text
+- Text to Speech
+- LLM
+- Telephony
+- API Gateway
+- Conversational AI
+- Developer Tools
+- AI Infrastructure
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- aid: speko:speko-agents-api
+  name: Speko Agents API
+  description: The Agents API from Speko — 2 operation(s) for agents.
+  humanURL: https://docs.speko.dev/api-reference/introduction
+  baseURL: https://api.speko.dev
+  tags:
+  - Agents
+  properties:
+  - type: OpenAPI
+    url: openapi/speko-agents-api-openapi.yml
+  - type: Authentication
+    url: authentication/speko-authentication.yml
+  - type: ErrorCatalog
+    url: errors/speko-problem-types.yml
+  - type: Conventions
+    url: conventions/speko-conventions.yml
+  - type: Idempotency
+    url: conventions/speko-conventions.yml
+  - type: DataModel
+    url: data-model/speko-data-model.yml
+  - type: Webhooks
+    url: asyncapi/speko-webhooks.yml
+- aid: speko:speko-providers-api
+  name: Speko Providers API
+  description: The Providers API from Speko — 1 operation(s) for providers.
+  humanURL: https://docs.speko.dev/api-reference/introduction
+  baseURL: https://api.speko.dev
+  tags:
+  - Providers
+  properties:
+  - type: OpenAPI
+    url: openapi/speko-providers-api-openapi.yml
+  - type: Authentication
+    url: authentication/speko-authentication.yml
+  - type: ErrorCatalog
+    url: errors/speko-problem-types.yml
+  - type: Conventions
+    url: conventions/speko-conventions.yml
+  - type: Idempotency
+    url: conventions/speko-conventions.yml
+  - type: DataModel
+    url: data-model/speko-data-model.yml
+  - type: Webhooks
+    url: asyncapi/speko-webhooks.yml
+- aid: speko:speko-telephony-api
+  name: Speko Telephony API
+  description: The Telephony API from Speko — 22 operation(s) for telephony.
+  humanURL: https://docs.speko.dev/api-reference/introduction
+  baseURL: https://api.speko.dev
+  tags:
+  - Telephony
+  properties:
+  - type: OpenAPI
+    url: openapi/speko-telephony-api-openapi.yml
+  - type: Authentication
+    url: authentication/speko-authentication.yml
+  - type: ErrorCatalog
+    url: errors/speko-problem-types.yml
+  - type: Conventions
+    url: conventions/speko-conventions.yml
+  - type: Idempotency
+    url: conventions/speko-conventions.yml
+  - type: DataModel
+    url: data-model/speko-data-model.yml
+  - type: Webhooks
+    url: asyncapi/speko-webhooks.yml
+- aid: speko:speko-voice-api
+  name: Speko Voice API
+  description: The Voice API from Speko — 8 operation(s) for voice.
+  humanURL: https://docs.speko.dev/api-reference/introduction
+  baseURL: https://api.speko.dev
+  tags:
+  - Voice
+  properties:
+  - type: OpenAPI
+    url: openapi/speko-voice-api-openapi.yml
+  - type: Authentication
+    url: authentication/speko-authentication.yml
+  - type: ErrorCatalog
+    url: errors/speko-problem-types.yml
+  - type: Conventions
+    url: conventions/speko-conventions.yml
+  - type: Idempotency
+    url: conventions/speko-conventions.yml
+  - type: DataModel
+    url: data-model/speko-data-model.yml
+  - type: Webhooks
+    url: asyncapi/speko-webhooks.yml
+common:
+- type: DeveloperPortal
+  url: https://docs.speko.dev
+- type: Documentation
+  url: https://docs.speko.dev
+- type: APIReference
+  url: https://docs.speko.dev/api-reference/introduction
+- type: GettingStarted
+  url: https://docs.speko.dev/quickstart
+- type: Pricing
+  url: https://speko.ai/pricing
+- type: SignUp
+  url: https://platform.speko.dev/sign-in
+- type: TermsOfService
+  url: https://speko.ai/terms-of-service
+- type: PrivacyPolicy
+  url: https://speko.ai/privacy-policy
+- type: Blog
+  url: https://speko.ai/blog
+- type: GitHubOrganization
+  url: https://github.com/SpekoAI
+- type: StatusPage
+  url: https://status.speko.ai
+- type: Support
+  url: mailto:founders@speko.ai
+- type: MCPServer
+  url: mcp/speko-mcp.yml
+- type: Packages
+  url: packages/speko-packages.yml
+- type: SDKs
+  url: packages/speko-packages.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Lifecycle
+  url: lifecycle/speko-lifecycle.yml
+- type: Conformance
+  url: conformance/speko-conformance.yml
+- type: Compliance
+  url: https://speko.ai/
+- type: Authentication
+  url: authentication/speko-authentication.yml
+- type: AgenticAccess
+  url: agentic-access/speko-agentic-access.yml
+- type: DomainSecurity
+  url: security/speko-domain-security.yml
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 17
+  pass: local-v1

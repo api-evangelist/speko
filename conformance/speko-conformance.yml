@@ -1,0 +1,43 @@
+generated: '2026-07-21'
+method: searched
+source:
+- openapi/speko-openapi-original.json
+- https://speko.ai/
+- https://speko.ai/pricing
+standards:
+- id: openapi-3.1
+  conforms: true
+  evidence: openapi/speko-openapi-original.json is OpenAPI 3.1.0
+- id: oauth2
+  conforms: false
+  evidence: single securityScheme is http bearer (API key), no oauth2 flows
+- id: oidc
+  conforms: false
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: errors use a custom {error, code} envelope, not application/problem+json
+- id: cursor-pagination
+  conforms: true
+  evidence: list operations expose opaque `cursor` + `limit` query params
+- id: idempotency
+  conforms: true
+  evidence: postSessionTurns is idempotent on (session_id, index)
+- id: e164-phone-numbers
+  conforms: true
+  evidence: schemas use an E164 type for phone numbers
+- id: soc2-type-ii
+  conforms: true
+  evidence: speko.ai publishes a "SOC 2, Type II" badge (audited controls for call-data processing/retention/access)
+- id: hipaa
+  conforms: true
+  evidence: speko.ai publishes a HIPAA badge (healthcare calls / PHI safeguarding)
+- id: gdpr
+  conforms: true
+  evidence: speko.ai publishes a GDPR badge (EU privacy; audio never trains models)
+compliance_program:
+  published: true
+  certifications:
+  - SOC 2 Type II
+  - HIPAA
+  - GDPR
+  source: https://speko.ai/

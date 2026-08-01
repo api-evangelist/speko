@@ -1,0 +1,33 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/speko-openapi-original.json
+format: custom
+envelope:
+  schema: Error
+  fields:
+    error: Human-readable message.
+    code: Machine-readable code.
+  media_type: application/json
+  note: >-
+    Speko does not use RFC 9457 application/problem+json. Every error response
+    returns the Error object { error, code }.
+problems:
+- status: 400
+  title: Bad Request
+  meaning: Request body or parameters failed validation.
+- status: 401
+  title: Unauthorized
+  meaning: 'Missing or invalid bearer API key (Authorization: Bearer sk_live_...).'
+- status: 404
+  title: Not Found
+  meaning: >-
+    Resource id unknown to the calling organization (agents/sessions/calls are
+    org-scoped; ids from another org always return 404). Also returned when a
+    session recording is suppressed, still in flight, or upload failed.
+- status: 409
+  title: Conflict
+  meaning: >-
+    State conflict - e.g. attempting to delete an organization's only remaining agent.
+- status: 500
+  title: Internal Server Error
+  meaning: Unexpected server-side error.

@@ -1,0 +1,18 @@
+{
+  "repo": "speko",
+  "feeds": [
+    {
+      "source": "https://speko.ai/rss.xml",
+      "error": "HTTPError"
+    },
+    {
+      "source": "https://speko.ai/privacy-policy",
+      "feed_url": "https://speko.ai/privacy-policy",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-08-01T15:49:00Z"
+}

@@ -1,0 +1,18 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/speko-openapi-original.json
+docs: https://docs.speko.dev/api-reference/introduction
+notes: >-
+  Single auth model - a bearer API key (sk_live_...) sent as Authorization:
+  Bearer. Keys are minted in the platform dashboard (https://platform.speko.dev).
+  The hosted MCP server additionally supports OAuth. No OAuth2 flows in the REST API.
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: API key (sk_live_...)
+  sources:
+  - openapi/speko-openapi-original.json

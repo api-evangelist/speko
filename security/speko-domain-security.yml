@@ -1,0 +1,15 @@
+generated: '2026-07-21'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: api.speko.dev
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 19 07:55:16 2026 GMT
+  hsts: null
+domains:
+- domain: speko.dev
+  dnssec: false
+  caa: []
+  spf: false
+  dmarc: false

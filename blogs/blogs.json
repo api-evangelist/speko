@@ -2,17 +2,13 @@
   "repo": "speko",
   "feeds": [
     {
-      "source": "https://speko.ai/rss.xml",
-      "error": "HTTPError"
-    },
-    {
       "source": "https://speko.ai/privacy-policy",
-      "feed_url": "https://speko.ai/privacy-policy",
+      "feed_url": "https://speko.ai/changelog.xml",
       "title": "",
-      "saved": 0,
-      "method": "none"
+      "saved": 30,
+      "method": "discovered"
     }
   ],
-  "post_count": 0,
-  "fetched": "2026-08-01T15:49:00Z"
+  "post_count": 30,
+  "fetched": "2026-08-06T14:08:46Z"
 }

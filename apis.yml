@@ -138,6 +138,8 @@ apis:
   - type: Webhooks
     url: asyncapi/speko-webhooks.yml
 common:
+- type: Overlay
+  url: overlays/speko-openapi-overlay.yaml
 - type: DeveloperPortal
   url: https://docs.speko.dev
 - type: Documentation

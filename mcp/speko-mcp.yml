@@ -10,7 +10,7 @@ server:
   - oauth
   - api-key (Authorization: Bearer sk_live_...)
   bridge:
-    package: "@spekoai/mcp"
+    package: '@spekoai/mcp'
     install: npx @spekoai/mcp@latest init
     repository: https://github.com/SpekoAI/mcp-bridge
     server_repo: https://github.com/SpekoAI/mcp
@@ -36,3 +36,10 @@ tool_groups:
   - inspect_workspace
   - parse_external_config
   - build_session_config
+deployment:
+  mode: remote
+  endpoint: https://mcp.speko.ai/mcp
+  verified: probed
+  probe: gated
+  checked: '2026-08-12'
+  source: catalog MCP census

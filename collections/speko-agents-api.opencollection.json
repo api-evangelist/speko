@@ -1,0 +1,111 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Speko Agents API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Agents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List agents",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speko.dev/v1/agents"
+          },
+          "docs": "Returns every agent belonging to the authenticated organization. Agents are scoped per-org — IDs from another org will never appear here."
+        },
+        {
+          "info": {
+            "name": "Create an agent",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.speko.dev/v1/agents",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Persists a reusable voice persona — `systemPrompt`, optional `voice`, routing `intent`, and optional `llmOptions` — keyed by `name` within the authenticated organization. Pass the returned `id` as `agentId` on `POST /v1/sessions` to seed a session from this agent."
+        },
+        {
+          "info": {
+            "name": "Get an agent",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speko.dev/v1/agents/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Agent id, prefixed `agent_`."
+              }
+            ]
+          },
+          "docs": "Fetch a single agent by id. Scoped to the authenticated organization — agents owned by another org always return 404."
+        },
+        {
+          "info": {
+            "name": "Update an agent",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.speko.dev/v1/agents/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Agent id, prefixed `agent_`."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partial update — every field on the body is optional and only supplied keys are written."
+        },
+        {
+          "info": {
+            "name": "Delete an agent",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.speko.dev/v1/agents/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Agent id, prefixed `agent_`."
+              }
+            ]
+          },
+          "docs": "Removes the agent and its registered tools. The organization's only remaining agent cannot be deleted and returns 409."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

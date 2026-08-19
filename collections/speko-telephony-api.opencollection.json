@@ -1,0 +1,536 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Speko Agents Telephony API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Telephony",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Place an outbound phone call",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.speko.dev/v1/sessions/phone",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a voice session, dispatches the configured agent worker, and dials the destination over LiveKit SIP. Supply either `agentId` or `intent`."
+        },
+        {
+          "info": {
+            "name": "List calls for an agent",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speko.dev/v1/agents/:id/calls",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Agent id."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Use `next_cursor` from the previous page."
+              },
+              {
+                "name": "since",
+                "value": "",
+                "type": "query",
+                "description": "Only include calls created at or after this timestamp."
+              }
+            ]
+          },
+          "docs": "Returns recent calls whose session pipeline config references this agent. Results are newest first and support cursor pagination."
+        },
+        {
+          "info": {
+            "name": "List phone numbers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speko.dev/v1/phone-numbers"
+          },
+          "docs": "Returns managed and customer SIP-trunk phone numbers registered to the authenticated organization."
+        },
+        {
+          "info": {
+            "name": "Buy a managed phone number",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.speko.dev/v1/phone-numbers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Orders a platform-managed phone number and registers it for inbound and/or outbound calling. Business verification and sufficient credits are required."
+        },
+        {
+          "info": {
+            "name": "Search available managed numbers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speko.dev/v1/phone-numbers/available",
+            "params": [
+              {
+                "name": "areaCode",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "locality",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Searches the platform-managed phone-number pool. Business verification and the buy-phone-numbers feature flag are required."
+        },
+        {
+          "info": {
+            "name": "Import a SIP trunk phone number",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.speko.dev/v1/phone-numbers/import",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Registers a customer-owned phone number from an installed SIP connection or a legacy outbound trunk id."
+        },
+        {
+          "info": {
+            "name": "Get phone-number business verification",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speko.dev/v1/phone-numbers/kyb"
+          },
+          "docs": "Returns the latest business verification submission and optional 10DLC-derived prefill."
+        },
+        {
+          "info": {
+            "name": "Save phone-number business verification draft",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.speko.dev/v1/phone-numbers/kyb/draft",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Save phone-number business verification draft"
+        },
+        {
+          "info": {
+            "name": "Submit phone-number business verification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.speko.dev/v1/phone-numbers/kyb/submit",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit phone-number business verification"
+        },
+        {
+          "info": {
+            "name": "Get a phone number",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speko.dev/v1/phone-numbers/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Resource id."
+              }
+            ]
+          },
+          "docs": "Get a phone number"
+        },
+        {
+          "info": {
+            "name": "Update a phone number",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.speko.dev/v1/phone-numbers/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Resource id."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a phone number"
+        },
+        {
+          "info": {
+            "name": "Release a phone number",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.speko.dev/v1/phone-numbers/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Resource id."
+              }
+            ]
+          },
+          "docs": "Release a phone number"
+        },
+        {
+          "info": {
+            "name": "Get call detail",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speko.dev/v1/calls/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Resource id."
+              }
+            ]
+          },
+          "docs": "Returns the call session, transcript, report if available, transfer attempts, and recording metadata."
+        },
+        {
+          "info": {
+            "name": "List call events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speko.dev/v1/calls/:id/events",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Resource id."
+              }
+            ]
+          },
+          "docs": "List call events"
+        },
+        {
+          "info": {
+            "name": "Get call report",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speko.dev/v1/calls/:id/report",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Resource id."
+              }
+            ]
+          },
+          "docs": "Get call report"
+        },
+        {
+          "info": {
+            "name": "Finalize call report",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.speko.dev/v1/calls/:id/report/finalize",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Resource id."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Runs or re-runs analysis for a call and optionally retries post-call webhook delivery."
+        },
+        {
+          "info": {
+            "name": "Get call recording URL",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speko.dev/v1/calls/:id/recording",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Resource id."
+              }
+            ]
+          },
+          "docs": "Get call recording URL"
+        },
+        {
+          "info": {
+            "name": "Start blind transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.speko.dev/v1/calls/:id/transfers/blind",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Resource id."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Start blind transfer"
+        },
+        {
+          "info": {
+            "name": "Start warm transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.speko.dev/v1/calls/:id/transfers/warm",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Resource id."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Start warm transfer"
+        },
+        {
+          "info": {
+            "name": "Complete warm transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.speko.dev/v1/calls/:id/transfers/:transferId/complete",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Resource id."
+              },
+              {
+                "name": "transferId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Complete warm transfer"
+        },
+        {
+          "info": {
+            "name": "Cancel warm transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.speko.dev/v1/calls/:id/transfers/:transferId/cancel",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Resource id."
+              },
+              {
+                "name": "transferId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Cancel warm transfer"
+        },
+        {
+          "info": {
+            "name": "List scheduled callbacks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speko.dev/v1/callbacks",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "source_session_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List scheduled callbacks"
+        },
+        {
+          "info": {
+            "name": "Get scheduled callback",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speko.dev/v1/callbacks/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Resource id."
+              }
+            ]
+          },
+          "docs": "Get scheduled callback"
+        },
+        {
+          "info": {
+            "name": "Cancel scheduled callback",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.speko.dev/v1/callbacks/:id/cancel",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Resource id."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Cancel scheduled callback"
+        },
+        {
+          "info": {
+            "name": "Dispatch scheduled callback now",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.speko.dev/v1/callbacks/:id/dispatch",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Resource id."
+              }
+            ]
+          },
+          "docs": "Dispatch scheduled callback now"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

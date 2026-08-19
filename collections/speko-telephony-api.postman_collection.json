@@ -1,0 +1,4568 @@
+{
+  "item": [
+    {
+      "id": "ad4cd2a4-fe44-4aea-bf38-0c55bad559e8",
+      "name": "Telephony",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0a7adfb0-67ee-484d-adca-adc8c1a4161d",
+          "name": "Place an outbound phone call",
+          "request": {
+            "name": "Place an outbound phone call",
+            "description": {
+              "content": "Creates a voice session, dispatches the configured agent worker, and dials the destination over LiveKit SIP. Supply either `agentId` or `intent`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "sessions",
+                "phone"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"to\": \"<string>\",\n  \"from\": \"<string>\",\n  \"agentId\": \"<string>\",\n  \"intent\": {\n    \"language\": \"<string>\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"llm\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"tts\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"s2s\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  },\n  \"voice\": \"<string>\",\n  \"systemPrompt\": \"<string>\",\n  \"firstMessage\": \"<string>\",\n  \"llm\": {\n    \"key_0\": 8835.329322600173,\n    \"key_1\": 3614\n  },\n  \"ttsOptions\": {\n    \"key_0\": false,\n    \"key_1\": \"string\",\n    \"key_2\": 9485.545800839462\n  },\n  \"sttOptions\": {\n    \"key_0\": \"string\"\n  },\n  \"telephony\": {\n    \"region\": \"<string>\",\n    \"amd\": {\n      \"mode\": \"agent\",\n      \"timeoutSeconds\": \"<integer>\"\n    }\n  },\n  \"metadata\": {\n    \"key_0\": true\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "28ec877f-5124-4e12-8b42-07ce4b9a5d76",
+              "name": "Call dialing",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    "phone"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"to\": \"+12015551234\",\n  \"from\": \"+12015551234\",\n  \"agentId\": \"<string>\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ],\n      \"s2s\": [\n        \"openai\",\n        \"openai\"\n      ]\n    }\n  },\n  \"voice\": \"<string>\",\n  \"systemPrompt\": \"<string>\",\n  \"firstMessage\": \"<string>\",\n  \"llm\": {\n    \"key_0\": 9744,\n    \"key_1\": false\n  },\n  \"ttsOptions\": {\n    \"key_0\": 365.23745546045984\n  },\n  \"sttOptions\": {\n    \"key_0\": \"string\"\n  },\n  \"telephony\": {\n    \"region\": \"string\",\n    \"amd\": {\n      \"mode\": \"agent\",\n      \"timeoutSeconds\": 20\n    }\n  },\n  \"metadata\": {\n    \"key_0\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"sessionId\": \"string\",\n  \"callControlId\": \"string\",\n  \"roomName\": \"string\",\n  \"status\": \"dialing-stub\",\n  \"to\": \"+12015551234\",\n  \"from\": \"+12015551234\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "909b776f-2154-4d94-b81c-7ddcb865a57c",
+              "name": "Request body or query parameters failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    "phone"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"to\": \"+12015551234\",\n  \"from\": \"+12015551234\",\n  \"agentId\": \"<string>\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ],\n      \"s2s\": [\n        \"openai\",\n        \"openai\"\n      ]\n    }\n  },\n  \"voice\": \"<string>\",\n  \"systemPrompt\": \"<string>\",\n  \"firstMessage\": \"<string>\",\n  \"llm\": {\n    \"key_0\": 9744,\n    \"key_1\": false\n  },\n  \"ttsOptions\": {\n    \"key_0\": 365.23745546045984\n  },\n  \"sttOptions\": {\n    \"key_0\": \"string\"\n  },\n  \"telephony\": {\n    \"region\": \"string\",\n    \"amd\": {\n      \"mode\": \"agent\",\n      \"timeoutSeconds\": 20\n    }\n  },\n  \"metadata\": {\n    \"key_0\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Invalid request body\",\n  \"code\": \"VALIDATION_ERROR\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5009f31c-b65e-4338-a26e-c9ea33d3d055",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    "phone"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"to\": \"+12015551234\",\n  \"from\": \"+12015551234\",\n  \"agentId\": \"<string>\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ],\n      \"s2s\": [\n        \"openai\",\n        \"openai\"\n      ]\n    }\n  },\n  \"voice\": \"<string>\",\n  \"systemPrompt\": \"<string>\",\n  \"firstMessage\": \"<string>\",\n  \"llm\": {\n    \"key_0\": 9744,\n    \"key_1\": false\n  },\n  \"ttsOptions\": {\n    \"key_0\": 365.23745546045984\n  },\n  \"sttOptions\": {\n    \"key_0\": \"string\"\n  },\n  \"telephony\": {\n    \"region\": \"string\",\n    \"amd\": {\n      \"mode\": \"agent\",\n      \"timeoutSeconds\": 20\n    }\n  },\n  \"metadata\": {\n    \"key_0\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e1a7ee0b-3ae5-4604-8941-04f1a1205fd0",
+              "name": "No agent with this id exists in the authenticated organization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    "phone"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"to\": \"+12015551234\",\n  \"from\": \"+12015551234\",\n  \"agentId\": \"<string>\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ],\n      \"s2s\": [\n        \"openai\",\n        \"openai\"\n      ]\n    }\n  },\n  \"voice\": \"<string>\",\n  \"systemPrompt\": \"<string>\",\n  \"firstMessage\": \"<string>\",\n  \"llm\": {\n    \"key_0\": 9744,\n    \"key_1\": false\n  },\n  \"ttsOptions\": {\n    \"key_0\": 365.23745546045984\n  },\n  \"sttOptions\": {\n    \"key_0\": \"string\"\n  },\n  \"telephony\": {\n    \"region\": \"string\",\n    \"amd\": {\n      \"mode\": \"agent\",\n      \"timeoutSeconds\": 20\n    }\n  },\n  \"metadata\": {\n    \"key_0\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"not found\",\n  \"code\": \"NOT_FOUND\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c9ae3c77-5988-4e26-afc4-0e833ae24265",
+          "name": "List calls for an agent",
+          "request": {
+            "name": "List calls for an agent",
+            "description": {
+              "content": "Returns recent calls whose session pipeline config references this agent. Results are newest first and support cursor pagination.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "agents",
+                ":id",
+                "calls"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<dateTime>",
+                  "description": "Use `next_cursor` from the previous page."
+                },
+                {
+                  "disabled": false,
+                  "key": "since",
+                  "value": "<dateTime>",
+                  "description": "Only include calls created at or after this timestamp."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Agent id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e24f340d-7258-46db-90d6-5637759e6dd7",
+              "name": "Page of calls",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agents",
+                    ":id",
+                    "calls"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "since",
+                      "value": "<dateTime>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Agent id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"calls\": [\n    {\n      \"id\": \"string\",\n      \"call_id\": \"string\",\n      \"resource_uri\": \"string\",\n      \"agent_id\": \"string\",\n      \"status\": \"string\",\n      \"kind\": \"string\",\n      \"created_at\": \"1956-09-04T12:05:41.138Z\",\n      \"room_name\": \"string\",\n      \"language\": \"string\",\n      \"ended_at\": \"2006-05-29T10:04:23.208Z\",\n      \"duration_seconds\": 988,\n      \"recording_status\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"call_id\": \"string\",\n      \"resource_uri\": \"string\",\n      \"agent_id\": \"string\",\n      \"status\": \"string\",\n      \"kind\": \"string\",\n      \"created_at\": \"1978-05-25T05:25:04.507Z\",\n      \"room_name\": \"string\",\n      \"language\": \"string\",\n      \"ended_at\": \"1999-04-16T17:10:22.558Z\",\n      \"duration_seconds\": 9543,\n      \"recording_status\": \"string\"\n    }\n  ],\n  \"entries\": [\n    {\n      \"id\": \"string\",\n      \"call_id\": \"string\",\n      \"resource_uri\": \"string\",\n      \"agent_id\": \"string\",\n      \"status\": \"string\",\n      \"kind\": \"string\",\n      \"created_at\": \"1984-08-24T13:18:19.796Z\",\n      \"room_name\": \"string\",\n      \"language\": \"string\",\n      \"ended_at\": \"1993-06-17T21:32:33.332Z\",\n      \"duration_seconds\": 7924,\n      \"recording_status\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"call_id\": \"string\",\n      \"resource_uri\": \"string\",\n      \"agent_id\": \"string\",\n      \"status\": \"string\",\n      \"kind\": \"string\",\n      \"created_at\": \"1999-04-11T11:44:46.834Z\",\n      \"room_name\": \"string\",\n      \"language\": \"string\",\n      \"ended_at\": \"1960-01-22T03:19:16.742Z\",\n      \"duration_seconds\": 4477,\n      \"recording_status\": \"string\"\n    }\n  ],\n  \"next_cursor\": \"2004-04-19T18:59:54.976Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "74d64987-1c71-4c4f-9ec4-7df3ca978138",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agents",
+                    ":id",
+                    "calls"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "since",
+                      "value": "<dateTime>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Agent id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a239daed-1bb1-4806-85f3-956858aa205a",
+              "name": "No agent with this id exists in the authenticated organization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agents",
+                    ":id",
+                    "calls"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "since",
+                      "value": "<dateTime>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Agent id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"not found\",\n  \"code\": \"NOT_FOUND\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2a46a6eb-f10d-459a-8e37-9ea111d2b10f",
+          "name": "List phone numbers",
+          "request": {
+            "name": "List phone numbers",
+            "description": {
+              "content": "Returns managed and customer SIP-trunk phone numbers registered to the authenticated organization.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "phone-numbers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "48c22b14-0423-4b4c-875b-bee7ee29f440",
+              "name": "Organization phone numbers",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"organizationId\": \"string\",\n    \"e164\": \"+12015551234\",\n    \"source\": \"managed\",\n    \"direction\": \"inbound\",\n    \"setupStatus\": {\n      \"status\": \"ready\",\n      \"inboundReady\": true,\n      \"outboundReady\": true,\n      \"agentReady\": true,\n      \"forwardingRequired\": false,\n      \"sipConnectionReady\": false,\n      \"issues\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"createdAt\": \"2021-05-17T02:53:45.646Z\",\n    \"updatedAt\": \"2022-03-13T23:30:37.904Z\",\n    \"providerResourceId\": \"string\",\n    \"telnyxPhoneNumberId\": \"string\",\n    \"sipTrunkId\": \"string\",\n    \"sipConnectionInstallationId\": \"string\",\n    \"sipProviderName\": \"string\",\n    \"dispatchMetadataTemplate\": {\n      \"key_0\": 1957\n    },\n    \"agentId\": \"string\",\n    \"label\": \"string\",\n    \"sms10dlcProfileId\": \"string\",\n    \"smsCampaignId\": \"string\",\n    \"smsAssignmentStatus\": \"string\",\n    \"smsAssignmentUpdatedAt\": \"1994-05-27T09:02:03.347Z\",\n    \"nextChargeAt\": \"1997-03-25T17:26:01.179Z\",\n    \"lastChargedAt\": \"2016-03-30T11:25:46.846Z\",\n    \"suspendedAt\": \"2006-05-20T02:07:02.790Z\"\n  },\n  {\n    \"id\": \"string\",\n    \"organizationId\": \"string\",\n    \"e164\": \"+12015551234\",\n    \"source\": \"managed\",\n    \"direction\": \"both\",\n    \"setupStatus\": {\n      \"status\": \"ready\",\n      \"inboundReady\": true,\n      \"outboundReady\": false,\n      \"agentReady\": true,\n      \"forwardingRequired\": false,\n      \"sipConnectionReady\": false,\n      \"issues\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"createdAt\": \"2024-05-24T08:12:43.929Z\",\n    \"updatedAt\": \"1966-12-19T15:30:59.197Z\",\n    \"providerResourceId\": \"string\",\n    \"telnyxPhoneNumberId\": \"string\",\n    \"sipTrunkId\": \"string\",\n    \"sipConnectionInstallationId\": \"string\",\n    \"sipProviderName\": \"string\",\n    \"dispatchMetadataTemplate\": {\n      \"key_0\": false\n    },\n    \"agentId\": \"string\",\n    \"label\": \"string\",\n    \"sms10dlcProfileId\": \"string\",\n    \"smsCampaignId\": \"string\",\n    \"smsAssignmentStatus\": \"string\",\n    \"smsAssignmentUpdatedAt\": \"1981-03-26T02:02:58.790Z\",\n    \"nextChargeAt\": \"2023-01-08T01:26:28.363Z\",\n    \"lastChargedAt\": \"1955-07-06T21:25:57.710Z\",\n    \"suspendedAt\": \"1993-12-02T11:34:29.404Z\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e600d8df-563c-4d90-818c-464c0974452a",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9bdb021a-e10a-4201-b12a-5d946381c45e",
+          "name": "Buy a managed phone number",
+          "request": {
+            "name": "Buy a managed phone number",
+            "description": {
+              "content": "Orders a platform-managed phone number and registers it for inbound and/or outbound calling. Business verification and sufficient credits are required.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "phone-numbers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"e164\": \"<string>\",\n  \"direction\": \"<string>\",\n  \"dispatchMetadataTemplate\": {\n    \"key_0\": \"string\",\n    \"key_1\": 2450,\n    \"key_2\": 9282.823955617632\n  },\n  \"label\": \"<string>\",\n  \"agentId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "434ce5fc-3f4e-47b7-a438-8808b1ee060a",
+              "name": "Phone number",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"e164\": \"+12015551234\",\n  \"direction\": \"outbound\",\n  \"dispatchMetadataTemplate\": {\n    \"key_0\": false,\n    \"key_1\": \"string\"\n  },\n  \"label\": \"<string>\",\n  \"agentId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"organizationId\": \"string\",\n  \"e164\": \"+12015551234\",\n  \"source\": \"sip_trunk\",\n  \"direction\": \"outbound\",\n  \"setupStatus\": {\n    \"status\": \"suspended\",\n    \"inboundReady\": false,\n    \"outboundReady\": false,\n    \"agentReady\": false,\n    \"forwardingRequired\": false,\n    \"sipConnectionReady\": true,\n    \"issues\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"createdAt\": \"1979-10-06T20:06:07.363Z\",\n  \"updatedAt\": \"1977-07-13T14:35:05.046Z\",\n  \"providerResourceId\": \"string\",\n  \"telnyxPhoneNumberId\": \"string\",\n  \"sipTrunkId\": \"string\",\n  \"sipConnectionInstallationId\": \"string\",\n  \"sipProviderName\": \"string\",\n  \"dispatchMetadataTemplate\": {\n    \"key_0\": 7430,\n    \"key_1\": 4542\n  },\n  \"agentId\": \"string\",\n  \"label\": \"string\",\n  \"sms10dlcProfileId\": \"string\",\n  \"smsCampaignId\": \"string\",\n  \"smsAssignmentStatus\": \"string\",\n  \"smsAssignmentUpdatedAt\": \"1966-09-18T17:21:18.640Z\",\n  \"nextChargeAt\": \"1966-02-08T11:27:57.244Z\",\n  \"lastChargedAt\": \"1977-08-27T09:51:44.635Z\",\n  \"suspendedAt\": \"1996-12-15T06:03:25.010Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9441aab9-6d53-44d4-927d-012249536658",
+              "name": "Request body or query parameters failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"e164\": \"+12015551234\",\n  \"direction\": \"outbound\",\n  \"dispatchMetadataTemplate\": {\n    \"key_0\": false,\n    \"key_1\": \"string\"\n  },\n  \"label\": \"<string>\",\n  \"agentId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Invalid request body\",\n  \"code\": \"VALIDATION_ERROR\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "631fef4b-8489-489e-84ed-b76a7734769a",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"e164\": \"+12015551234\",\n  \"direction\": \"outbound\",\n  \"dispatchMetadataTemplate\": {\n    \"key_0\": false,\n    \"key_1\": \"string\"\n  },\n  \"label\": \"<string>\",\n  \"agentId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "789604bc-6c0a-48f0-a80f-a8953059eb53",
+          "name": "Search available managed numbers",
+          "request": {
+            "name": "Search available managed numbers",
+            "description": {
+              "content": "Searches the platform-managed phone-number pool. Business verification and the buy-phone-numbers feature flag are required.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "phone-numbers",
+                "available"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "areaCode",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "locality",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "236cd973-0a35-4aed-bb96-1bdcec1fe61d",
+              "name": "Available numbers",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    "available"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "areaCode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "locality",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"e164\": \"+12015551234\",\n    \"friendlyName\": \"string\",\n    \"monthlyCostUsd\": 9988.674011571009,\n    \"upfrontCostUsd\": 9719.450138760183,\n    \"features\": [\n      \"string\",\n      \"string\"\n    ],\n    \"region\": {\n      \"key_0\": 2732\n    }\n  },\n  {\n    \"e164\": \"+12015551234\",\n    \"friendlyName\": \"string\",\n    \"monthlyCostUsd\": 8858.589819049981,\n    \"upfrontCostUsd\": 5832.727404600046,\n    \"features\": [\n      \"string\",\n      \"string\"\n    ],\n    \"region\": {\n      \"key_0\": 6231\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2239f521-c9c2-45ba-9eca-ac676f60078b",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    "available"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "areaCode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "locality",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cfae9848-0cbe-4614-b900-0c20ac160448",
+          "name": "Import a SIP trunk phone number",
+          "request": {
+            "name": "Import a SIP trunk phone number",
+            "description": {
+              "content": "Registers a customer-owned phone number from an installed SIP connection or a legacy outbound trunk id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "phone-numbers",
+                "import"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"e164\": \"<string>\",\n  \"sipConnectionInstallationId\": \"<string>\",\n  \"sipTrunkId\": \"<string>\",\n  \"sipProviderName\": \"<string>\",\n  \"direction\": \"<string>\",\n  \"dispatchMetadataTemplate\": {\n    \"key_0\": 9537\n  },\n  \"label\": \"<string>\",\n  \"agentId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bf17946b-b9c5-4d34-8829-78df0a4a8ee3",
+              "name": "Phone number",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    "import"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"e164\": \"+12015551234\",\n  \"sipConnectionInstallationId\": \"<string>\",\n  \"sipTrunkId\": \"<string>\",\n  \"sipProviderName\": \"<string>\",\n  \"direction\": \"both\",\n  \"dispatchMetadataTemplate\": {\n    \"key_0\": 7487.157640191603\n  },\n  \"label\": \"<string>\",\n  \"agentId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"organizationId\": \"string\",\n  \"e164\": \"+12015551234\",\n  \"source\": \"sip_trunk\",\n  \"direction\": \"outbound\",\n  \"setupStatus\": {\n    \"status\": \"suspended\",\n    \"inboundReady\": false,\n    \"outboundReady\": false,\n    \"agentReady\": false,\n    \"forwardingRequired\": false,\n    \"sipConnectionReady\": true,\n    \"issues\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"createdAt\": \"1979-10-06T20:06:07.363Z\",\n  \"updatedAt\": \"1977-07-13T14:35:05.046Z\",\n  \"providerResourceId\": \"string\",\n  \"telnyxPhoneNumberId\": \"string\",\n  \"sipTrunkId\": \"string\",\n  \"sipConnectionInstallationId\": \"string\",\n  \"sipProviderName\": \"string\",\n  \"dispatchMetadataTemplate\": {\n    \"key_0\": 7430,\n    \"key_1\": 4542\n  },\n  \"agentId\": \"string\",\n  \"label\": \"string\",\n  \"sms10dlcProfileId\": \"string\",\n  \"smsCampaignId\": \"string\",\n  \"smsAssignmentStatus\": \"string\",\n  \"smsAssignmentUpdatedAt\": \"1966-09-18T17:21:18.640Z\",\n  \"nextChargeAt\": \"1966-02-08T11:27:57.244Z\",\n  \"lastChargedAt\": \"1977-08-27T09:51:44.635Z\",\n  \"suspendedAt\": \"1996-12-15T06:03:25.010Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9f1cc9bf-cd89-4995-8c64-ff15de8352bb",
+              "name": "Request body or query parameters failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    "import"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"e164\": \"+12015551234\",\n  \"sipConnectionInstallationId\": \"<string>\",\n  \"sipTrunkId\": \"<string>\",\n  \"sipProviderName\": \"<string>\",\n  \"direction\": \"both\",\n  \"dispatchMetadataTemplate\": {\n    \"key_0\": 7487.157640191603\n  },\n  \"label\": \"<string>\",\n  \"agentId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Invalid request body\",\n  \"code\": \"VALIDATION_ERROR\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e6eec793-e904-4d71-bb0f-5f4fc9b1a6df",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    "import"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"e164\": \"+12015551234\",\n  \"sipConnectionInstallationId\": \"<string>\",\n  \"sipTrunkId\": \"<string>\",\n  \"sipProviderName\": \"<string>\",\n  \"direction\": \"both\",\n  \"dispatchMetadataTemplate\": {\n    \"key_0\": 7487.157640191603\n  },\n  \"label\": \"<string>\",\n  \"agentId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "602dda2a-5d41-4e86-ba3a-207c42e8c2b0",
+          "name": "Get phone-number business verification",
+          "request": {
+            "name": "Get phone-number business verification",
+            "description": {
+              "content": "Returns the latest business verification submission and optional 10DLC-derived prefill.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "phone-numbers",
+                "kyb"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8e8100c9-e567-46eb-8905-9a02e93fccda",
+              "name": "Business verification state",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    "kyb"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"approved\",\n  \"submission\": {\n    \"id\": \"string\",\n    \"organizationId\": \"string\",\n    \"status\": \"revoked\",\n    \"attestationAccepted\": true,\n    \"createdAt\": \"2025-02-01T14:52:13.597Z\",\n    \"updatedAt\": \"2024-07-22T03:10:33.912Z\",\n    \"businessProfile\": {\n      \"legalName\": \"string\",\n      \"displayName\": \"string\",\n      \"entityType\": \"string\",\n      \"country\": \"string\",\n      \"website\": \"https://tKvIqjXvFoz.xiobThPL1uCIkiVP-ssqIb1T138,\",\n      \"address\": {\n        \"key_0\": 7444.597106888189,\n        \"key_1\": 8186,\n        \"key_2\": false\n      },\n      \"useCase\": \"string\",\n      \"expectedUsage\": \"string\",\n      \"registrationId\": \"string\"\n    },\n    \"authorizedRepresentative\": {\n      \"name\": \"string\",\n      \"title\": \"string\",\n      \"email\": \"dUWv7@wJopybSrQcXme.arco\",\n      \"phone\": \"+12015551234\"\n    },\n    \"attestedAt\": \"2018-01-10T15:08:38.199Z\",\n    \"submittedAt\": \"1998-12-15T04:58:17.539Z\",\n    \"rejectionReason\": \"string\",\n    \"slackNotificationStatus\": \"not_queued\",\n    \"slackNotificationJobId\": \"string\",\n    \"slackNotificationError\": \"string\"\n  },\n  \"prefill\": {\n    \"businessProfile\": {\n      \"legalName\": \"string\",\n      \"displayName\": \"string\",\n      \"entityType\": \"string\",\n      \"country\": \"string\",\n      \"website\": \"https://dkquaV.rmupDJKsq0gAAZNGE-EgZp3-g6Pv7lPWeQya5G.Rjbs\",\n      \"address\": {\n        \"key_0\": 6485.603324208639\n      },\n      \"useCase\": \"string\",\n      \"expectedUsage\": \"string\",\n      \"registrationId\": \"string\"\n    },\n    \"authorizedRepresentative\": {\n      \"name\": \"string\",\n      \"title\": \"string\",\n      \"email\": \"76oXk1lgMdtaSa0@yxannLJJaipPzcAYQfJ.lt\",\n      \"phone\": \"+12015551234\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ec59816d-10ac-4aae-a83b-c16d76ed3a2b",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    "kyb"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5401213c-0695-417c-b17b-6072b5c8facd",
+          "name": "Save phone-number business verification draft",
+          "request": {
+            "name": "Save phone-number business verification draft",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "phone-numbers",
+                "kyb",
+                "draft"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"businessProfile\": {\n    \"legalName\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"entityType\": \"<string>\",\n    \"country\": \"<string>\",\n    \"website\": \"<uri>\",\n    \"address\": {\n      \"key_0\": 7139.494249505315,\n      \"key_1\": 3945.5617777995744\n    },\n    \"useCase\": \"<string>\",\n    \"expectedUsage\": \"<string>\",\n    \"registrationId\": \"<string>\"\n  },\n  \"authorizedRepresentative\": {\n    \"name\": \"<string>\",\n    \"title\": \"<string>\",\n    \"email\": \"<email>\",\n    \"phone\": \"<string>\"\n  },\n  \"attestationAccepted\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d405101c-55f3-46df-b45a-baadb0e0fa5a",
+              "name": "Saved draft",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    "kyb",
+                    "draft"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"businessProfile\": {\n    \"legalName\": \"string\",\n    \"displayName\": \"string\",\n    \"entityType\": \"string\",\n    \"country\": \"string\",\n    \"website\": \"https://cbPVYdnnw.nzX3RMPUTDK7TucQbsQ87S04DvC8\",\n    \"address\": {\n      \"key_0\": true,\n      \"key_1\": 9313.892578729947,\n      \"key_2\": \"string\",\n      \"key_3\": \"string\"\n    },\n    \"useCase\": \"string\",\n    \"expectedUsage\": \"string\",\n    \"registrationId\": \"string\"\n  },\n  \"authorizedRepresentative\": {\n    \"name\": \"string\",\n    \"title\": \"string\",\n    \"email\": \"5DgfULM1CBGq62@cOfUxhHRcKAGrCMFMoHvlcYtFipLaEMk.qy\",\n    \"phone\": \"+12015551234\"\n  },\n  \"attestationAccepted\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"organizationId\": \"string\",\n  \"status\": \"approved\",\n  \"attestationAccepted\": true,\n  \"createdAt\": \"1977-12-15T19:43:45.315Z\",\n  \"updatedAt\": \"2012-12-28T16:49:20.936Z\",\n  \"businessProfile\": {\n    \"legalName\": \"string\",\n    \"displayName\": \"string\",\n    \"entityType\": \"string\",\n    \"country\": \"string\",\n    \"website\": \"http://HhBQCjZeM.xgicAKa8tciSI8p2ZhCM+D\",\n    \"address\": {\n      \"key_0\": 1944\n    },\n    \"useCase\": \"string\",\n    \"expectedUsage\": \"string\",\n    \"registrationId\": \"string\"\n  },\n  \"authorizedRepresentative\": {\n    \"name\": \"string\",\n    \"title\": \"string\",\n    \"email\": \"qm3sGtM3F5O1e5@XVLZbXCegwzEXYESOWNB.op\",\n    \"phone\": \"+12015551234\"\n  },\n  \"attestedAt\": \"1999-03-31T21:30:26.293Z\",\n  \"submittedAt\": \"2015-12-18T04:56:14.849Z\",\n  \"rejectionReason\": \"string\",\n  \"slackNotificationStatus\": \"not_queued\",\n  \"slackNotificationJobId\": \"string\",\n  \"slackNotificationError\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "743740f1-afe7-47b5-a4f2-4a8c2648e4e4",
+              "name": "Request body or query parameters failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    "kyb",
+                    "draft"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"businessProfile\": {\n    \"legalName\": \"string\",\n    \"displayName\": \"string\",\n    \"entityType\": \"string\",\n    \"country\": \"string\",\n    \"website\": \"https://cbPVYdnnw.nzX3RMPUTDK7TucQbsQ87S04DvC8\",\n    \"address\": {\n      \"key_0\": true,\n      \"key_1\": 9313.892578729947,\n      \"key_2\": \"string\",\n      \"key_3\": \"string\"\n    },\n    \"useCase\": \"string\",\n    \"expectedUsage\": \"string\",\n    \"registrationId\": \"string\"\n  },\n  \"authorizedRepresentative\": {\n    \"name\": \"string\",\n    \"title\": \"string\",\n    \"email\": \"5DgfULM1CBGq62@cOfUxhHRcKAGrCMFMoHvlcYtFipLaEMk.qy\",\n    \"phone\": \"+12015551234\"\n  },\n  \"attestationAccepted\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Invalid request body\",\n  \"code\": \"VALIDATION_ERROR\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "62612ceb-a188-4f7d-bd5b-bb4d62e00c61",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    "kyb",
+                    "draft"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"businessProfile\": {\n    \"legalName\": \"string\",\n    \"displayName\": \"string\",\n    \"entityType\": \"string\",\n    \"country\": \"string\",\n    \"website\": \"https://cbPVYdnnw.nzX3RMPUTDK7TucQbsQ87S04DvC8\",\n    \"address\": {\n      \"key_0\": true,\n      \"key_1\": 9313.892578729947,\n      \"key_2\": \"string\",\n      \"key_3\": \"string\"\n    },\n    \"useCase\": \"string\",\n    \"expectedUsage\": \"string\",\n    \"registrationId\": \"string\"\n  },\n  \"authorizedRepresentative\": {\n    \"name\": \"string\",\n    \"title\": \"string\",\n    \"email\": \"5DgfULM1CBGq62@cOfUxhHRcKAGrCMFMoHvlcYtFipLaEMk.qy\",\n    \"phone\": \"+12015551234\"\n  },\n  \"attestationAccepted\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0c8150fa-1854-4de3-90c9-d56da5fa3702",
+          "name": "Submit phone-number business verification",
+          "request": {
+            "name": "Submit phone-number business verification",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "phone-numbers",
+                "kyb",
+                "submit"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"attestationAccepted\": false,\n  \"authorizedRepresentative\": {\n    \"name\": \"<string>\",\n    \"title\": \"<string>\",\n    \"email\": \"<email>\",\n    \"phone\": \"<string>\"\n  },\n  \"businessProfile\": {\n    \"legalName\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"entityType\": \"<string>\",\n    \"country\": \"<string>\",\n    \"website\": \"<uri>\",\n    \"address\": {\n      \"key_0\": true,\n      \"key_1\": 7776,\n      \"key_2\": 5078\n    },\n    \"useCase\": \"<string>\",\n    \"expectedUsage\": \"<string>\",\n    \"registrationId\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "180644ea-e0ed-4d3f-b350-4ab51fdc70eb",
+              "name": "Submitted verification",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    "kyb",
+                    "submit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attestationAccepted\": false,\n  \"authorizedRepresentative\": {\n    \"name\": \"string\",\n    \"title\": \"string\",\n    \"email\": \"9E7S@hFL.myhf\",\n    \"phone\": \"+12015551234\"\n  },\n  \"businessProfile\": {\n    \"legalName\": \"string\",\n    \"displayName\": \"string\",\n    \"entityType\": \"string\",\n    \"country\": \"string\",\n    \"website\": \"http://hZMQmTnrsFTlXMJKhEkKQ.mvmi+ZhcLOrU9,rc8fKiSzGkblRXt29LKfRg0fTPRRSgVqKpzGOf\",\n    \"address\": {\n      \"key_0\": 3091,\n      \"key_1\": \"string\",\n      \"key_2\": 8239,\n      \"key_3\": 7610.910712120554,\n      \"key_4\": false\n    },\n    \"useCase\": \"string\",\n    \"expectedUsage\": \"string\",\n    \"registrationId\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"organizationId\": \"string\",\n  \"status\": \"approved\",\n  \"attestationAccepted\": true,\n  \"createdAt\": \"1977-12-15T19:43:45.315Z\",\n  \"updatedAt\": \"2012-12-28T16:49:20.936Z\",\n  \"businessProfile\": {\n    \"legalName\": \"string\",\n    \"displayName\": \"string\",\n    \"entityType\": \"string\",\n    \"country\": \"string\",\n    \"website\": \"http://HhBQCjZeM.xgicAKa8tciSI8p2ZhCM+D\",\n    \"address\": {\n      \"key_0\": 1944\n    },\n    \"useCase\": \"string\",\n    \"expectedUsage\": \"string\",\n    \"registrationId\": \"string\"\n  },\n  \"authorizedRepresentative\": {\n    \"name\": \"string\",\n    \"title\": \"string\",\n    \"email\": \"qm3sGtM3F5O1e5@XVLZbXCegwzEXYESOWNB.op\",\n    \"phone\": \"+12015551234\"\n  },\n  \"attestedAt\": \"1999-03-31T21:30:26.293Z\",\n  \"submittedAt\": \"2015-12-18T04:56:14.849Z\",\n  \"rejectionReason\": \"string\",\n  \"slackNotificationStatus\": \"not_queued\",\n  \"slackNotificationJobId\": \"string\",\n  \"slackNotificationError\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3cc871ce-c2ab-4572-bdf8-b089173cb2e6",
+              "name": "Request body or query parameters failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    "kyb",
+                    "submit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attestationAccepted\": false,\n  \"authorizedRepresentative\": {\n    \"name\": \"string\",\n    \"title\": \"string\",\n    \"email\": \"9E7S@hFL.myhf\",\n    \"phone\": \"+12015551234\"\n  },\n  \"businessProfile\": {\n    \"legalName\": \"string\",\n    \"displayName\": \"string\",\n    \"entityType\": \"string\",\n    \"country\": \"string\",\n    \"website\": \"http://hZMQmTnrsFTlXMJKhEkKQ.mvmi+ZhcLOrU9,rc8fKiSzGkblRXt29LKfRg0fTPRRSgVqKpzGOf\",\n    \"address\": {\n      \"key_0\": 3091,\n      \"key_1\": \"string\",\n      \"key_2\": 8239,\n      \"key_3\": 7610.910712120554,\n      \"key_4\": false\n    },\n    \"useCase\": \"string\",\n    \"expectedUsage\": \"string\",\n    \"registrationId\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Invalid request body\",\n  \"code\": \"VALIDATION_ERROR\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fd8356b1-553f-41f6-8669-09d0a55317ea",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    "kyb",
+                    "submit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attestationAccepted\": false,\n  \"authorizedRepresentative\": {\n    \"name\": \"string\",\n    \"title\": \"string\",\n    \"email\": \"9E7S@hFL.myhf\",\n    \"phone\": \"+12015551234\"\n  },\n  \"businessProfile\": {\n    \"legalName\": \"string\",\n    \"displayName\": \"string\",\n    \"entityType\": \"string\",\n    \"country\": \"string\",\n    \"website\": \"http://hZMQmTnrsFTlXMJKhEkKQ.mvmi+ZhcLOrU9,rc8fKiSzGkblRXt29LKfRg0fTPRRSgVqKpzGOf\",\n    \"address\": {\n      \"key_0\": 3091,\n      \"key_1\": \"string\",\n      \"key_2\": 8239,\n      \"key_3\": 7610.910712120554,\n      \"key_4\": false\n    },\n    \"useCase\": \"string\",\n    \"expectedUsage\": \"string\",\n    \"registrationId\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9d43f70a-de9f-4692-830e-cef9e10f2dea",
+          "name": "Get a phone number",
+          "request": {
+            "name": "Get a phone number",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "phone-numbers",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Resource id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f573d806-8fc8-472d-a08d-8508ff12c17b",
+              "name": "Phone number",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"organizationId\": \"string\",\n  \"e164\": \"+12015551234\",\n  \"source\": \"sip_trunk\",\n  \"direction\": \"outbound\",\n  \"setupStatus\": {\n    \"status\": \"suspended\",\n    \"inboundReady\": false,\n    \"outboundReady\": false,\n    \"agentReady\": false,\n    \"forwardingRequired\": false,\n    \"sipConnectionReady\": true,\n    \"issues\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"createdAt\": \"1979-10-06T20:06:07.363Z\",\n  \"updatedAt\": \"1977-07-13T14:35:05.046Z\",\n  \"providerResourceId\": \"string\",\n  \"telnyxPhoneNumberId\": \"string\",\n  \"sipTrunkId\": \"string\",\n  \"sipConnectionInstallationId\": \"string\",\n  \"sipProviderName\": \"string\",\n  \"dispatchMetadataTemplate\": {\n    \"key_0\": 7430,\n    \"key_1\": 4542\n  },\n  \"agentId\": \"string\",\n  \"label\": \"string\",\n  \"sms10dlcProfileId\": \"string\",\n  \"smsCampaignId\": \"string\",\n  \"smsAssignmentStatus\": \"string\",\n  \"smsAssignmentUpdatedAt\": \"1966-09-18T17:21:18.640Z\",\n  \"nextChargeAt\": \"1966-02-08T11:27:57.244Z\",\n  \"lastChargedAt\": \"1977-08-27T09:51:44.635Z\",\n  \"suspendedAt\": \"1996-12-15T06:03:25.010Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b4c025df-7d79-4d7d-a93d-78436ebd8e9e",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d8c1df47-8a42-4bb6-92bc-25d84b59fe0a",
+          "name": "Update a phone number",
+          "request": {
+            "name": "Update a phone number",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "phone-numbers",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Resource id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"direction\": \"<string>\",\n  \"dispatchMetadataTemplate\": {\n    \"key_0\": true\n  },\n  \"label\": \"<string>\",\n  \"agentId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "10da5200-6e6f-4e14-984e-c24a6da98e70",
+              "name": "Phone number",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"direction\": \"both\",\n  \"dispatchMetadataTemplate\": {\n    \"key_0\": 2622\n  },\n  \"label\": \"<string>\",\n  \"agentId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"organizationId\": \"string\",\n  \"e164\": \"+12015551234\",\n  \"source\": \"sip_trunk\",\n  \"direction\": \"outbound\",\n  \"setupStatus\": {\n    \"status\": \"suspended\",\n    \"inboundReady\": false,\n    \"outboundReady\": false,\n    \"agentReady\": false,\n    \"forwardingRequired\": false,\n    \"sipConnectionReady\": true,\n    \"issues\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"createdAt\": \"1979-10-06T20:06:07.363Z\",\n  \"updatedAt\": \"1977-07-13T14:35:05.046Z\",\n  \"providerResourceId\": \"string\",\n  \"telnyxPhoneNumberId\": \"string\",\n  \"sipTrunkId\": \"string\",\n  \"sipConnectionInstallationId\": \"string\",\n  \"sipProviderName\": \"string\",\n  \"dispatchMetadataTemplate\": {\n    \"key_0\": 7430,\n    \"key_1\": 4542\n  },\n  \"agentId\": \"string\",\n  \"label\": \"string\",\n  \"sms10dlcProfileId\": \"string\",\n  \"smsCampaignId\": \"string\",\n  \"smsAssignmentStatus\": \"string\",\n  \"smsAssignmentUpdatedAt\": \"1966-09-18T17:21:18.640Z\",\n  \"nextChargeAt\": \"1966-02-08T11:27:57.244Z\",\n  \"lastChargedAt\": \"1977-08-27T09:51:44.635Z\",\n  \"suspendedAt\": \"1996-12-15T06:03:25.010Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2ab3acbb-7696-49d3-b7e5-4ce882df15af",
+              "name": "Request body or query parameters failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"direction\": \"both\",\n  \"dispatchMetadataTemplate\": {\n    \"key_0\": 2622\n  },\n  \"label\": \"<string>\",\n  \"agentId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Invalid request body\",\n  \"code\": \"VALIDATION_ERROR\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8792693f-7880-491c-b510-c633cc8decde",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"direction\": \"both\",\n  \"dispatchMetadataTemplate\": {\n    \"key_0\": 2622\n  },\n  \"label\": \"<string>\",\n  \"agentId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bba2ef48-9ac1-4348-ba87-f59787ff23df",
+          "name": "Release a phone number",
+          "request": {
+            "name": "Release a phone number",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "phone-numbers",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Resource id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "095fcae4-056e-44ed-a9a5-93412504d835",
+              "name": "Release result",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"released\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ef212a54-1ad7-42d0-adca-f2053402719b",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone-numbers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3372e529-8414-4a58-8ac3-c6720e503609",
+          "name": "Get call detail",
+          "request": {
+            "name": "Get call detail",
+            "description": {
+              "content": "Returns the call session, transcript, report if available, transfer attempts, and recording metadata.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "calls",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Resource id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cb43197b-a08e-4f0d-a809-246fba20918a",
+              "name": "Call detail",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "calls",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"call_id\": \"string\",\n  \"resource_uri\": \"string\",\n  \"status\": \"string\",\n  \"kind\": \"string\",\n  \"created_at\": \"2025-04-15T00:25:08.254Z\",\n  \"transcript\": {\n    \"entries\": [\n      {\n        \"id\": \"string\",\n        \"index\": 1588,\n        \"source\": \"agent\",\n        \"text\": \"string\",\n        \"started_at\": \"1989-06-05T19:56:57.780Z\",\n        \"metadata\": {\n          \"key_0\": \"string\",\n          \"key_1\": 1710\n        },\n        \"ended_at\": \"1995-10-02T11:13:31.483Z\",\n        \"provider\": \"string\",\n        \"model\": \"string\"\n      },\n      {\n        \"id\": \"string\",\n        \"index\": 1587,\n        \"source\": \"user\",\n        \"text\": \"string\",\n        \"started_at\": \"2024-12-17T07:42:22.191Z\",\n        \"metadata\": {\n          \"key_0\": 1768.59284064129,\n          \"key_1\": 2041.2133931579447\n        },\n        \"ended_at\": \"2018-06-17T11:55:38.334Z\",\n        \"provider\": \"string\",\n        \"model\": \"string\"\n      }\n    ]\n  },\n  \"agent_id\": \"string\",\n  \"room_name\": \"string\",\n  \"language\": \"string\",\n  \"pipeline_config\": {\n    \"key_0\": \"string\",\n    \"key_1\": 7688.352663181843,\n    \"key_2\": \"string\"\n  },\n  \"metadata\": {\n    \"key_0\": \"string\"\n  },\n  \"updated_at\": \"2015-08-11T23:01:21.929Z\",\n  \"ended_at\": \"1979-09-19T03:35:10.253Z\",\n  \"duration_seconds\": 6327,\n  \"recording_status\": \"string\",\n  \"recording_duration_ms\": 9171,\n  \"recording_resource_uri\": \"string\",\n  \"report\": {\n    \"session_id\": \"string\",\n    \"summary\": \"string\",\n    \"outcome\": \"string\",\n    \"transcript\": {\n      \"entries\": [\n        {\n          \"id\": \"string\",\n          \"index\": 4431,\n          \"source\": \"agent\",\n          \"text\": \"string\",\n          \"started_at\": \"1976-04-22T06:06:36.288Z\",\n          \"metadata\": {\n            \"key_0\": false\n          },\n          \"ended_at\": \"1985-05-26T01:25:16.815Z\",\n          \"provider\": \"string\",\n          \"model\": \"string\"\n        },\n        {\n          \"id\": \"string\",\n          \"index\": 9624,\n          \"source\": \"agent\",\n          \"text\": \"string\",\n          \"started_at\": \"1976-07-07T15:49:32.591Z\",\n          \"metadata\": {\n            \"key_0\": true,\n            \"key_1\": 581.3896913931915,\n            \"key_2\": 7824.6595294170575\n          },\n          \"ended_at\": \"1959-02-07T05:19:52.774Z\",\n          \"provider\": \"string\",\n          \"model\": \"string\"\n        }\n      ]\n    },\n    \"cost_micro_usd\": \"string\",\n    \"organization_id\": \"string\",\n    \"structured_data\": {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\"\n    },\n    \"cost_breakdown\": [\n      {\n        \"key_0\": false,\n        \"key_1\": 9599,\n        \"key_2\": 724\n      },\n      {\n        \"key_0\": 9065.019209629863,\n        \"key_1\": 4293.393636958364\n      }\n    ],\n    \"metadata\": {\n      \"key_0\": \"string\",\n      \"key_1\": 9519.781200744455\n    },\n    \"scheduled_callback\": {\n      \"key_0\": 4780.549048751902\n    },\n    \"analysis_status\": \"heuristic\",\n    \"post_call_webhook_status\": \"string\",\n    \"created_at\": \"2013-01-05T16:54:41.056Z\",\n    \"updated_at\": \"1969-02-09T15:28:01.679Z\"\n  },\n  \"transfers\": [\n    {\n      \"id\": \"string\",\n      \"session_id\": \"string\",\n      \"organization_id\": \"string\",\n      \"kind\": \"warm\",\n      \"status\": \"requested\",\n      \"transfer_to\": \"string\",\n      \"metadata\": {\n        \"key_0\": false,\n        \"key_1\": \"string\"\n      },\n      \"created_at\": \"1986-08-01T19:22:18.161Z\",\n      \"updated_at\": \"1993-05-29T11:49:12.288Z\",\n      \"from_room_name\": \"string\",\n      \"consultation_room_name\": \"string\",\n      \"caller_participant_identity\": \"string\",\n      \"recipient_participant_identity\": \"string\",\n      \"outbound_trunk_id\": \"string\",\n      \"screening_prompt\": \"string\",\n      \"summary\": \"string\",\n      \"failure_cause\": \"string\",\n      \"completed_at\": \"2010-10-14T15:38:17.384Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"session_id\": \"string\",\n      \"organization_id\": \"string\",\n      \"kind\": \"blind\",\n      \"status\": \"completed\",\n      \"transfer_to\": \"string\",\n      \"metadata\": {\n        \"key_0\": 8711.243377240813,\n        \"key_1\": false\n      },\n      \"created_at\": \"1952-10-20T14:14:00.816Z\",\n      \"updated_at\": \"1996-04-12T15:52:16.369Z\",\n      \"from_room_name\": \"string\",\n      \"consultation_room_name\": \"string\",\n      \"caller_participant_identity\": \"string\",\n      \"recipient_participant_identity\": \"string\",\n      \"outbound_trunk_id\": \"string\",\n      \"screening_prompt\": \"string\",\n      \"summary\": \"string\",\n      \"failure_cause\": \"string\",\n      \"completed_at\": \"1970-01-05T15:20:10.651Z\"\n    }\n  ],\n  \"span_tree\": {\n    \"key_0\": 9513\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f6a65941-9943-483e-811f-ce0df9bf5e4e",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "calls",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "303adc82-e443-4473-a2f4-c00bc9816abd",
+          "name": "List call events",
+          "request": {
+            "name": "List call events",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "calls",
+                ":id",
+                "events"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Resource id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "26cf6f05-a4ed-45c4-8def-a86d4d15f97f",
+              "name": "Call events",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "calls",
+                    ":id",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"events\": [\n    {\n      \"id\": \"string\",\n      \"organization_id\": \"string\",\n      \"provider\": \"string\",\n      \"event_type\": \"string\",\n      \"occurred_at\": \"1996-10-25T21:43:45.208Z\",\n      \"payload\": {\n        \"key_0\": \"string\",\n        \"key_1\": true\n      },\n      \"created_at\": \"1987-09-16T04:09:30.536Z\",\n      \"session_id\": \"string\",\n      \"status\": \"string\",\n      \"failure_cause\": \"string\",\n      \"sip_status_code\": 9348,\n      \"sip_status\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"organization_id\": \"string\",\n      \"provider\": \"string\",\n      \"event_type\": \"string\",\n      \"occurred_at\": \"1956-06-12T03:20:49.409Z\",\n      \"payload\": {\n        \"key_0\": true,\n        \"key_1\": 8789.772069514225\n      },\n      \"created_at\": \"1988-06-04T07:19:43.237Z\",\n      \"session_id\": \"string\",\n      \"status\": \"string\",\n      \"failure_cause\": \"string\",\n      \"sip_status_code\": 7092,\n      \"sip_status\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a4b00661-16cd-48fe-b90b-cbafc4b4a840",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "calls",
+                    ":id",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b8f9cd5c-d777-454e-8efb-e2ac5151f70e",
+          "name": "Get call report",
+          "request": {
+            "name": "Get call report",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "calls",
+                ":id",
+                "report"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Resource id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "343f6967-ad13-4de5-be23-8e12e2709109",
+              "name": "Call report",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "calls",
+                    ":id",
+                    "report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"session_id\": \"string\",\n  \"summary\": \"string\",\n  \"outcome\": \"string\",\n  \"transcript\": {\n    \"entries\": [\n      {\n        \"id\": \"string\",\n        \"index\": 2281,\n        \"source\": \"agent\",\n        \"text\": \"string\",\n        \"started_at\": \"1978-09-02T14:59:31.830Z\",\n        \"metadata\": {\n          \"key_0\": \"string\"\n        },\n        \"ended_at\": \"1969-05-20T11:05:43.464Z\",\n        \"provider\": \"string\",\n        \"model\": \"string\"\n      },\n      {\n        \"id\": \"string\",\n        \"index\": 3737,\n        \"source\": \"user\",\n        \"text\": \"string\",\n        \"started_at\": \"1949-07-18T21:01:56.927Z\",\n        \"metadata\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\"\n        },\n        \"ended_at\": \"2019-08-07T00:07:38.375Z\",\n        \"provider\": \"string\",\n        \"model\": \"string\"\n      }\n    ]\n  },\n  \"cost_micro_usd\": \"string\",\n  \"organization_id\": \"string\",\n  \"structured_data\": {\n    \"key_0\": 9173.573697597596\n  },\n  \"cost_breakdown\": [\n    {\n      \"key_0\": true,\n      \"key_1\": \"string\"\n    },\n    {\n      \"key_0\": 9518,\n      \"key_1\": 5739\n    }\n  ],\n  \"metadata\": {\n    \"key_0\": true,\n    \"key_1\": \"string\",\n    \"key_2\": 2887\n  },\n  \"scheduled_callback\": {\n    \"key_0\": false,\n    \"key_1\": \"string\"\n  },\n  \"analysis_status\": \"completed\",\n  \"post_call_webhook_status\": \"string\",\n  \"created_at\": \"2014-07-09T20:38:51.770Z\",\n  \"updated_at\": \"2011-05-01T04:12:41.702Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "79275a88-a48f-4757-9715-1b5d7d62e8d2",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "calls",
+                    ":id",
+                    "report"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0f8bb004-e636-4351-9a5a-39d3d9e773f4",
+          "name": "Finalize call report",
+          "request": {
+            "name": "Finalize call report",
+            "description": {
+              "content": "Runs or re-runs analysis for a call and optionally retries post-call webhook delivery.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "calls",
+                ":id",
+                "report",
+                "finalize"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Resource id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"forceAnalysis\": \"<boolean>\",\n  \"retryWebhook\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "53c109b5-5559-4637-8077-6e2086c5e747",
+              "name": "Finalization result",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "calls",
+                    ":id",
+                    "report",
+                    "finalize"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"forceAnalysis\": \"<boolean>\",\n  \"retryWebhook\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"session_id\": \"string\",\n  \"summary\": \"string\",\n  \"outcome\": \"string\",\n  \"cost_micro_usd\": \"string\",\n  \"webhook\": {\n    \"key_0\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "15fb29ff-be38-4567-9203-f4b8f973a9ce",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "calls",
+                    ":id",
+                    "report",
+                    "finalize"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"forceAnalysis\": \"<boolean>\",\n  \"retryWebhook\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bc006c6b-02eb-4996-afa3-1191cef861e0",
+          "name": "Get call recording URL",
+          "request": {
+            "name": "Get call recording URL",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "calls",
+                ":id",
+                "recording"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Resource id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "878d1598-db7e-408b-94a8-6afb7f371ca7",
+              "name": "Signed recording URL",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "calls",
+                    ":id",
+                    "recording"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"url\": \"https://LvXmuxvjluOynmGmfOEVXjUI.yqFuVMirsWqszLAfrrwsN1v7aUmRO2gS22ItlQk-EWGNtGrfeM9xu,Qo8\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f5795f27-2ec5-4e3f-872f-120bc678e9e8",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "calls",
+                    ":id",
+                    "recording"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1faec5ba-60bc-4318-9805-952fe1f8b713",
+          "name": "Start blind transfer",
+          "request": {
+            "name": "Start blind transfer",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "calls",
+                ":id",
+                "transfers",
+                "blind"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Resource id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"to\": \"<string>\",\n  \"participantIdentity\": \"<string>\",\n  \"playDialtone\": \"<boolean>\",\n  \"ringingTimeout\": \"<integer>\",\n  \"headers\": {\n    \"key_0\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "529a15ea-dd39-414c-ae8d-1d0f5e8f5079",
+              "name": "Transfer",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "calls",
+                    ":id",
+                    "transfers",
+                    "blind"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"to\": \"<string>\",\n  \"participantIdentity\": \"<string>\",\n  \"playDialtone\": \"<boolean>\",\n  \"ringingTimeout\": \"<integer>\",\n  \"headers\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"session_id\": \"string\",\n  \"organization_id\": \"string\",\n  \"kind\": \"blind\",\n  \"status\": \"requested\",\n  \"transfer_to\": \"string\",\n  \"metadata\": {\n    \"key_0\": 4473.520442900647,\n    \"key_1\": 7915.864511446694\n  },\n  \"created_at\": \"1957-11-14T00:11:54.087Z\",\n  \"updated_at\": \"1951-10-21T20:25:30.539Z\",\n  \"from_room_name\": \"string\",\n  \"consultation_room_name\": \"string\",\n  \"caller_participant_identity\": \"string\",\n  \"recipient_participant_identity\": \"string\",\n  \"outbound_trunk_id\": \"string\",\n  \"screening_prompt\": \"string\",\n  \"summary\": \"string\",\n  \"failure_cause\": \"string\",\n  \"completed_at\": \"1985-07-26T18:06:58.578Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "25ea087f-3d94-426f-ace0-64fb30e793de",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "calls",
+                    ":id",
+                    "transfers",
+                    "blind"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"to\": \"<string>\",\n  \"participantIdentity\": \"<string>\",\n  \"playDialtone\": \"<boolean>\",\n  \"ringingTimeout\": \"<integer>\",\n  \"headers\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7f6871e5-f195-4161-88ab-a5358409f056",
+          "name": "Start warm transfer",
+          "request": {
+            "name": "Start warm transfer",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "calls",
+                ":id",
+                "transfers",
+                "warm"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Resource id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"to\": \"<string>\",\n  \"destinations\": [\n    {\n      \"key_0\": 6346.475862667546\n    }\n  ],\n  \"from\": \"<string>\",\n  \"participantIdentity\": \"<string>\",\n  \"outboundTrunkId\": \"<string>\",\n  \"screeningPrompt\": \"<string>\",\n  \"summary\": \"<string>\",\n  \"ringingTimeout\": \"<integer>\",\n  \"waitUntilAnswered\": \"<boolean>\",\n  \"fallback\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\",\n    \"key_2\": 1754\n  },\n  \"voicemailDetection\": {\n    \"key_0\": 9039,\n    \"key_1\": 8464\n  },\n  \"metadata\": {\n    \"key_0\": 9184,\n    \"key_1\": 7834.959752883134\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ae47febe-d7fb-4c31-8bdf-f7d8ae02a656",
+              "name": "Transfer",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "calls",
+                    ":id",
+                    "transfers",
+                    "warm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"to\": \"+12015551234\",\n  \"destinations\": [\n    {\n      \"key_0\": 2959\n    }\n  ],\n  \"from\": \"+12015551234\",\n  \"participantIdentity\": \"<string>\",\n  \"outboundTrunkId\": \"<string>\",\n  \"screeningPrompt\": \"<string>\",\n  \"summary\": \"<string>\",\n  \"ringingTimeout\": \"<integer>\",\n  \"waitUntilAnswered\": \"<boolean>\",\n  \"fallback\": {\n    \"key_0\": 8210,\n    \"key_1\": true\n  },\n  \"voicemailDetection\": {\n    \"key_0\": 8579.106089105822,\n    \"key_1\": \"string\",\n    \"key_2\": 9938.309893537284\n  },\n  \"metadata\": {\n    \"key_0\": 9268.38383163416,\n    \"key_1\": 7778.17037049715,\n    \"key_2\": 856,\n    \"key_3\": 9552.52760988426\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"session_id\": \"string\",\n  \"organization_id\": \"string\",\n  \"kind\": \"blind\",\n  \"status\": \"completed\",\n  \"transfer_to\": \"string\",\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\"\n  },\n  \"created_at\": \"2006-04-06T05:50:18.373Z\",\n  \"updated_at\": \"2017-06-18T02:00:59.310Z\",\n  \"from_room_name\": \"string\",\n  \"consultation_room_name\": \"string\",\n  \"caller_participant_identity\": \"string\",\n  \"recipient_participant_identity\": \"string\",\n  \"outbound_trunk_id\": \"string\",\n  \"screening_prompt\": \"string\",\n  \"summary\": \"string\",\n  \"failure_cause\": \"string\",\n  \"completed_at\": \"1980-05-04T01:47:39.585Z\",\n  \"routing_attempts\": [\n    {\n      \"id\": \"string\",\n      \"session_id\": \"string\",\n      \"organization_id\": \"string\",\n      \"kind\": \"warm\",\n      \"status\": \"screening\",\n      \"transfer_to\": \"string\",\n      \"metadata\": {\n        \"key_0\": 603.0479290862256\n      },\n      \"created_at\": \"1964-10-06T19:21:18.819Z\",\n      \"updated_at\": \"1964-08-20T04:06:32.644Z\",\n      \"from_room_name\": \"string\",\n      \"consultation_room_name\": \"string\",\n      \"caller_participant_identity\": \"string\",\n      \"recipient_participant_identity\": \"string\",\n      \"outbound_trunk_id\": \"string\",\n      \"screening_prompt\": \"string\",\n      \"summary\": \"string\",\n      \"failure_cause\": \"string\",\n      \"completed_at\": \"2021-09-04T14:17:23.897Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"session_id\": \"string\",\n      \"organization_id\": \"string\",\n      \"kind\": \"blind\",\n      \"status\": \"cancelled\",\n      \"transfer_to\": \"string\",\n      \"metadata\": {\n        \"key_0\": false,\n        \"key_1\": false,\n        \"key_2\": \"string\",\n        \"key_3\": false\n      },\n      \"created_at\": \"1956-11-15T05:56:52.876Z\",\n      \"updated_at\": \"2013-10-31T23:39:31.713Z\",\n      \"from_room_name\": \"string\",\n      \"consultation_room_name\": \"string\",\n      \"caller_participant_identity\": \"string\",\n      \"recipient_participant_identity\": \"string\",\n      \"outbound_trunk_id\": \"string\",\n      \"screening_prompt\": \"string\",\n      \"summary\": \"string\",\n      \"failure_cause\": \"string\",\n      \"completed_at\": \"1956-01-24T14:58:31.782Z\"\n    }\n  ],\n  \"next_transfer\": {\n    \"id\": \"string\",\n    \"session_id\": \"string\",\n    \"organization_id\": \"string\",\n    \"kind\": \"blind\",\n    \"status\": \"completed\",\n    \"transfer_to\": \"string\",\n    \"metadata\": {\n      \"key_0\": 2152\n    },\n    \"created_at\": \"1967-02-02T09:27:21.585Z\",\n    \"updated_at\": \"2002-10-16T10:49:34.734Z\",\n    \"from_room_name\": \"string\",\n    \"consultation_room_name\": \"string\",\n    \"caller_participant_identity\": \"string\",\n    \"recipient_participant_identity\": \"string\",\n    \"outbound_trunk_id\": \"string\",\n    \"screening_prompt\": \"string\",\n    \"summary\": \"string\",\n    \"failure_cause\": \"string\",\n    \"completed_at\": \"1999-11-12T12:41:23.641Z\"\n  },\n  \"fallback\": {\n    \"key_0\": \"string\",\n    \"key_1\": true,\n    \"key_2\": \"string\",\n    \"key_3\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6017c8cd-7dfd-4f7e-82f8-4ab2d4d4da8a",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "calls",
+                    ":id",
+                    "transfers",
+                    "warm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"to\": \"+12015551234\",\n  \"destinations\": [\n    {\n      \"key_0\": 2959\n    }\n  ],\n  \"from\": \"+12015551234\",\n  \"participantIdentity\": \"<string>\",\n  \"outboundTrunkId\": \"<string>\",\n  \"screeningPrompt\": \"<string>\",\n  \"summary\": \"<string>\",\n  \"ringingTimeout\": \"<integer>\",\n  \"waitUntilAnswered\": \"<boolean>\",\n  \"fallback\": {\n    \"key_0\": 8210,\n    \"key_1\": true\n  },\n  \"voicemailDetection\": {\n    \"key_0\": 8579.106089105822,\n    \"key_1\": \"string\",\n    \"key_2\": 9938.309893537284\n  },\n  \"metadata\": {\n    \"key_0\": 9268.38383163416,\n    \"key_1\": 7778.17037049715,\n    \"key_2\": 856,\n    \"key_3\": 9552.52760988426\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b6b58ade-ab0f-4c57-9d1c-1bfe5e9901b9",
+          "name": "Complete warm transfer",
+          "request": {
+            "name": "Complete warm transfer",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "calls",
+                ":id",
+                "transfers",
+                ":transferId",
+                "complete"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Resource id."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "transferId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"recipientParticipantIdentity\": \"<string>\",\n  \"summary\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8275d551-4b77-4a9b-9ab9-8049b6b453c4",
+              "name": "Transfer",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "calls",
+                    ":id",
+                    "transfers",
+                    ":transferId",
+                    "complete"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transferId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"recipientParticipantIdentity\": \"<string>\",\n  \"summary\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"session_id\": \"string\",\n  \"organization_id\": \"string\",\n  \"kind\": \"blind\",\n  \"status\": \"requested\",\n  \"transfer_to\": \"string\",\n  \"metadata\": {\n    \"key_0\": 4473.520442900647,\n    \"key_1\": 7915.864511446694\n  },\n  \"created_at\": \"1957-11-14T00:11:54.087Z\",\n  \"updated_at\": \"1951-10-21T20:25:30.539Z\",\n  \"from_room_name\": \"string\",\n  \"consultation_room_name\": \"string\",\n  \"caller_participant_identity\": \"string\",\n  \"recipient_participant_identity\": \"string\",\n  \"outbound_trunk_id\": \"string\",\n  \"screening_prompt\": \"string\",\n  \"summary\": \"string\",\n  \"failure_cause\": \"string\",\n  \"completed_at\": \"1985-07-26T18:06:58.578Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8d4c05b8-fc96-4792-ade2-d2b6d0ec9841",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "calls",
+                    ":id",
+                    "transfers",
+                    ":transferId",
+                    "complete"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transferId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"recipientParticipantIdentity\": \"<string>\",\n  \"summary\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "185940f9-0c40-4751-acfc-36fc18e3f043",
+          "name": "Cancel warm transfer",
+          "request": {
+            "name": "Cancel warm transfer",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "calls",
+                ":id",
+                "transfers",
+                ":transferId",
+                "cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Resource id."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "transferId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"<string>\",\n  \"summary\": \"<string>\",\n  \"tryNext\": \"<boolean>\",\n  \"voicemailDetected\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b634cda3-88d2-42fd-bc27-d604598cb728",
+              "name": "Transfer response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "calls",
+                    ":id",
+                    "transfers",
+                    ":transferId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transferId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"<string>\",\n  \"summary\": \"<string>\",\n  \"tryNext\": \"<boolean>\",\n  \"voicemailDetected\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"session_id\": \"string\",\n  \"organization_id\": \"string\",\n  \"kind\": \"blind\",\n  \"status\": \"completed\",\n  \"transfer_to\": \"string\",\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\"\n  },\n  \"created_at\": \"2006-04-06T05:50:18.373Z\",\n  \"updated_at\": \"2017-06-18T02:00:59.310Z\",\n  \"from_room_name\": \"string\",\n  \"consultation_room_name\": \"string\",\n  \"caller_participant_identity\": \"string\",\n  \"recipient_participant_identity\": \"string\",\n  \"outbound_trunk_id\": \"string\",\n  \"screening_prompt\": \"string\",\n  \"summary\": \"string\",\n  \"failure_cause\": \"string\",\n  \"completed_at\": \"1980-05-04T01:47:39.585Z\",\n  \"routing_attempts\": [\n    {\n      \"id\": \"string\",\n      \"session_id\": \"string\",\n      \"organization_id\": \"string\",\n      \"kind\": \"warm\",\n      \"status\": \"screening\",\n      \"transfer_to\": \"string\",\n      \"metadata\": {\n        \"key_0\": 603.0479290862256\n      },\n      \"created_at\": \"1964-10-06T19:21:18.819Z\",\n      \"updated_at\": \"1964-08-20T04:06:32.644Z\",\n      \"from_room_name\": \"string\",\n      \"consultation_room_name\": \"string\",\n      \"caller_participant_identity\": \"string\",\n      \"recipient_participant_identity\": \"string\",\n      \"outbound_trunk_id\": \"string\",\n      \"screening_prompt\": \"string\",\n      \"summary\": \"string\",\n      \"failure_cause\": \"string\",\n      \"completed_at\": \"2021-09-04T14:17:23.897Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"session_id\": \"string\",\n      \"organization_id\": \"string\",\n      \"kind\": \"blind\",\n      \"status\": \"cancelled\",\n      \"transfer_to\": \"string\",\n      \"metadata\": {\n        \"key_0\": false,\n        \"key_1\": false,\n        \"key_2\": \"string\",\n        \"key_3\": false\n      },\n      \"created_at\": \"1956-11-15T05:56:52.876Z\",\n      \"updated_at\": \"2013-10-31T23:39:31.713Z\",\n      \"from_room_name\": \"string\",\n      \"consultation_room_name\": \"string\",\n      \"caller_participant_identity\": \"string\",\n      \"recipient_participant_identity\": \"string\",\n      \"outbound_trunk_id\": \"string\",\n      \"screening_prompt\": \"string\",\n      \"summary\": \"string\",\n      \"failure_cause\": \"string\",\n      \"completed_at\": \"1956-01-24T14:58:31.782Z\"\n    }\n  ],\n  \"next_transfer\": {\n    \"id\": \"string\",\n    \"session_id\": \"string\",\n    \"organization_id\": \"string\",\n    \"kind\": \"blind\",\n    \"status\": \"completed\",\n    \"transfer_to\": \"string\",\n    \"metadata\": {\n      \"key_0\": 2152\n    },\n    \"created_at\": \"1967-02-02T09:27:21.585Z\",\n    \"updated_at\": \"2002-10-16T10:49:34.734Z\",\n    \"from_room_name\": \"string\",\n    \"consultation_room_name\": \"string\",\n    \"caller_participant_identity\": \"string\",\n    \"recipient_participant_identity\": \"string\",\n    \"outbound_trunk_id\": \"string\",\n    \"screening_prompt\": \"string\",\n    \"summary\": \"string\",\n    \"failure_cause\": \"string\",\n    \"completed_at\": \"1999-11-12T12:41:23.641Z\"\n  },\n  \"fallback\": {\n    \"key_0\": \"string\",\n    \"key_1\": true,\n    \"key_2\": \"string\",\n    \"key_3\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d43d8371-bf62-4c05-ba8c-50402a61a6a3",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "calls",
+                    ":id",
+                    "transfers",
+                    ":transferId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "transferId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"<string>\",\n  \"summary\": \"<string>\",\n  \"tryNext\": \"<boolean>\",\n  \"voicemailDetected\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e3e542e1-719a-41b2-b8bf-7baf13025aba",
+          "name": "List scheduled callbacks",
+          "request": {
+            "name": "List scheduled callbacks",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "callbacks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "source_session_id",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a15b3c56-485b-4333-a6a5-44676a204c8c",
+              "name": "Scheduled callbacks",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "callbacks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "failed"
+                    },
+                    {
+                      "key": "source_session_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"callbacks\": [\n    {\n      \"id\": \"string\",\n      \"organization_id\": \"string\",\n      \"to_number\": \"+12015551234\",\n      \"scheduled_at\": \"1953-10-14T13:40:17.789Z\",\n      \"status\": \"scheduled\",\n      \"pipeline_config\": {\n        \"key_0\": true\n      },\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"created_at\": \"1963-04-26T16:49:09.116Z\",\n      \"updated_at\": \"2012-10-20T05:26:58.544Z\",\n      \"source_session_id\": \"string\",\n      \"created_session_id\": \"string\",\n      \"agent_id\": \"string\",\n      \"phone_number_id\": \"string\",\n      \"from_number\": \"string\",\n      \"reason\": \"string\",\n      \"instructions\": \"string\",\n      \"summary\": \"string\",\n      \"failure_cause\": \"string\",\n      \"attempted_at\": \"1955-10-31T06:37:41.733Z\",\n      \"dispatched_at\": \"2023-08-18T13:18:27.329Z\",\n      \"cancelled_at\": \"2002-02-12T13:41:50.669Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"organization_id\": \"string\",\n      \"to_number\": \"+12015551234\",\n      \"scheduled_at\": \"1974-11-28T19:43:17.357Z\",\n      \"status\": \"dispatching\",\n      \"pipeline_config\": {\n        \"key_0\": true,\n        \"key_1\": true,\n        \"key_2\": true\n      },\n      \"metadata\": {\n        \"key_0\": 9085,\n        \"key_1\": \"string\",\n        \"key_2\": false,\n        \"key_3\": 843\n      },\n      \"created_at\": \"1975-01-11T23:29:38.840Z\",\n      \"updated_at\": \"1950-11-08T00:17:50.182Z\",\n      \"source_session_id\": \"string\",\n      \"created_session_id\": \"string\",\n      \"agent_id\": \"string\",\n      \"phone_number_id\": \"string\",\n      \"from_number\": \"string\",\n      \"reason\": \"string\",\n      \"instructions\": \"string\",\n      \"summary\": \"string\",\n      \"failure_cause\": \"string\",\n      \"attempted_at\": \"1964-06-21T23:40:59.224Z\",\n      \"dispatched_at\": \"1973-11-03T00:20:22.641Z\",\n      \"cancelled_at\": \"1968-06-23T02:49:26.654Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c630709e-08e7-4bff-a18b-6407410428b6",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "callbacks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "failed"
+                    },
+                    {
+                      "key": "source_session_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "754b6880-5393-45d4-839b-b3e3eadf18b5",
+          "name": "Get scheduled callback",
+          "request": {
+            "name": "Get scheduled callback",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "callbacks",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Resource id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "86eb7afe-593f-4854-b414-f28d638af650",
+              "name": "Scheduled callback",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "callbacks",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"organization_id\": \"string\",\n  \"to_number\": \"+12015551234\",\n  \"scheduled_at\": \"1985-05-24T20:16:51.433Z\",\n  \"status\": \"scheduled\",\n  \"pipeline_config\": {\n    \"key_0\": false,\n    \"key_1\": \"string\"\n  },\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": 1419.2199347565836,\n    \"key_2\": true\n  },\n  \"created_at\": \"2000-12-28T07:25:03.190Z\",\n  \"updated_at\": \"1976-06-16T16:52:11.670Z\",\n  \"source_session_id\": \"string\",\n  \"created_session_id\": \"string\",\n  \"agent_id\": \"string\",\n  \"phone_number_id\": \"string\",\n  \"from_number\": \"string\",\n  \"reason\": \"string\",\n  \"instructions\": \"string\",\n  \"summary\": \"string\",\n  \"failure_cause\": \"string\",\n  \"attempted_at\": \"2005-09-18T22:48:52.778Z\",\n  \"dispatched_at\": \"1977-10-01T19:13:30.309Z\",\n  \"cancelled_at\": \"1968-11-12T22:06:55.734Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7b19d6f6-53e7-4106-9c40-0bfe6cf97471",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "callbacks",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ebb88fdc-c3ad-4176-bd96-d602d63f249c",
+          "name": "Cancel scheduled callback",
+          "request": {
+            "name": "Cancel scheduled callback",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "callbacks",
+                ":id",
+                "cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Resource id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "da828da7-deb4-4220-a121-7119658f2563",
+              "name": "Scheduled callback",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "callbacks",
+                    ":id",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"organization_id\": \"string\",\n  \"to_number\": \"+12015551234\",\n  \"scheduled_at\": \"1985-05-24T20:16:51.433Z\",\n  \"status\": \"scheduled\",\n  \"pipeline_config\": {\n    \"key_0\": false,\n    \"key_1\": \"string\"\n  },\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": 1419.2199347565836,\n    \"key_2\": true\n  },\n  \"created_at\": \"2000-12-28T07:25:03.190Z\",\n  \"updated_at\": \"1976-06-16T16:52:11.670Z\",\n  \"source_session_id\": \"string\",\n  \"created_session_id\": \"string\",\n  \"agent_id\": \"string\",\n  \"phone_number_id\": \"string\",\n  \"from_number\": \"string\",\n  \"reason\": \"string\",\n  \"instructions\": \"string\",\n  \"summary\": \"string\",\n  \"failure_cause\": \"string\",\n  \"attempted_at\": \"2005-09-18T22:48:52.778Z\",\n  \"dispatched_at\": \"1977-10-01T19:13:30.309Z\",\n  \"cancelled_at\": \"1968-11-12T22:06:55.734Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d7fffd8a-9ec3-4aff-85b0-cad4e27fc1d1",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "callbacks",
+                    ":id",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "42e466da-abf1-48e2-a341-2ab8706a995d",
+          "name": "Dispatch scheduled callback now",
+          "request": {
+            "name": "Dispatch scheduled callback now",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "callbacks",
+                ":id",
+                "dispatch"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Resource id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2b83c18f-2858-4292-8fed-a4b9f67c058b",
+              "name": "Scheduled callback",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "callbacks",
+                    ":id",
+                    "dispatch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"organization_id\": \"string\",\n  \"to_number\": \"+12015551234\",\n  \"scheduled_at\": \"1985-05-24T20:16:51.433Z\",\n  \"status\": \"scheduled\",\n  \"pipeline_config\": {\n    \"key_0\": false,\n    \"key_1\": \"string\"\n  },\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": 1419.2199347565836,\n    \"key_2\": true\n  },\n  \"created_at\": \"2000-12-28T07:25:03.190Z\",\n  \"updated_at\": \"1976-06-16T16:52:11.670Z\",\n  \"source_session_id\": \"string\",\n  \"created_session_id\": \"string\",\n  \"agent_id\": \"string\",\n  \"phone_number_id\": \"string\",\n  \"from_number\": \"string\",\n  \"reason\": \"string\",\n  \"instructions\": \"string\",\n  \"summary\": \"string\",\n  \"failure_cause\": \"string\",\n  \"attempted_at\": \"2005-09-18T22:48:52.778Z\",\n  \"dispatched_at\": \"1977-10-01T19:13:30.309Z\",\n  \"cancelled_at\": \"1968-11-12T22:06:55.734Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cfef0c5d-a151-448d-8860-137efd2211d5",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "callbacks",
+                    ":id",
+                    "dispatch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Resource id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.speko.dev",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "5bb4164b-e102-4265-9830-a3e81ee73223",
+    "name": "Speko Agents Telephony API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Public REST API for the Speko voice gateway. Routes, transcribes, synthesizes, and completes via the highest-scoring provider for your routing intent, with transparent server-side failover.\n\nContact Support:\n Email: abat@speko.ai",
+      "type": "text/plain"
+    }
+  }
+}

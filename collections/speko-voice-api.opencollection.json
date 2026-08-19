@@ -1,0 +1,221 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Speko Agents Voice API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Voice",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List voice sessions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speko.dev/v1/sessions",
+            "params": [
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Opaque cursor returned by a prior call. Omit on the first page."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Max number of entries to return."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by session lifecycle status (e.g. `active`, `ended`, `failed`)."
+              },
+              {
+                "name": "kind",
+                "value": "",
+                "type": "query",
+                "description": "Filter by session kind."
+              },
+              {
+                "name": "agent",
+                "value": "",
+                "type": "query",
+                "description": "Filter to sessions started against this agent. Matches sessions whose `pipelineConfig.agentId` equals this value. Combines with other filters via AND."
+              }
+            ]
+          },
+          "docs": "Returns sessions visible to the calling key, newest first. Supports cursor pagination and filtering by `status`, `kind`, and `agent`. All filters combine via AND."
+        },
+        {
+          "info": {
+            "name": "Create a real-time voice session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.speko.dev/v1/sessions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Mints browser-safe media transport credentials, persists the pipeline config, and dispatches an agent worker. Use the returned `transportToken` and `transportUrl` with `@spekoai/client` to join from a browser."
+        },
+        {
+          "info": {
+            "name": "Transcribe audio (speech to text)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.speko.dev/v1/transcribe",
+            "headers": [
+              {
+                "name": "x-speko-intent",
+                "value": ""
+              },
+              {
+                "name": "x-speko-constraints",
+                "value": ""
+              },
+              {
+                "name": "x-speko-stt-options",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Routes the request to the best STT provider for your `(language, region, optimizeFor)` intent, with automatic failover to runner-up providers before the first event is emitted. Body is binary audio. Routing intent goes in the `x-speko-intent` header (JSON). The response is a Server-Sent Events stream: `meta`, `transcript`, `done`, and `error`."
+        },
+        {
+          "info": {
+            "name": "List TTS voices",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speko.dev/v1/voices",
+            "params": [
+              {
+                "name": "provider",
+                "value": "",
+                "type": "query",
+                "description": "Filter to a single provider's voices. Accepts either the routing key (`cartesia`, `xai`, `alibaba`, `openai`, `inworld`, `elevenlabs`) or the catalog suffix form (`xai-tts`, `alibaba-tts`, `openai-tts`)."
+              }
+            ]
+          },
+          "docs": "Returns the curated catalog of TTS voices grouped by provider, plus the list of TTS providers Speko routes to. ElevenLabs is included in `providers` with `voicesFetchedLive: true` because its voice library is account-scoped — fetch it directly from `https://api.elevenlabs.io/v1/voices` with the org's key."
+        },
+        {
+          "info": {
+            "name": "Synthesize speech (text to speech)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.speko.dev/v1/synthesize",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Routes the request to the best TTS provider for your intent, with automatic failover before the first audio chunk. Returns chunked binary audio. The `Content-Type` header (mirrored in `X-Speko-Audio-Format`) tells you the format."
+        },
+        {
+          "info": {
+            "name": "Generate an LLM completion",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.speko.dev/v1/complete",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Single-turn LLM call routed to the best provider for your intent, with automatic failover before the first event is emitted. The response is a Server-Sent Events stream: `meta`, `delta`, `tool_call`, `server_tool_call`, `done`, and `error`."
+        },
+        {
+          "info": {
+            "name": "Get a signed URL for the session recording",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speko.dev/v1/sessions/:id/recording",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Session id."
+              }
+            ]
+          },
+          "docs": "Returns a 302 redirect to a short-lived (5 minute) signed Google Cloud Storage URL for the mixed-mono Opus recording of this session. Follow the redirect to download the file — clients should pass the equivalent of `curl -L`. The signed URL is single-use within its TTL window; refetch this endpoint to get a fresh one. Recordings are retained for 30 days after the session ends, then deleted by a GCS lifecycle policy."
+        },
+        {
+          "info": {
+            "name": "Ingest finalized transcript turns",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.speko.dev/v1/sessions/:id/turns",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Session id."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Append finalized STT and LLM turns to a session's transcript. Worker-only — the agent worker batches and debounces (~200ms) finalized turns and POSTs them here. Interim STT partials are not accepted; only finalized turns are persisted. Idempotent on `(session_id, index)`: re-posting a turn with the same index replaces the existing entry, so retries on transient errors are safe."
+        },
+        {
+          "info": {
+            "name": "Get a session's full transcript",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speko.dev/v1/sessions/:id/transcript",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Session id."
+              }
+            ]
+          },
+          "docs": "Returns every finalized STT and LLM turn captured during the session, sorted by `index` ascending. The dashboard's session detail page surfaces these under the Transcript card. S2S sessions don't currently produce transcripts (the audio path bypasses our STT/LLM components) — expect an empty `entries` array for those. Interim STT partials are never returned; only finalized turns make it into this response."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

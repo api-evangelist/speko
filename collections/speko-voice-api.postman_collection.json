@@ -1,0 +1,2247 @@
+{
+  "item": [
+    {
+      "id": "a5fc8dbd-2e9e-4255-b745-4da899936a67",
+      "name": "Voice",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f11188e1-e86e-46c3-be0c-42df318c310c",
+          "name": "Create a real-time voice session",
+          "request": {
+            "name": "Create a real-time voice session",
+            "description": {
+              "content": "Mints browser-safe media transport credentials, persists the pipeline config, and dispatches an agent worker. Use the returned `transportToken` and `transportUrl` with `@spekoai/client` to join from a browser.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "sessions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"agentId\": \"<string>\",\n  \"intent\": {\n    \"language\": \"<string>\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"llm\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"tts\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"s2s\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  },\n  \"voice\": \"<string>\",\n  \"systemPrompt\": \"<string>\",\n  \"llm\": {\n    \"temperature\": \"<number>\",\n    \"maxTokens\": \"<integer>\"\n  },\n  \"ttsOptions\": {\n    \"sampleRate\": \"<integer>\",\n    \"speed\": \"<number>\"\n  },\n  \"metadata\": {\n    \"key_0\": false\n  },\n  \"ttlSeconds\": 900,\n  \"identity\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "45c9260c-581f-4b2e-8bc9-6cd07a8d1f12",
+              "name": "Session created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"agentId\": \"<string>\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ],\n      \"s2s\": [\n        \"openai\",\n        \"openai\"\n      ]\n    }\n  },\n  \"voice\": \"<string>\",\n  \"systemPrompt\": \"<string>\",\n  \"llm\": {\n    \"temperature\": \"<number>\",\n    \"maxTokens\": \"<integer>\"\n  },\n  \"ttsOptions\": {\n    \"sampleRate\": \"<integer>\",\n    \"speed\": \"<number>\"\n  },\n  \"metadata\": {\n    \"key_0\": true,\n    \"key_1\": true,\n    \"key_2\": 8810.70666292497,\n    \"key_3\": 1052\n  },\n  \"ttlSeconds\": 900,\n  \"identity\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"sessionId\": \"63829815-b710-6d76-146e-a45d0ba36198\",\n  \"transportToken\": \"string\",\n  \"transportUrl\": \"https://nzaeZY.xzmJHnyyWVZFDqJ33,VXqJ.6LVkSgOYHBAsOH,c3wIlPtnIyZ8LiPprfm\",\n  \"conversationToken\": \"string\",\n  \"livekitUrl\": \"http://NuVEElgqpOuoraJujS.hgtL.FUgKIpicCpESEZSZ,5cNR4wnNj0237,GBU0BC8bdMvQHsy-NcxmUuNH1JO\",\n  \"roomName\": \"speko_...\",\n  \"identity\": \"string\",\n  \"expiresAt\": \"1973-01-15T11:16:14.322Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "11c5459d-0be5-4daf-863b-4613398cf3f4",
+              "name": "Request body or query parameters failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"agentId\": \"<string>\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ],\n      \"s2s\": [\n        \"openai\",\n        \"openai\"\n      ]\n    }\n  },\n  \"voice\": \"<string>\",\n  \"systemPrompt\": \"<string>\",\n  \"llm\": {\n    \"temperature\": \"<number>\",\n    \"maxTokens\": \"<integer>\"\n  },\n  \"ttsOptions\": {\n    \"sampleRate\": \"<integer>\",\n    \"speed\": \"<number>\"\n  },\n  \"metadata\": {\n    \"key_0\": true,\n    \"key_1\": true,\n    \"key_2\": 8810.70666292497,\n    \"key_3\": 1052\n  },\n  \"ttlSeconds\": 900,\n  \"identity\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Invalid request body\",\n  \"code\": \"VALIDATION_ERROR\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "00c098eb-3504-4dd4-895d-6e4c76aae66c",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"agentId\": \"<string>\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ],\n      \"s2s\": [\n        \"openai\",\n        \"openai\"\n      ]\n    }\n  },\n  \"voice\": \"<string>\",\n  \"systemPrompt\": \"<string>\",\n  \"llm\": {\n    \"temperature\": \"<number>\",\n    \"maxTokens\": \"<integer>\"\n  },\n  \"ttsOptions\": {\n    \"sampleRate\": \"<integer>\",\n    \"speed\": \"<number>\"\n  },\n  \"metadata\": {\n    \"key_0\": true,\n    \"key_1\": true,\n    \"key_2\": 8810.70666292497,\n    \"key_3\": 1052\n  },\n  \"ttlSeconds\": 900,\n  \"identity\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7a9a9a5e-74f5-4069-8c80-f4a2126855f6",
+              "name": "Token mint failed, agent dispatch failed, or DB insert failed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"agentId\": \"<string>\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ],\n      \"s2s\": [\n        \"openai\",\n        \"openai\"\n      ]\n    }\n  },\n  \"voice\": \"<string>\",\n  \"systemPrompt\": \"<string>\",\n  \"llm\": {\n    \"temperature\": \"<number>\",\n    \"maxTokens\": \"<integer>\"\n  },\n  \"ttsOptions\": {\n    \"sampleRate\": \"<integer>\",\n    \"speed\": \"<number>\"\n  },\n  \"metadata\": {\n    \"key_0\": true,\n    \"key_1\": true,\n    \"key_2\": 8810.70666292497,\n    \"key_3\": 1052\n  },\n  \"ttlSeconds\": 900,\n  \"identity\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Failed to dispatch voice agent\",\n  \"code\": \"SESSION_CREATE_FAILED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0b722cad-9e0f-4712-8b9c-e590f29af215",
+          "name": "List voice sessions",
+          "request": {
+            "name": "List voice sessions",
+            "description": {
+              "content": "Returns sessions visible to the calling key, newest first. Supports cursor pagination and filtering by `status`, `kind`, and `agent`. All filters combine via AND.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "sessions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Opaque cursor returned by a prior call. Omit on the first page."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Max number of entries to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter by session lifecycle status (e.g. `active`, `ended`, `failed`)."
+                },
+                {
+                  "disabled": false,
+                  "key": "kind",
+                  "value": "<string>",
+                  "description": "Filter by session kind."
+                },
+                {
+                  "disabled": false,
+                  "key": "agent",
+                  "value": "<string>",
+                  "description": "Filter to sessions started against this agent. Matches sessions whose `pipelineConfig.agentId` equals this value. Combines with other filters via AND."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f595ae8f-0d8c-4f9f-8fc2-97f52da7ceac",
+              "name": "Page of session entries.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "kind",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "agent",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entries\": [\n    {\n      \"sessionId\": \"f83a372a-0be4-6344-e231-a51dfa146b32\",\n      \"createdAt\": \"1949-08-02T09:10:29.839Z\",\n      \"status\": \"string\",\n      \"kind\": \"string\",\n      \"pipelineConfig\": {\n        \"agentId\": \"string\"\n      },\n      \"recordingObjectPath\": \"string\",\n      \"recordingDurationMs\": 3551,\n      \"recordingStatus\": \"pending\"\n    },\n    {\n      \"sessionId\": \"fbf67a19-9d91-59d8-397f-4b971a5fd371\",\n      \"createdAt\": \"1967-12-13T07:05:34.971Z\",\n      \"status\": \"string\",\n      \"kind\": \"string\",\n      \"pipelineConfig\": {\n        \"agentId\": \"string\"\n      },\n      \"recordingObjectPath\": \"string\",\n      \"recordingDurationMs\": 9896,\n      \"recordingStatus\": \"suppressed\"\n    }\n  ],\n  \"nextCursor\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "521c72cb-9e77-4cdc-95a2-e6408bc259ed",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "kind",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "agent",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4b3a83dc-f87a-4327-9cae-3584353c53d1",
+          "name": "Transcribe audio (speech to text)",
+          "request": {
+            "name": "Transcribe audio (speech to text)",
+            "description": {
+              "content": "Routes the request to the best STT provider for your `(language, region, optimizeFor)` intent, with automatic failover to runner-up providers before the first event is emitted. Body is binary audio. Routing intent goes in the `x-speko-intent` header (JSON). The response is a Server-Sent Events stream: `meta`, `transcript`, `done`, and `error`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "transcribe"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) JSON-encoded `RoutingIntent`. Example: `{\"language\":\"en-US\",\"region\":\"global\"}`.",
+                "key": "x-speko-intent",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Optional JSON-encoded `PipelineConstraints`. Each `allowedProviders` entry is either `\"<vendor>\"` (any model from that vendor) or `\"<vendor>:<model>\"` (a specific model). Example: `{\"allowedProviders\":{\"stt\":[\"deepgram:nova-3\"]}}`.",
+                "key": "x-speko-constraints",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Optional JSON-encoded STT options. Example: `{\"keywords\":[\"Speko\",\"Ava Martinez\"]}`.",
+                "key": "x-speko-stt-options",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/octet-stream"
+              },
+              {
+                "key": "Accept",
+                "value": "text/event-stream"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<binary>"
+            }
+          },
+          "response": [
+            {
+              "id": "39107d98-7f64-44a4-85ed-f44dc73f499c",
+              "name": "Transcript event stream",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "transcribe"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) JSON-encoded `RoutingIntent`. Example: `{\"language\":\"en-US\",\"region\":\"global\"}`.",
+                    "key": "x-speko-intent",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional JSON-encoded `PipelineConstraints`. Each `allowedProviders` entry is either `\"<vendor>\"` (any model from that vendor) or `\"<vendor>:<model>\"` (a specific model). Example: `{\"allowedProviders\":{\"stt\":[\"deepgram:nova-3\"]}}`.",
+                    "key": "x-speko-constraints",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional JSON-encoded STT options. Example: `{\"keywords\":[\"Speko\",\"Ava Martinez\"]}`.",
+                    "key": "x-speko-stt-options",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Audio MIME type, e.g. `audio/wav`, `audio/mpeg`, `audio/pcm;rate=16000`.",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/event-stream"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<binary>"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/event-stream"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "96d63960-d69f-4762-be6a-47baf42a7e9c",
+              "name": "Empty body, missing/invalid `x-speko-intent` header, or malformed `x-speko-constraints`.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "transcribe"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) JSON-encoded `RoutingIntent`. Example: `{\"language\":\"en-US\",\"region\":\"global\"}`.",
+                    "key": "x-speko-intent",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional JSON-encoded `PipelineConstraints`. Each `allowedProviders` entry is either `\"<vendor>\"` (any model from that vendor) or `\"<vendor>:<model>\"` (a specific model). Example: `{\"allowedProviders\":{\"stt\":[\"deepgram:nova-3\"]}}`.",
+                    "key": "x-speko-constraints",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional JSON-encoded STT options. Example: `{\"keywords\":[\"Speko\",\"Ava Martinez\"]}`.",
+                    "key": "x-speko-stt-options",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Audio MIME type, e.g. `audio/wav`, `audio/mpeg`, `audio/pcm;rate=16000`.",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<binary>"
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Audio body is empty.\",\n  \"code\": \"INVALID_AUDIO\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e4d056ec-397c-42f8-b149-cb98a04b679f",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "transcribe"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) JSON-encoded `RoutingIntent`. Example: `{\"language\":\"en-US\",\"region\":\"global\"}`.",
+                    "key": "x-speko-intent",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional JSON-encoded `PipelineConstraints`. Each `allowedProviders` entry is either `\"<vendor>\"` (any model from that vendor) or `\"<vendor>:<model>\"` (a specific model). Example: `{\"allowedProviders\":{\"stt\":[\"deepgram:nova-3\"]}}`.",
+                    "key": "x-speko-constraints",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional JSON-encoded STT options. Example: `{\"keywords\":[\"Speko\",\"Ava Martinez\"]}`.",
+                    "key": "x-speko-stt-options",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Audio MIME type, e.g. `audio/wav`, `audio/mpeg`, `audio/pcm;rate=16000`.",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<binary>"
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "585c3190-afaf-48a3-a32c-a62ace9869f7",
+              "name": "No STT provider available for the intent, or every candidate failed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "transcribe"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) JSON-encoded `RoutingIntent`. Example: `{\"language\":\"en-US\",\"region\":\"global\"}`.",
+                    "key": "x-speko-intent",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional JSON-encoded `PipelineConstraints`. Each `allowedProviders` entry is either `\"<vendor>\"` (any model from that vendor) or `\"<vendor>:<model>\"` (a specific model). Example: `{\"allowedProviders\":{\"stt\":[\"deepgram:nova-3\"]}}`.",
+                    "key": "x-speko-constraints",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional JSON-encoded STT options. Example: `{\"keywords\":[\"Speko\",\"Ava Martinez\"]}`.",
+                    "key": "x-speko-stt-options",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Audio MIME type, e.g. `audio/wav`, `audio/mpeg`, `audio/pcm;rate=16000`.",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "<binary>"
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"All providers failed\",\n  \"code\": \"TRANSCRIBE_FAILED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "31b5a869-2e54-4d90-8e7b-09acc4883185",
+          "name": "List TTS voices",
+          "request": {
+            "name": "List TTS voices",
+            "description": {
+              "content": "Returns the curated catalog of TTS voices grouped by provider, plus the list of TTS providers Speko routes to. ElevenLabs is included in `providers` with `voicesFetchedLive: true` because its voice library is account-scoped — fetch it directly from `https://api.elevenlabs.io/v1/voices` with the org's key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "voices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "provider",
+                  "value": "<string>",
+                  "description": "Filter to a single provider's voices. Accepts either the routing key (`cartesia`, `xai`, `alibaba`, `openai`, `inworld`, `elevenlabs`) or the catalog suffix form (`xai-tts`, `alibaba-tts`, `openai-tts`)."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6b76d4b7-8323-4e24-9f1a-84a2048da34e",
+              "name": "Voice catalog",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "voices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "provider",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"voices\": [\n    {\n      \"vendor\": \"string\",\n      \"id\": \"string\",\n      \"name\": \"string\"\n    },\n    {\n      \"vendor\": \"string\",\n      \"id\": \"string\",\n      \"name\": \"string\"\n    }\n  ],\n  \"providers\": [\n    {\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"models\": [\n        \"string\",\n        \"string\"\n      ],\n      \"voicesFetchedLive\": false\n    },\n    {\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"models\": [\n        \"string\",\n        \"string\"\n      ],\n      \"voicesFetchedLive\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "239b7b4d-6efd-45c6-9e18-e6acdffecf2b",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "voices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "provider",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "344c8f6d-559a-4805-a598-7b081dcf4f24",
+          "name": "Synthesize speech (text to speech)",
+          "request": {
+            "name": "Synthesize speech (text to speech)",
+            "description": {
+              "content": "Routes the request to the best TTS provider for your intent, with automatic failover before the first audio chunk. Returns chunked binary audio. The `Content-Type` header (mirrored in `X-Speko-Audio-Format`) tells you the format.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "synthesize"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/octet-stream"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"<string>\",\n  \"intent\": {\n    \"language\": \"<string>\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"voice\": \"<string>\",\n  \"model\": \"<string>\",\n  \"speed\": \"<number>\",\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"llm\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"tts\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"s2s\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b30124e5-9c53-445e-8741-ee3ae82f2ac5",
+              "name": "Chunked audio bytes",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "synthesize"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/octet-stream"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"text\": \"<string>\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"voice\": \"<string>\",\n  \"model\": \"<string>\",\n  \"speed\": \"<number>\",\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ],\n      \"s2s\": [\n        \"openai\",\n        \"openai\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Mirrors `Content-Type` for client-side dispatch.",
+                  "key": "X-Speko-Audio-Format",
+                  "value": "string"
+                },
+                {
+                  "disabled": false,
+                  "description": "Provider that actually handled the request.",
+                  "key": "X-Speko-Provider",
+                  "value": "string"
+                },
+                {
+                  "disabled": false,
+                  "description": "Specific model used.",
+                  "key": "X-Speko-Model",
+                  "value": "string"
+                },
+                {
+                  "disabled": false,
+                  "description": "Number of providers tried before success.",
+                  "key": "X-Speko-Failover-Count",
+                  "value": "767"
+                },
+                {
+                  "disabled": false,
+                  "description": "Benchmark snapshot id used for routing.",
+                  "key": "X-Speko-Scores-Run-Id",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/octet-stream"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f284d403-288b-42db-9ed4-e42916908c70",
+              "name": "Request body or query parameters failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "synthesize"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"text\": \"<string>\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"voice\": \"<string>\",\n  \"model\": \"<string>\",\n  \"speed\": \"<number>\",\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ],\n      \"s2s\": [\n        \"openai\",\n        \"openai\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Invalid request body\",\n  \"code\": \"VALIDATION_ERROR\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a7b70c4-9448-4f16-b690-44421a06d5c0",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "synthesize"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"text\": \"<string>\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"voice\": \"<string>\",\n  \"model\": \"<string>\",\n  \"speed\": \"<number>\",\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ],\n      \"s2s\": [\n        \"openai\",\n        \"openai\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7cc8dd98-eb66-4872-b6c7-dd721bfcdd8d",
+              "name": "No TTS provider available for the intent, no default voice for chosen provider, or every candidate failed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "synthesize"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"text\": \"<string>\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"voice\": \"<string>\",\n  \"model\": \"<string>\",\n  \"speed\": \"<number>\",\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ],\n      \"s2s\": [\n        \"openai\",\n        \"openai\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"All providers failed\",\n  \"code\": \"SYNTHESIZE_FAILED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ea9b845d-b585-410b-8912-f4afc568e0c6",
+          "name": "Generate an LLM completion",
+          "request": {
+            "name": "Generate an LLM completion",
+            "description": {
+              "content": "Single-turn LLM call routed to the best provider for your intent, with automatic failover before the first event is emitted. The response is a Server-Sent Events stream: `meta`, `delta`, `tool_call`, `server_tool_call`, `done`, and `error`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "complete"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "text/event-stream"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\",\n      \"toolCalls\": [\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"args\": \"<string>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"args\": \"<string>\"\n        }\n      ],\n      \"toolCallId\": \"<string>\",\n      \"isError\": \"<boolean>\"\n    }\n  ],\n  \"intent\": {\n    \"language\": \"<string>\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"temperature\": \"<number>\",\n  \"maxTokens\": \"<integer>\",\n  \"systemPrompt\": \"<string>\",\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"llm\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"tts\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"s2s\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  },\n  \"reasoningEffort\": \"<string>\",\n  \"tools\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"parameters\": {\n        \"key_0\": 1165\n      },\n      \"executionMode\": \"<string>\",\n      \"source\": {\n        \"key_0\": false,\n        \"key_1\": 9838.707562029942,\n        \"key_2\": 1274,\n        \"key_3\": 1994.9360513845804\n      }\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"parameters\": {\n        \"key_0\": 2747\n      },\n      \"executionMode\": \"<string>\",\n      \"source\": {\n        \"key_0\": true\n      }\n    }\n  ],\n  \"toolChoice\": \"<string>\",\n  \"parallelToolCalls\": \"<boolean>\",\n  \"maxToolHops\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f8162f5a-c1af-4e71-b0ec-b5eef43abbad",
+              "name": "Completion event stream",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "complete"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/event-stream"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"string\",\n      \"toolCalls\": [\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"args\": \"string\"\n        },\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"args\": \"string\"\n        }\n      ],\n      \"toolCallId\": \"string\",\n      \"isError\": false\n    }\n  ],\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"temperature\": \"<number>\",\n  \"maxTokens\": \"<integer>\",\n  \"systemPrompt\": \"<string>\",\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ],\n      \"s2s\": [\n        \"openai\",\n        \"openai\"\n      ]\n    }\n  },\n  \"reasoningEffort\": \"<string>\",\n  \"tools\": [\n    {\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"parameters\": {\n        \"key_0\": \"string\"\n      },\n      \"executionMode\": \"webhook\",\n      \"source\": {\n        \"key_0\": true,\n        \"key_1\": 7248.970019004537\n      }\n    },\n    {\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"parameters\": {\n        \"key_0\": true\n      },\n      \"executionMode\": \"builtin\",\n      \"source\": {\n        \"key_0\": 7322\n      }\n    }\n  ],\n  \"toolChoice\": \"<string>\",\n  \"parallelToolCalls\": \"<boolean>\",\n  \"maxToolHops\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/event-stream"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "75219375-9896-4ee5-848f-61044fb76967",
+              "name": "Request body or query parameters failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "complete"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"string\",\n      \"toolCalls\": [\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"args\": \"string\"\n        },\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"args\": \"string\"\n        }\n      ],\n      \"toolCallId\": \"string\",\n      \"isError\": false\n    }\n  ],\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"temperature\": \"<number>\",\n  \"maxTokens\": \"<integer>\",\n  \"systemPrompt\": \"<string>\",\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ],\n      \"s2s\": [\n        \"openai\",\n        \"openai\"\n      ]\n    }\n  },\n  \"reasoningEffort\": \"<string>\",\n  \"tools\": [\n    {\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"parameters\": {\n        \"key_0\": \"string\"\n      },\n      \"executionMode\": \"webhook\",\n      \"source\": {\n        \"key_0\": true,\n        \"key_1\": 7248.970019004537\n      }\n    },\n    {\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"parameters\": {\n        \"key_0\": true\n      },\n      \"executionMode\": \"builtin\",\n      \"source\": {\n        \"key_0\": 7322\n      }\n    }\n  ],\n  \"toolChoice\": \"<string>\",\n  \"parallelToolCalls\": \"<boolean>\",\n  \"maxToolHops\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Invalid request body\",\n  \"code\": \"VALIDATION_ERROR\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "22098442-2275-487d-b1f2-4005699a45ca",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "complete"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"string\",\n      \"toolCalls\": [\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"args\": \"string\"\n        },\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"args\": \"string\"\n        }\n      ],\n      \"toolCallId\": \"string\",\n      \"isError\": false\n    }\n  ],\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"temperature\": \"<number>\",\n  \"maxTokens\": \"<integer>\",\n  \"systemPrompt\": \"<string>\",\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ],\n      \"s2s\": [\n        \"openai\",\n        \"openai\"\n      ]\n    }\n  },\n  \"reasoningEffort\": \"<string>\",\n  \"tools\": [\n    {\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"parameters\": {\n        \"key_0\": \"string\"\n      },\n      \"executionMode\": \"webhook\",\n      \"source\": {\n        \"key_0\": true,\n        \"key_1\": 7248.970019004537\n      }\n    },\n    {\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"parameters\": {\n        \"key_0\": true\n      },\n      \"executionMode\": \"builtin\",\n      \"source\": {\n        \"key_0\": 7322\n      }\n    }\n  ],\n  \"toolChoice\": \"<string>\",\n  \"parallelToolCalls\": \"<boolean>\",\n  \"maxToolHops\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d4b5e356-96e0-4f1e-8d9d-3d3f967dac16",
+              "name": "No LLM provider available for the intent, or every candidate failed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "complete"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"string\",\n      \"toolCalls\": [\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"args\": \"string\"\n        },\n        {\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"args\": \"string\"\n        }\n      ],\n      \"toolCallId\": \"string\",\n      \"isError\": false\n    }\n  ],\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"region\": \"global\",\n    \"optimizeFor\": \"balanced\"\n  },\n  \"temperature\": \"<number>\",\n  \"maxTokens\": \"<integer>\",\n  \"systemPrompt\": \"<string>\",\n  \"constraints\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ],\n      \"s2s\": [\n        \"openai\",\n        \"openai\"\n      ]\n    }\n  },\n  \"reasoningEffort\": \"<string>\",\n  \"tools\": [\n    {\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"parameters\": {\n        \"key_0\": \"string\"\n      },\n      \"executionMode\": \"webhook\",\n      \"source\": {\n        \"key_0\": true,\n        \"key_1\": 7248.970019004537\n      }\n    },\n    {\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"parameters\": {\n        \"key_0\": true\n      },\n      \"executionMode\": \"builtin\",\n      \"source\": {\n        \"key_0\": 7322\n      }\n    }\n  ],\n  \"toolChoice\": \"<string>\",\n  \"parallelToolCalls\": \"<boolean>\",\n  \"maxToolHops\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"All providers failed\",\n  \"code\": \"COMPLETE_FAILED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a0ee5dab-4469-4a1c-b4fc-d4cdeba55883",
+          "name": "Get a signed URL for the session recording",
+          "request": {
+            "name": "Get a signed URL for the session recording",
+            "description": {
+              "content": "Returns a 302 redirect to a short-lived (5 minute) signed Google Cloud Storage URL for the mixed-mono Opus recording of this session. Follow the redirect to download the file — clients should pass the equivalent of `curl -L`. The signed URL is single-use within its TTL window; refetch this endpoint to get a fresh one. Recordings are retained for 30 days after the session ends, then deleted by a GCS lifecycle policy.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "sessions",
+                ":id",
+                "recording"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Session id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "20bd1756-6670-4e56-8e37-66539ee198c3",
+              "name": "Redirect to a signed GCS URL valid for 5 minutes. The URL is returned in the `Location` header; the response body is empty.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id",
+                    "recording"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Session id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Found",
+              "code": 302,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Short-lived signed GCS URL. Follow to download the recording.",
+                  "key": "Location",
+                  "value": "https://WIQhNoJjLfeqUtUQONlYcsmP.bqlAiXwBvgpvfY.+yD5YiHK8xFwyrmhJ,NF0rEnLQaZ0u7Owz"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "086b8c4c-7f0a-44dc-b0bf-402a959eeb06",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id",
+                    "recording"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Session id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b46d1baf-9aa0-4c8d-9333-25869c987b17",
+              "name": "No recording exists for this session — either the id is unknown to the calling organization, recording was suppressed (`recordingStatus: \"suppressed\"`), the session is still in flight (`pending` / `uploading`), or the upload failed (`failed`). Inspect the parent session entry to disambiguate.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id",
+                    "recording"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Session id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"recording not available\",\n  \"code\": \"RECORDING_NOT_AVAILABLE\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9e89b5fc-face-461d-b63a-34df59cb6922",
+          "name": "Ingest finalized transcript turns",
+          "request": {
+            "name": "Ingest finalized transcript turns",
+            "description": {
+              "content": "Append finalized STT and LLM turns to a session's transcript. Worker-only — the agent worker batches and debounces (~200ms) finalized turns and POSTs them here. Interim STT partials are not accepted; only finalized turns are persisted. Idempotent on `(session_id, index)`: re-posting a turn with the same index replaces the existing entry, so retries on transient errors are safe.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "sessions",
+                ":id",
+                "turns"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Session id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"turns\": [\n    {\n      \"index\": \"<integer>\",\n      \"source\": \"<string>\",\n      \"text\": \"<string>\",\n      \"startedAt\": \"<dateTime>\",\n      \"endedAt\": \"<dateTime>\",\n      \"provider\": \"<string>\",\n      \"model\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bb258017-5959-425c-870f-26892244d3ad",
+              "name": "Turns accepted for persistence. Response body is empty.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id",
+                    "turns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Session id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"turns\": [\n    {\n      \"index\": 3870,\n      \"source\": \"agent\",\n      \"text\": \"string\",\n      \"startedAt\": \"2023-03-23T07:17:40.005Z\",\n      \"endedAt\": \"1978-11-30T15:56:48.032Z\",\n      \"provider\": \"string\",\n      \"model\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b91098c5-f590-4a89-90cd-af9d9c2eaeaa",
+              "name": "Request body or query parameters failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id",
+                    "turns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Session id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"turns\": [\n    {\n      \"index\": 3870,\n      \"source\": \"agent\",\n      \"text\": \"string\",\n      \"startedAt\": \"2023-03-23T07:17:40.005Z\",\n      \"endedAt\": \"1978-11-30T15:56:48.032Z\",\n      \"provider\": \"string\",\n      \"model\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Invalid request body\",\n  \"code\": \"VALIDATION_ERROR\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d34fca6e-eb5a-4a22-94be-e2c8680702db",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id",
+                    "turns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Session id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"turns\": [\n    {\n      \"index\": 3870,\n      \"source\": \"agent\",\n      \"text\": \"string\",\n      \"startedAt\": \"2023-03-23T07:17:40.005Z\",\n      \"endedAt\": \"1978-11-30T15:56:48.032Z\",\n      \"provider\": \"string\",\n      \"model\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e4dddf00-2b53-4462-8207-5926277a4662",
+              "name": "Session id is unknown to the calling organization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id",
+                    "turns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Session id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"turns\": [\n    {\n      \"index\": 3870,\n      \"source\": \"agent\",\n      \"text\": \"string\",\n      \"startedAt\": \"2023-03-23T07:17:40.005Z\",\n      \"endedAt\": \"1978-11-30T15:56:48.032Z\",\n      \"provider\": \"string\",\n      \"model\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"session not found\",\n  \"code\": \"SESSION_NOT_FOUND\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3dcfc921-6a4e-4385-9ab9-cdc35c2f5d5b",
+          "name": "Get a session's full transcript",
+          "request": {
+            "name": "Get a session's full transcript",
+            "description": {
+              "content": "Returns every finalized STT and LLM turn captured during the session, sorted by `index` ascending. The dashboard's session detail page surfaces these under the Transcript card. S2S sessions don't currently produce transcripts (the audio path bypasses our STT/LLM components) — expect an empty `entries` array for those. Interim STT partials are never returned; only finalized turns make it into this response.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "sessions",
+                ":id",
+                "transcript"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Session id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e74812c3-bd3b-4ffb-8afc-012d8b043ca8",
+              "name": "Full transcript for the session, ordered by `index`.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id",
+                    "transcript"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Session id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entries\": [\n    {\n      \"id\": \"string\",\n      \"index\": 8096,\n      \"source\": \"system\",\n      \"text\": \"string\",\n      \"startedAt\": \"1979-03-13T06:01:26.148Z\",\n      \"endedAt\": \"1959-03-22T01:03:14.794Z\",\n      \"provider\": \"string\",\n      \"model\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"index\": 5143,\n      \"source\": \"system\",\n      \"text\": \"string\",\n      \"startedAt\": \"1980-10-05T21:34:00.640Z\",\n      \"endedAt\": \"1987-05-31T09:38:14.766Z\",\n      \"provider\": \"string\",\n      \"model\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bc1e3a33-c5a0-42c1-8de9-2a578997a628",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id",
+                    "transcript"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Session id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fcb7dda3-b6c9-4def-be88-6b6f1d74babc",
+              "name": "Session id is unknown to the calling organization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "sessions",
+                    ":id",
+                    "transcript"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Session id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"session not found\",\n  \"code\": \"SESSION_NOT_FOUND\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.speko.dev",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "9dff98cf-41a4-4cee-b197-e2a12f18dc32",
+    "name": "Speko Agents Voice API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Public REST API for the Speko voice gateway. Routes, transcribes, synthesizes, and completes via the highest-scoring provider for your routing intent, with transparent server-side failover.\n\nContact Support:\n Email: abat@speko.ai",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "item": [
+    {
+      "id": "90ad75d6-e038-4a10-bf5c-b49d79010d37",
+      "name": "Providers",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6b5967bf-b7eb-4990-af30-86cfe7f1d995",
+          "name": "List known providers",
+          "request": {
+            "name": "List known providers",
+            "description": {
+              "content": "Returns every (vendor, model) pair the router knows about per pipeline layer, plus one vendor-wildcard row per vendor. The `id` field on each entry is the verbatim string callers put into `allowedProviders` on session create, transcribe, synthesize, complete, or `stackPreferences` on an agent. Use this to populate UI pickers or validate user-supplied allowlists.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "providers",
+                "known"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "67cb9749-948f-4938-87a4-75a5a7f26624",
+              "name": "Per-modality lists of allowlist-eligible entries.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "providers",
+                    "known"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"stt\": [\n    {\n      \"id\": \"deepgram\",\n      \"vendor\": \"deepgram\",\n      \"vendorName\": \"Deepgram\",\n      \"model\": \"nova-3\",\n      \"benchmarked\": true\n    },\n    {\n      \"id\": \"deepgram\",\n      \"vendor\": \"deepgram\",\n      \"vendorName\": \"Deepgram\",\n      \"model\": \"nova-3\",\n      \"benchmarked\": false\n    }\n  ],\n  \"llm\": [\n    {\n      \"id\": \"deepgram\",\n      \"vendor\": \"deepgram\",\n      \"vendorName\": \"Deepgram\",\n      \"model\": \"nova-3\",\n      \"benchmarked\": false\n    },\n    {\n      \"id\": \"deepgram\",\n      \"vendor\": \"deepgram\",\n      \"vendorName\": \"Deepgram\",\n      \"model\": \"nova-3\",\n      \"benchmarked\": false\n    }\n  ],\n  \"tts\": [\n    {\n      \"id\": \"deepgram\",\n      \"vendor\": \"deepgram\",\n      \"vendorName\": \"Deepgram\",\n      \"model\": \"nova-3\",\n      \"benchmarked\": false\n    },\n    {\n      \"id\": \"deepgram\",\n      \"vendor\": \"deepgram\",\n      \"vendorName\": \"Deepgram\",\n      \"model\": \"nova-3\",\n      \"benchmarked\": true\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2ff4aca1-0d7c-44e6-a963-ca746d9869b7",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "providers",
+                    "known"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.speko.dev",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "94c53880-04ab-49bc-8ca7-2e2b7e3a686d",
+    "name": "Speko Agents Providers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Public REST API for the Speko voice gateway. Routes, transcribes, synthesizes, and completes via the highest-scoring provider for your routing intent, with transparent server-side failover.\n\nContact Support:\n Email: abat@speko.ai",
+      "type": "text/plain"
+    }
+  }
+}

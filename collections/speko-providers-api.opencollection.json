@@ -1,0 +1,35 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Speko Agents Providers API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Providers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List known providers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.speko.dev/v1/providers/known"
+          },
+          "docs": "Returns every (vendor, model) pair the router knows about per pipeline layer, plus one vendor-wildcard row per vendor. The `id` field on each entry is the verbatim string callers put into `allowedProviders` on session create, transcribe, synthesize, complete, or `stackPreferences` on an agent. Use this to populate UI pickers or validate user-supplied allowlists."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

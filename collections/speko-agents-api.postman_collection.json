@@ -1,0 +1,1133 @@
+{
+  "item": [
+    {
+      "id": "6f2a7617-ba83-4c08-bcd8-0ce1b197f028",
+      "name": "Agents",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "cc4ce528-5e30-4a95-9b9b-d723fc8961a4",
+          "name": "List agents",
+          "request": {
+            "name": "List agents",
+            "description": {
+              "content": "Returns every agent belonging to the authenticated organization. Agents are scoped per-org — IDs from another org will never appear here.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "agents"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b5ae2bc8-9add-457d-9220-f0ba6a8ba8c9",
+              "name": "Agents owned by the authenticated organization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"agent_01HW...\",\n    \"organizationId\": \"string\",\n    \"name\": \"string\",\n    \"systemPrompt\": \"string\",\n    \"voice\": \"string\",\n    \"intent\": {\n      \"language\": \"en-US\",\n      \"optimizeFor\": \"quality\"\n    },\n    \"llmOptions\": {\n      \"temperature\": 1.2360546318307544,\n      \"maxTokens\": 5283,\n      \"model\": \"string\"\n    },\n    \"createdAt\": \"2024-02-19T01:41:37.432Z\",\n    \"updatedAt\": \"1986-03-30T13:40:39.694Z\",\n    \"stackPreferences\": {\n      \"allowedProviders\": {\n        \"stt\": [\n          \"deepgram\",\n          \"deepgram\"\n        ],\n        \"llm\": [\n          \"openai\",\n          \"openai\"\n        ],\n        \"tts\": [\n          \"elevenlabs\",\n          \"elevenlabs\"\n        ]\n      }\n    }\n  },\n  {\n    \"id\": \"agent_01HW...\",\n    \"organizationId\": \"string\",\n    \"name\": \"string\",\n    \"systemPrompt\": \"string\",\n    \"voice\": \"string\",\n    \"intent\": {\n      \"language\": \"en-US\",\n      \"optimizeFor\": \"cost\"\n    },\n    \"llmOptions\": {\n      \"temperature\": 0.36020558773569356,\n      \"maxTokens\": 5749,\n      \"model\": \"string\"\n    },\n    \"createdAt\": \"2003-03-17T12:57:39.140Z\",\n    \"updatedAt\": \"2013-05-31T04:39:50.039Z\",\n    \"stackPreferences\": {\n      \"allowedProviders\": {\n        \"stt\": [\n          \"deepgram\",\n          \"deepgram\"\n        ],\n        \"llm\": [\n          \"openai\",\n          \"openai\"\n        ],\n        \"tts\": [\n          \"elevenlabs\",\n          \"elevenlabs\"\n        ]\n      }\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8fca25a7-ffdb-4c51-b05d-05745c4e653a",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5bdfd047-836c-4d90-9da5-a012d7cc1a36",
+          "name": "Create an agent",
+          "request": {
+            "name": "Create an agent",
+            "description": {
+              "content": "Persists a reusable voice persona — `systemPrompt`, optional `voice`, routing `intent`, and optional `llmOptions` — keyed by `name` within the authenticated organization. Pass the returned `id` as `agentId` on `POST /v1/sessions` to seed a session from this agent.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "agents"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"systemPrompt\": \"<string>\",\n  \"intent\": {\n    \"language\": \"<string>\",\n    \"optimizeFor\": \"<string>\"\n  },\n  \"voice\": \"<string>\",\n  \"llmOptions\": {\n    \"temperature\": \"<number>\",\n    \"maxTokens\": \"<integer>\",\n    \"model\": \"<string>\"\n  },\n  \"stackPreferences\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"llm\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"tts\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a157e8f0-94fa-41b0-bf13-efe9363de982",
+              "name": "Agent created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"systemPrompt\": \"<string>\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"optimizeFor\": \"cost\"\n  },\n  \"voice\": \"<string>\",\n  \"llmOptions\": {\n    \"temperature\": 0.36560216369099985,\n    \"maxTokens\": 2452,\n    \"model\": \"string\"\n  },\n  \"stackPreferences\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"agent_01HW...\",\n  \"organizationId\": \"string\",\n  \"name\": \"string\",\n  \"systemPrompt\": \"string\",\n  \"voice\": \"string\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"optimizeFor\": \"latency\"\n  },\n  \"llmOptions\": {\n    \"temperature\": 0.35997563287183687,\n    \"maxTokens\": 119,\n    \"model\": \"string\"\n  },\n  \"createdAt\": \"2005-04-05T21:18:54.075Z\",\n  \"updatedAt\": \"1949-02-03T11:15:21.432Z\",\n  \"stackPreferences\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7b4e200d-d310-4f4d-b33f-f4f4e24e7c1e",
+              "name": "Request body or query parameters failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"systemPrompt\": \"<string>\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"optimizeFor\": \"cost\"\n  },\n  \"voice\": \"<string>\",\n  \"llmOptions\": {\n    \"temperature\": 0.36560216369099985,\n    \"maxTokens\": 2452,\n    \"model\": \"string\"\n  },\n  \"stackPreferences\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Invalid request body\",\n  \"code\": \"VALIDATION_ERROR\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "507c310b-d66e-4b50-a9ee-1562a0a5784e",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"systemPrompt\": \"<string>\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"optimizeFor\": \"cost\"\n  },\n  \"voice\": \"<string>\",\n  \"llmOptions\": {\n    \"temperature\": 0.36560216369099985,\n    \"maxTokens\": 2452,\n    \"model\": \"string\"\n  },\n  \"stackPreferences\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ab947c04-a463-465f-9aad-9e8bc66f3ed8",
+          "name": "Get an agent",
+          "request": {
+            "name": "Get an agent",
+            "description": {
+              "content": "Fetch a single agent by id. Scoped to the authenticated organization — agents owned by another org always return 404.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "agents",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Agent id, prefixed `agent_`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "57ea0619-6066-4ce7-a087-1cae39205b0c",
+              "name": "Agent",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agents",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Agent id, prefixed `agent_`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"agent_01HW...\",\n  \"organizationId\": \"string\",\n  \"name\": \"string\",\n  \"systemPrompt\": \"string\",\n  \"voice\": \"string\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"optimizeFor\": \"latency\"\n  },\n  \"llmOptions\": {\n    \"temperature\": 0.35997563287183687,\n    \"maxTokens\": 119,\n    \"model\": \"string\"\n  },\n  \"createdAt\": \"2005-04-05T21:18:54.075Z\",\n  \"updatedAt\": \"1949-02-03T11:15:21.432Z\",\n  \"stackPreferences\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4db176ec-87ff-43ec-9f77-d86f09a407fb",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agents",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Agent id, prefixed `agent_`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c732ad2c-ccc1-4fe8-a95d-0b59c23fcb76",
+              "name": "No agent with this id exists in the authenticated organization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agents",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Agent id, prefixed `agent_`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"not found\",\n  \"code\": \"NOT_FOUND\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "91a61fe0-5966-41a1-abcb-a647136293c6",
+          "name": "Update an agent",
+          "request": {
+            "name": "Update an agent",
+            "description": {
+              "content": "Partial update — every field on the body is optional and only supplied keys are written.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "agents",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Agent id, prefixed `agent_`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"systemPrompt\": \"<string>\",\n  \"voice\": \"<string>\",\n  \"intent\": {\n    \"language\": \"<string>\",\n    \"optimizeFor\": \"<string>\"\n  },\n  \"llmOptions\": {\n    \"temperature\": \"<number>\",\n    \"maxTokens\": \"<integer>\",\n    \"model\": \"<string>\"\n  },\n  \"stackPreferences\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"llm\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"tts\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4f95f20a-cff4-42a0-a447-6a26368b4059",
+              "name": "Agent updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agents",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Agent id, prefixed `agent_`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"systemPrompt\": \"<string>\",\n  \"voice\": \"<string>\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"optimizeFor\": \"latency\"\n  },\n  \"llmOptions\": {\n    \"temperature\": 1.267314253583406,\n    \"maxTokens\": 9562,\n    \"model\": \"string\"\n  },\n  \"stackPreferences\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"agent_01HW...\",\n  \"organizationId\": \"string\",\n  \"name\": \"string\",\n  \"systemPrompt\": \"string\",\n  \"voice\": \"string\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"optimizeFor\": \"latency\"\n  },\n  \"llmOptions\": {\n    \"temperature\": 0.35997563287183687,\n    \"maxTokens\": 119,\n    \"model\": \"string\"\n  },\n  \"createdAt\": \"2005-04-05T21:18:54.075Z\",\n  \"updatedAt\": \"1949-02-03T11:15:21.432Z\",\n  \"stackPreferences\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0a457089-6027-4458-858b-b4f3761b87c3",
+              "name": "Request body or query parameters failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agents",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Agent id, prefixed `agent_`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"systemPrompt\": \"<string>\",\n  \"voice\": \"<string>\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"optimizeFor\": \"latency\"\n  },\n  \"llmOptions\": {\n    \"temperature\": 1.267314253583406,\n    \"maxTokens\": 9562,\n    \"model\": \"string\"\n  },\n  \"stackPreferences\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Invalid request body\",\n  \"code\": \"VALIDATION_ERROR\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d52817a3-c7a4-48d4-9ab9-09cda77b5200",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agents",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Agent id, prefixed `agent_`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"systemPrompt\": \"<string>\",\n  \"voice\": \"<string>\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"optimizeFor\": \"latency\"\n  },\n  \"llmOptions\": {\n    \"temperature\": 1.267314253583406,\n    \"maxTokens\": 9562,\n    \"model\": \"string\"\n  },\n  \"stackPreferences\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5c7f99ed-7fcf-4801-8240-f5c369cc3604",
+              "name": "No agent with this id exists in the authenticated organization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agents",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Agent id, prefixed `agent_`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"systemPrompt\": \"<string>\",\n  \"voice\": \"<string>\",\n  \"intent\": {\n    \"language\": \"en-US\",\n    \"optimizeFor\": \"latency\"\n  },\n  \"llmOptions\": {\n    \"temperature\": 1.267314253583406,\n    \"maxTokens\": 9562,\n    \"model\": \"string\"\n  },\n  \"stackPreferences\": {\n    \"allowedProviders\": {\n      \"stt\": [\n        \"deepgram\",\n        \"deepgram\"\n      ],\n      \"llm\": [\n        \"openai\",\n        \"openai\"\n      ],\n      \"tts\": [\n        \"elevenlabs\",\n        \"elevenlabs\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"not found\",\n  \"code\": \"NOT_FOUND\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7c602389-a45e-4b64-a311-b7fbf9ed13da",
+          "name": "Delete an agent",
+          "request": {
+            "name": "Delete an agent",
+            "description": {
+              "content": "Removes the agent and its registered tools. The organization's only remaining agent cannot be deleted and returns 409.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "agents",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Agent id, prefixed `agent_`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3a1c4102-4dad-4284-b067-30af9d8e29d3",
+              "name": "Agent deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agents",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Agent id, prefixed `agent_`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"deleted\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "02bd657a-9aca-42e0-8569-bb320d178b75",
+              "name": "Missing or invalid bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agents",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Agent id, prefixed `agent_`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\",\n  \"code\": \"UNAUTHORIZED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e5af457-ec2b-48f9-8e68-6277564b802b",
+              "name": "No agent with this id exists in the authenticated organization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agents",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Agent id, prefixed `agent_`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"not found\",\n  \"code\": \"NOT_FOUND\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "de696e6f-c59c-44d6-8034-d99913b7c312",
+              "name": "The organization's only remaining agent cannot be deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agents",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Agent id, prefixed `agent_`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Cannot delete the only agent in this organization\",\n  \"code\": \"LAST_AGENT\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.speko.dev",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "1a8a1acf-f52a-4091-88e3-384a70138d16",
+    "name": "Speko Agents API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Public REST API for the Speko voice gateway. Routes, transcribes, synthesizes, and completes via the highest-scoring provider for your routing intent, with transparent server-side failover.\n\nContact Support:\n Email: abat@speko.ai",
+      "type": "text/plain"
+    }
+  }
+}

@@ -11,6 +11,18 @@ description: >-
   founded by Beknazar Abdikamalov. The platform advertises SOC 2 Type II, HIPAA,
   and GDPR posture and ships TypeScript and Python SDKs, a browser SDK, a LiveKit
   adapter, and a hosted MCP server.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: self-serve

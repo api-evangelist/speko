@@ -1,0 +1,32 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "Speko",
+    "identifier": "speko.ai",
+    "documentationUrl": "https://speko.ai/developers",
+    "logoUrl": "https://speko.ai/icon.svg"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:speko.ai:mcp:docs",
+      "displayName": "Speko Docs MCP",
+      "description": "Public, read-only Speko API, SDK, adapter, quickstart, and migration documentation.",
+      "type": "application/mcp-server-card+json",
+      "url": "https://speko.ai/.well-known/mcp/server-card.json"
+    },
+    {
+      "identifier": "urn:air:speko.ai:skill:get-started",
+      "displayName": "Get started with Speko voice",
+      "description": "A governed playbook for creating and operating a disclosed Speko voice front desk.",
+      "type": "application/agent-skills+md",
+      "url": "https://speko.ai/.well-known/agent-skills/get-started/SKILL.md"
+    },
+    {
+      "identifier": "urn:air:speko.ai:api:relay",
+      "displayName": "Speko Relay API",
+      "description": "OpenAPI 3.1 contract for Speko's hosted STT, LLM, and TTS Relay.",
+      "type": "application/vnd.oai.openapi+json;version=3.1",
+      "url": "https://speko.ai/openapi.json"
+    }
+  ]
+}

@@ -23,7 +23,7 @@ conformance:
   spec_version_declared: '1.0'
   hard_failures: []
   soft_gaps:
-  - cors-not-wildcard
+  - cors-not-readable-cross-origin
   - entry-no-representativeQueries
   - host-identifier-not-did-web
   official_tool:

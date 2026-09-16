@@ -1,16 +1,13 @@
 aid: speko
 name: Speko
-description: >-
-  Speko is a voice-AI gateway - "one API for the whole voice stack." It
-  continuously benchmarks speech-to-text, LLM, and text-to-speech providers and
-  routes every call to the best provider for your language, latency, and cost
-  intent, with transparent server-side failover. Developers ship voice agents in
-  minutes over one REST API (no provider keys required, or bring your own),
-  deploying to phone numbers, web widgets, or one-shot transcribe/synthesize/
-  complete calls. Speko is a Y Combinator (S26) company based in San Francisco,
-  founded by Beknazar Abdikamalov. The platform advertises SOC 2 Type II, HIPAA,
-  and GDPR posture and ships TypeScript and Python SDKs, a browser SDK, a LiveKit
-  adapter, and a hosted MCP server.
+description: Speko is a voice-AI gateway - "one API for the whole voice stack." It continuously benchmarks
+  speech-to-text, LLM, and text-to-speech providers and routes every call to the best provider for your
+  language, latency, and cost intent, with transparent server-side failover. Developers ship voice agents
+  in minutes over one REST API (no provider keys required, or bring your own), deploying to phone numbers,
+  web widgets, or one-shot transcribe/synthesize/ complete calls. Speko is a Y Combinator (S26) company
+  based in San Francisco, founded by Beknazar Abdikamalov. The platform advertises SOC 2 Type II, HIPAA,
+  and GDPR posture and ships TypeScript and Python SDKs, a browser SDK, a LiveKit adapter, and a hosted
+  MCP server.
 deliveryModel:
   model: saas
   open_source: false
@@ -44,7 +41,7 @@ x-backed-by:
 - y-combinator
 specificationVersion: '0.23'
 created: '2026-07-17'
-modified: '2026-07-21'
+modified: '2026-09-16'
 tags:
 - Voice
 - Voice AI
@@ -162,6 +159,8 @@ apis:
   - type: Webhooks
     url: asyncapi/speko-webhooks.yml
 common:
+- type: Website
+  url: https://speko.dev
 - type: Overlay
   url: overlays/speko-openapi-overlay.yaml
 - type: DeveloperPortal

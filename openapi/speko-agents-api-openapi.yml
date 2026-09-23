@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Speko Agents API
   version: 1.0.0
@@ -146,111 +146,6 @@ paths:
           $ref: '#/components/responses/AgentDeleteConflict'
 components:
   schemas:
-    AgentIntent:
-      type: object
-      description: 'Routing defaults stored on an agent row. Hydrated into a session''s `RoutingIntent` when the session is created with `agentId` and no inline `intent`. Note: agents accept a smaller `optimizeFor` enum than the per-session `RoutingIntent`.'
-      required:
-      - language
-      properties:
-        language:
-          type: string
-          minLength: 2
-          description: BCP-47 language tag, e.g. `en`, `en-US`, `es-MX`.
-          examples:
-          - en-US
-        optimizeFor:
-          type: string
-          enum:
-          - latency
-          - quality
-          - cost
-    AgentLlmOptions:
-      type: object
-      description: Optional LLM tuning defaults stored on an agent. Strict object — only these three keys are accepted.
-      additionalProperties: false
-      properties:
-        temperature:
-          type: number
-          minimum: 0
-          maximum: 2
-        maxTokens:
-          type: integer
-          minimum: 1
-        model:
-          type: string
-          description: Pin a specific LLM model id. When omitted, the router picks per intent.
-    UpdateAgentRequest:
-      type: object
-      description: Partial update — every field is optional. Only supplied keys are written.
-      properties:
-        name:
-          type: string
-          minLength: 1
-          maxLength: 120
-          description: Human-readable display name. Does not need to be unique — agents are identified by `id`.
-        systemPrompt:
-          type: string
-          minLength: 1
-        voice:
-          type: string
-        intent:
-          $ref: '#/components/schemas/AgentIntent'
-        llmOptions:
-          $ref: '#/components/schemas/AgentLlmOptions'
-        stackPreferences:
-          $ref: '#/components/schemas/AgentStackPreferences'
-    AgentStackPreferences:
-      type: object
-      description: Per-agent stack preferences. Empty / missing layers leave the router unconstrained for that layer; failover stays active within the allowed set.
-      additionalProperties: false
-      properties:
-        allowedProviders:
-          type: object
-          description: Per-pipeline-layer provider allowlists (e.g. STT must be Deepgram or AssemblyAI). Each entry is either `"<vendor>"` (vendor wildcard — allow any model from that vendor) or `"<vendor>:<model>"` (allow only that specific model). Failover stays active across all entries in the layer.
-          additionalProperties: false
-          properties:
-            stt:
-              type: array
-              items:
-                type: string
-                description: Allowed STT provider entry. Either a vendor id (e.g. `"deepgram"` — any Deepgram model) or `"<vendor>:<model>"` (e.g. `"deepgram:nova-3"` — only Nova-3, no fallback to other Deepgram models within the vendor). Both forms can be mixed in the same array.
-                examples:
-                - deepgram
-                - deepgram:nova-3
-                - assemblyai
-              description: Allowed STT provider entries. Empty / absent = no constraint.
-            llm:
-              type: array
-              items:
-                type: string
-                description: Allowed LLM provider entry. Either a vendor id (e.g. `"openai"` — any OpenAI model) or `"<vendor>:<model>"` (e.g. `"openai:gpt-5"` — only that model). Both forms can be mixed in the same array.
-                examples:
-                - openai
-                - openai:gpt-5
-                - anthropic
-              description: Allowed LLM provider entries. Empty / absent = no constraint.
-            tts:
-              type: array
-              items:
-                type: string
-                description: Allowed TTS provider entry. Either a vendor id (e.g. `"elevenlabs"` — any ElevenLabs model) or `"<vendor>:<model>"` (e.g. `"elevenlabs:eleven_flash_v2_5"` — only that model). Both forms can be mixed in the same array.
-                examples:
-                - elevenlabs
-                - elevenlabs:eleven_flash_v2_5
-                - cartesia
-              description: Allowed TTS provider entries. Empty / absent = no constraint.
-    Error:
-      type: object
-      required:
-      - error
-      - code
-      properties:
-        error:
-          type: string
-          description: Human-readable message.
-        code:
-          type: string
-          description: Machine-readable code.
     CreateAgentRequest:
       type: object
       required:
@@ -331,18 +226,112 @@ components:
           - $ref: '#/components/schemas/AgentStackPreferences'
           - type: 'null'
           description: Per-agent stack preferences. `null` when the agent has no preferences set.
-  responses:
-    ValidationError:
-      description: Request body or query parameters failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      required:
+      - error
+      - code
+      properties:
+        error:
+          type: string
+          description: Human-readable message.
+        code:
+          type: string
+          description: Machine-readable code.
+    UpdateAgentRequest:
+      type: object
+      description: Partial update — every field is optional. Only supplied keys are written.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+          description: Human-readable display name. Does not need to be unique — agents are identified by `id`.
+        systemPrompt:
+          type: string
+          minLength: 1
+        voice:
+          type: string
+        intent:
+          $ref: '#/components/schemas/AgentIntent'
+        llmOptions:
+          $ref: '#/components/schemas/AgentLlmOptions'
+        stackPreferences:
+          $ref: '#/components/schemas/AgentStackPreferences'
+    AgentStackPreferences:
+      type: object
+      description: Per-agent stack preferences. Empty / missing layers leave the router unconstrained for that layer; failover stays active within the allowed set.
+      additionalProperties: false
+      properties:
+        allowedProviders:
+          type: object
+          description: Per-pipeline-layer provider allowlists (e.g. STT must be Deepgram or AssemblyAI). Each entry is either `"<vendor>"` (vendor wildcard — allow any model from that vendor) or `"<vendor>:<model>"` (allow only that specific model). Failover stays active across all entries in the layer.
+          additionalProperties: false
+          properties:
+            stt:
+              type: array
+              items:
+                type: string
+                description: Allowed STT provider entry. Either a vendor id (e.g. `"deepgram"` — any Deepgram model) or `"<vendor>:<model>"` (e.g. `"deepgram:nova-3"` — only Nova-3, no fallback to other Deepgram models within the vendor). Both forms can be mixed in the same array.
+                examples:
+                - deepgram
+                - deepgram:nova-3
+                - assemblyai
+              description: Allowed STT provider entries. Empty / absent = no constraint.
+            llm:
+              type: array
+              items:
+                type: string
+                description: Allowed LLM provider entry. Either a vendor id (e.g. `"openai"` — any OpenAI model) or `"<vendor>:<model>"` (e.g. `"openai:gpt-5"` — only that model). Both forms can be mixed in the same array.
+                examples:
+                - openai
+                - openai:gpt-5
+                - anthropic
+              description: Allowed LLM provider entries. Empty / absent = no constraint.
+            tts:
+              type: array
+              items:
+                type: string
+                description: Allowed TTS provider entry. Either a vendor id (e.g. `"elevenlabs"` — any ElevenLabs model) or `"<vendor>:<model>"` (e.g. `"elevenlabs:eleven_flash_v2_5"` — only that model). Both forms can be mixed in the same array.
+                examples:
+                - elevenlabs
+                - elevenlabs:eleven_flash_v2_5
+                - cartesia
+              description: Allowed TTS provider entries. Empty / absent = no constraint.
+    AgentLlmOptions:
+      type: object
+      description: Optional LLM tuning defaults stored on an agent. Strict object — only these three keys are accepted.
+      additionalProperties: false
+      properties:
+        temperature:
+          type: number
+          minimum: 0
+          maximum: 2
+        maxTokens:
+          type: integer
+          minimum: 1
+        model:
+          type: string
+          description: Pin a specific LLM model id. When omitted, the router picks per intent.
+    AgentIntent:
+      type: object
+      description: 'Routing defaults stored on an agent row. Hydrated into a session''s `RoutingIntent` when the session is created with `agentId` and no inline `intent`. Note: agents accept a smaller `optimizeFor` enum than the per-session `RoutingIntent`.'
+      required:
+      - language
+      properties:
+        language:
+          type: string
+          minLength: 2
+          description: BCP-47 language tag, e.g. `en`, `en-US`, `es-MX`.
           examples:
-            default:
-              value:
-                error: Invalid request body
-                code: VALIDATION_ERROR
+          - en-US
+        optimizeFor:
+          type: string
+          enum:
+          - latency
+          - quality
+          - cost
+  responses:
     AgentDeleteConflict:
       description: The organization's only remaining agent cannot be deleted.
       content:
@@ -365,6 +354,17 @@ components:
               value:
                 error: Unauthorized
                 code: UNAUTHORIZED
+    ValidationError:
+      description: Request body or query parameters failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              value:
+                error: Invalid request body
+                code: VALIDATION_ERROR
     AgentNotFound:
       description: No agent with this id exists in the authenticated organization.
       content:

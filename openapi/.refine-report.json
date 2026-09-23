@@ -1,10 +1,7 @@
 {
   "provider": "speko",
   "sources": [
-    "speko-agents-api-openapi.yml",
-    "speko-providers-api-openapi.yml",
-    "speko-telephony-api-openapi.yml",
-    "speko-voice-api-openapi.yml"
+    "_original/speko-openapi-original.json"
   ],
   "outputs": [
     "speko-agents-api-openapi.yml",
@@ -15,6 +12,19 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "speko-openapi-original.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "speko-openapi-original.json: declared missing tag: Agents",
+    "speko-openapi-original.json: declared missing tag: Providers",
+    "speko-openapi-original.json: declared missing tag: Telephony",
+    "speko-openapi-original.json: declared missing tag: Voice",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "speko-agents-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "speko-providers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "speko-telephony-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "speko-voice-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

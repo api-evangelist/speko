@@ -1,0 +1,1 @@
+{"resource":"https://mcp.speko.ai/mcp","authorization_servers":["https://platform.speko.ai/api/auth"],"scopes_supported":["openid","profile","email","speko:read","speko:write","speko:execute","speko:billing","speko:credentials","speko:compliance","speko:phone"],"bearer_methods_supported":["header"],"resource_name":"Speko MCP"}

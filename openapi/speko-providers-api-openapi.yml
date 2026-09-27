@@ -31,6 +31,18 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
+    Error:
+      type: object
+      required:
+      - error
+      - code
+      properties:
+        error:
+          type: string
+          description: Human-readable message.
+        code:
+          type: string
+          description: Machine-readable code.
     KnownProviders:
       type: object
       description: Per-modality lists of allowlist-eligible entries. Each layer's array contains one vendor-wildcard row per known vendor plus one row per known (vendor, model) pair. Use the `id` field as the verbatim string for `allowedProviders`.
@@ -51,18 +63,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProviderModelEntry'
-    Error:
-      type: object
-      required:
-      - error
-      - code
-      properties:
-        error:
-          type: string
-          description: Human-readable message.
-        code:
-          type: string
-          description: Machine-readable code.
     ProviderModelEntry:
       type: object
       description: A single allowlist-eligible entry returned by `/v1/providers/known`. The `id` is the verbatim string callers put into `allowedProviders` — either a vendor wildcard (`"deepgram"`) or a specific (vendor, model) pair (`"deepgram:nova-3"`).

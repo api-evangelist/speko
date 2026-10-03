@@ -611,6 +611,158 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
+    TelephonyOptions:
+      type: object
+      properties:
+        region:
+          type: string
+          description: Optional SIP routing region hint forwarded as `X-Speko-Region`.
+        amd:
+          type: object
+          properties:
+            mode:
+              type: string
+              enum:
+              - agent
+              - carrier
+              - disabled
+              default: agent
+            timeoutSeconds:
+              type: integer
+              minimum: 1
+              maximum: 60
+    AgentCallListEntry:
+      type: object
+      required:
+      - id
+      - call_id
+      - resource_uri
+      - agent_id
+      - status
+      - kind
+      - created_at
+      properties:
+        id:
+          type: string
+        call_id:
+          type: string
+        resource_uri:
+          type: string
+        agent_id:
+          type: string
+        status:
+          type: string
+        kind:
+          type: string
+        room_name:
+          type: string
+          nullable: true
+        language:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        ended_at:
+          type: string
+          format: date-time
+          nullable: true
+        duration_seconds:
+          type: integer
+          nullable: true
+        recording_status:
+          type: string
+          nullable: true
+    PhoneNumberSetupStatus:
+      type: object
+      required:
+      - status
+      - inboundReady
+      - outboundReady
+      - agentReady
+      - forwardingRequired
+      - sipConnectionReady
+      - issues
+      properties:
+        status:
+          type: string
+          enum:
+          - ready
+          - action_required
+          - suspended
+        inboundReady:
+          type: boolean
+        outboundReady:
+          type: boolean
+        agentReady:
+          type: boolean
+        forwardingRequired:
+          type: boolean
+        sipConnectionReady:
+          type: boolean
+        issues:
+          type: array
+          items:
+            type: string
+    PhoneNumberDirection:
+      type: string
+      enum:
+      - inbound
+      - outbound
+      - both
+    VoiceDialResponse:
+      type: object
+      required:
+      - sessionId
+      - callControlId
+      - roomName
+      - status
+      - to
+      - from
+      properties:
+        sessionId:
+          type: string
+        callControlId:
+          type: string
+          description: LiveKit SIP participant identity for the outbound leg.
+        roomName:
+          type: string
+        status:
+          type: string
+          enum:
+          - dialing
+          - dialing-stub
+        to:
+          $ref: '#/components/schemas/E164'
+        from:
+          $ref: '#/components/schemas/E164'
+    FinalizeCallReportResponse:
+      type: object
+      required:
+      - session_id
+      - summary
+      - outcome
+      - cost_micro_usd
+      - webhook
+      properties:
+        session_id:
+          type: string
+        summary:
+          type: string
+        outcome:
+          type: string
+        cost_micro_usd:
+          type: string
+        webhook:
+          $ref: '#/components/schemas/JsonObject'
+    CallEventsResponse:
+      type: object
+      required:
+      - events
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/CallEvent'
     CallDetail:
       type: object
       required:
@@ -680,50 +832,6 @@ components:
                 $ref: '#/components/schemas/CallTranscriptEntry'
         span_tree:
           $ref: '#/components/schemas/JsonObject'
-    PhoneNumberKybBusinessProfile:
-      type: object
-      required:
-      - legalName
-      - displayName
-      - entityType
-      - country
-      - website
-      - address
-      - useCase
-      - expectedUsage
-      properties:
-        legalName:
-          type: string
-        displayName:
-          type: string
-        entityType:
-          type: string
-        country:
-          type: string
-        registrationId:
-          type: string
-        website:
-          type: string
-          format: uri
-        address:
-          $ref: '#/components/schemas/JsonObject'
-        useCase:
-          type: string
-        expectedUsage:
-          type: string
-    CallTransferResponse:
-      allOf:
-      - $ref: '#/components/schemas/CallTransfer'
-      - type: object
-        properties:
-          routing_attempts:
-            type: array
-            items:
-              $ref: '#/components/schemas/CallTransfer'
-          next_transfer:
-            $ref: '#/components/schemas/CallTransfer'
-          fallback:
-            $ref: '#/components/schemas/JsonObject'
     CallTransfer:
       type: object
       required:
@@ -795,232 +903,17 @@ components:
           type: string
           format: date-time
           nullable: true
-    RoutingIntent:
-      type: object
-      required:
-      - language
-      properties:
-        language:
-          type: string
-          pattern: ^[a-z]{2}(-[A-Z]{2})?$
-          description: BCP-47 language tag, e.g. `en`, `en-US`, `es-MX`.
-          examples:
-          - en-US
-        region:
-          type: string
-          enum:
-          - global
-          - us-east4
-          - europe-west3
-          - asia-southeast1
-          default: global
-          description: Region whose streaming-latency measurements should be used. `global` falls through to batch-mode rows when no per-region data matches.
-        optimizeFor:
-          type: string
-          enum:
-          - balanced
-          - accuracy
-          - latency
-          - cost
-          default: balanced
-    CancelWarmTransferRequest:
-      type: object
-      properties:
-        reason:
-          type: string
-        summary:
-          type: string
-        tryNext:
-          type: boolean
-        voicemailDetected:
-          type: boolean
-    E164:
-      type: string
-      pattern: ^\+[1-9]\d{6,14}$
-      examples:
-      - '+12015551234'
-    PhoneNumberUpdateRequest:
-      type: object
-      properties:
-        direction:
-          $ref: '#/components/schemas/PhoneNumberDirection'
-        dispatchMetadataTemplate:
-          type: object
-          additionalProperties: true
-          nullable: true
-        label:
-          type: string
-          nullable: true
-          maxLength: 120
-        agentId:
-          type: string
-          nullable: true
-    FinalizeCallReportRequest:
-      type: object
-      properties:
-        forceAnalysis:
-          type: boolean
-        retryWebhook:
-          type: boolean
-    PhoneNumberImportRequest:
-      type: object
-      required:
-      - e164
-      properties:
-        e164:
-          $ref: '#/components/schemas/E164'
-        sipConnectionInstallationId:
-          type: string
-          description: Installed SIP connection integration id. Preferred for new imports.
-        sipTrunkId:
-          type: string
-          description: Legacy outbound trunk id. Required when `sipConnectionInstallationId` is omitted.
-        sipProviderName:
-          type: string
-        direction:
-          $ref: '#/components/schemas/PhoneNumberDirection'
-        dispatchMetadataTemplate:
-          $ref: '#/components/schemas/JsonObject'
-        label:
-          type: string
-          maxLength: 120
-        agentId:
-          type: string
-    CallTranscriptEntry:
-      type: object
-      required:
-      - id
-      - index
-      - source
-      - text
-      - started_at
-      - metadata
-      properties:
-        id:
-          type: string
-        index:
-          type: integer
-        source:
-          type: string
-          enum:
-          - user
-          - agent
-          - system
-        text:
-          type: string
-        started_at:
-          type: string
-          format: date-time
-        ended_at:
-          type: string
-          format: date-time
-          nullable: true
-        provider:
-          type: string
-          nullable: true
-        model:
-          type: string
-          nullable: true
-        metadata:
-          $ref: '#/components/schemas/JsonObject'
-    PhoneNumberKybSubmission:
-      type: object
-      required:
-      - id
-      - organizationId
-      - status
-      - attestationAccepted
-      - createdAt
-      - updatedAt
-      properties:
-        id:
-          type: string
-        organizationId:
-          type: string
-        status:
-          type: string
-          enum:
-          - draft
-          - submitted
-          - approved
-          - rejected
-          - revoked
-        businessProfile:
-          $ref: '#/components/schemas/PhoneNumberKybBusinessProfile'
-        authorizedRepresentative:
-          $ref: '#/components/schemas/PhoneNumberKybAuthorizedRepresentative'
-        attestationAccepted:
-          type: boolean
-        attestedAt:
-          type: string
-          format: date-time
-          nullable: true
-        submittedAt:
-          type: string
-          format: date-time
-          nullable: true
-        rejectionReason:
-          type: string
-          nullable: true
-        slackNotificationStatus:
-          type: string
-          enum:
-          - not_queued
-          - queued
-          - enqueue_failed
-        slackNotificationJobId:
-          type: string
-          nullable: true
-        slackNotificationError:
-          type: string
-          nullable: true
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    AvailablePhoneNumber:
-      type: object
-      required:
-      - e164
-      - friendlyName
-      - monthlyCostUsd
-      - upfrontCostUsd
-      - features
-      - region
-      properties:
-        e164:
-          $ref: '#/components/schemas/E164'
-        friendlyName:
-          type: string
-        monthlyCostUsd:
-          type: number
-        upfrontCostUsd:
-          type: number
-        features:
-          type: array
-          items:
-            type: string
-        region:
-          $ref: '#/components/schemas/JsonObject'
-    CallEventsResponse:
-      type: object
-      required:
-      - events
-      properties:
-        events:
-          type: array
-          items:
-            $ref: '#/components/schemas/CallEvent'
-    ScheduledCallbackStatus:
-      type: string
-      enum:
-      - scheduled
-      - dispatching
-      - dispatched
-      - cancelled
-      - failed
+    PhoneNumberKybSubmitRequest:
+      allOf:
+      - $ref: '#/components/schemas/PhoneNumberKybDraftRequest'
+      - type: object
+        required:
+        - attestationAccepted
+        properties:
+          attestationAccepted:
+            type: boolean
+            enum:
+            - true
     ScheduledCallback:
       type: object
       required:
@@ -1094,48 +987,6 @@ components:
         updated_at:
           type: string
           format: date-time
-    CallEvent:
-      type: object
-      required:
-      - id
-      - organization_id
-      - provider
-      - event_type
-      - occurred_at
-      - payload
-      - created_at
-      properties:
-        id:
-          type: string
-        session_id:
-          type: string
-          nullable: true
-        organization_id:
-          type: string
-        provider:
-          type: string
-        event_type:
-          type: string
-        status:
-          type: string
-          nullable: true
-        failure_cause:
-          type: string
-          nullable: true
-        sip_status_code:
-          type: integer
-          nullable: true
-        sip_status:
-          type: string
-          nullable: true
-        occurred_at:
-          type: string
-          format: date-time
-        payload:
-          $ref: '#/components/schemas/JsonObject'
-        created_at:
-          type: string
-          format: date-time
     WarmTransferRequest:
       type: object
       properties:
@@ -1169,67 +1020,58 @@ components:
           $ref: '#/components/schemas/JsonObject'
         metadata:
           $ref: '#/components/schemas/JsonObject'
-    PhoneNumberKybSubmitRequest:
-      allOf:
-      - $ref: '#/components/schemas/PhoneNumberKybDraftRequest'
-      - type: object
-        required:
-        - attestationAccepted
-        properties:
-          attestationAccepted:
-            type: boolean
-            enum:
-            - true
-    FinalizeCallReportResponse:
+    RoutingIntent:
       type: object
       required:
-      - session_id
-      - summary
-      - outcome
-      - cost_micro_usd
-      - webhook
+      - language
       properties:
-        session_id:
+        language:
           type: string
-        summary:
-          type: string
-        outcome:
-          type: string
-        cost_micro_usd:
-          type: string
-        webhook:
-          $ref: '#/components/schemas/JsonObject'
-    PhoneNumberSetupStatus:
-      type: object
-      required:
-      - status
-      - inboundReady
-      - outboundReady
-      - agentReady
-      - forwardingRequired
-      - sipConnectionReady
-      - issues
-      properties:
-        status:
+          pattern: ^[a-z]{2}(-[A-Z]{2})?$
+          description: BCP-47 language tag, e.g. `en`, `en-US`, `es-MX`.
+          examples:
+          - en-US
+        region:
           type: string
           enum:
-          - ready
-          - action_required
-          - suspended
-        inboundReady:
-          type: boolean
-        outboundReady:
-          type: boolean
-        agentReady:
-          type: boolean
-        forwardingRequired:
-          type: boolean
-        sipConnectionReady:
-          type: boolean
-        issues:
-          type: array
-          items:
-            type: string
+          - global
+          - us-east4
+          - europe-west3
+          - asia-southeast1
+          default: global
+          description: Region whose streaming-latency measurements should be used. `global` falls through to batch-mode rows when no per-region data matches.
+        optimizeFor:
+          type: string
+          enum:
+          - balanced
+          - accuracy
+          - latency
+          - cost
+          default: balanced
+    PhoneNumberImportRequest:
+      type: object
+      required:
+      - e164
+      properties:
+        e164:
+          $ref: '#/components/schemas/E164'
+        sipConnectionInstallationId:
+          type: string
+          description: Installed SIP connection integration id. Preferred for new imports.
+        sipTrunkId:
+          type: string
+          description: Legacy outbound trunk id. Required when `sipConnectionInstallationId` is omitted.
+        sipProviderName:
+          type: string
+        direction:
+          $ref: '#/components/schemas/PhoneNumberDirection'
+        dispatchMetadataTemplate:
+          $ref: '#/components/schemas/JsonObject'
+        label:
+          type: string
+          maxLength: 120
+        agentId:
+          type: string
     PhoneNumberKybOverview:
       type: object
       required:
@@ -1256,204 +1098,6 @@ components:
               $ref: '#/components/schemas/PhoneNumberKybBusinessProfile'
             authorizedRepresentative:
               $ref: '#/components/schemas/PhoneNumberKybAuthorizedRepresentative'
-    PhoneNumberKybAuthorizedRepresentative:
-      type: object
-      required:
-      - name
-      - title
-      - email
-      properties:
-        name:
-          type: string
-        title:
-          type: string
-        email:
-          type: string
-          format: email
-        phone:
-          $ref: '#/components/schemas/E164'
-    PhoneNumberKybDraftRequest:
-      type: object
-      required:
-      - businessProfile
-      - authorizedRepresentative
-      properties:
-        businessProfile:
-          $ref: '#/components/schemas/PhoneNumberKybBusinessProfile'
-        authorizedRepresentative:
-          $ref: '#/components/schemas/PhoneNumberKybAuthorizedRepresentative'
-        attestationAccepted:
-          type: boolean
-          default: false
-    PipelineConstraints:
-      type: object
-      properties:
-        allowedProviders:
-          type: object
-          description: Restrict candidate pool per modality. Router still ranks by score. Each entry is either `"<vendor>"` (vendor wildcard — allow any model from that vendor) or `"<vendor>:<model>"` (allow only that specific model). Failover stays active across all entries in the layer.
-          properties:
-            stt:
-              type: array
-              items:
-                type: string
-                description: Allowed STT provider entry. Either a vendor id (e.g. `"deepgram"` — any Deepgram model) or `"<vendor>:<model>"` (e.g. `"deepgram:nova-3"` — only Nova-3, no fallback to other Deepgram models within the vendor). Both forms can be mixed in the same array.
-                examples:
-                - deepgram
-                - deepgram:nova-3
-                - assemblyai
-            llm:
-              type: array
-              items:
-                type: string
-                description: Allowed LLM provider entry. Either a vendor id (e.g. `"openai"` — any OpenAI model) or `"<vendor>:<model>"` (e.g. `"openai:gpt-5"` — only that model). Both forms can be mixed in the same array.
-                examples:
-                - openai
-                - openai:gpt-5
-                - anthropic
-            tts:
-              type: array
-              items:
-                type: string
-                description: Allowed TTS provider entry. Either a vendor id (e.g. `"elevenlabs"` — any ElevenLabs model) or `"<vendor>:<model>"` (e.g. `"elevenlabs:eleven_flash_v2_5"` — only that model). Both forms can be mixed in the same array.
-                examples:
-                - elevenlabs
-                - elevenlabs:eleven_flash_v2_5
-                - cartesia
-            s2s:
-              type: array
-              items:
-                type: string
-                description: Allowed S2S provider entry. Either a vendor id (e.g. `"openai"` — any OpenAI realtime model) or `"<vendor>:<model>"` (e.g. `"openai:gpt-realtime"` — only that model). Both forms can be mixed in the same array.
-                examples:
-                - openai
-                - openai:gpt-realtime
-    AgentCallListPage:
-      type: object
-      required:
-      - calls
-      - entries
-      - next_cursor
-      properties:
-        calls:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentCallListEntry'
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentCallListEntry'
-        next_cursor:
-          type: string
-          format: date-time
-          nullable: true
-    TelephonyOptions:
-      type: object
-      properties:
-        region:
-          type: string
-          description: Optional SIP routing region hint forwarded as `X-Speko-Region`.
-        amd:
-          type: object
-          properties:
-            mode:
-              type: string
-              enum:
-              - agent
-              - carrier
-              - disabled
-              default: agent
-            timeoutSeconds:
-              type: integer
-              minimum: 1
-              maximum: 60
-    ScheduledCallbacksResponse:
-      type: object
-      required:
-      - callbacks
-      properties:
-        callbacks:
-          type: array
-          items:
-            $ref: '#/components/schemas/ScheduledCallback'
-    AgentCallListEntry:
-      type: object
-      required:
-      - id
-      - call_id
-      - resource_uri
-      - agent_id
-      - status
-      - kind
-      - created_at
-      properties:
-        id:
-          type: string
-        call_id:
-          type: string
-        resource_uri:
-          type: string
-        agent_id:
-          type: string
-        status:
-          type: string
-        kind:
-          type: string
-        room_name:
-          type: string
-          nullable: true
-        language:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        ended_at:
-          type: string
-          format: date-time
-          nullable: true
-        duration_seconds:
-          type: integer
-          nullable: true
-        recording_status:
-          type: string
-          nullable: true
-    Error:
-      type: object
-      required:
-      - error
-      - code
-      properties:
-        error:
-          type: string
-          description: Human-readable message.
-        code:
-          type: string
-          description: Machine-readable code.
-    PhoneNumberCreateRequest:
-      type: object
-      required:
-      - e164
-      properties:
-        e164:
-          $ref: '#/components/schemas/E164'
-        direction:
-          $ref: '#/components/schemas/PhoneNumberDirection'
-        dispatchMetadataTemplate:
-          $ref: '#/components/schemas/JsonObject'
-        label:
-          type: string
-          maxLength: 120
-        agentId:
-          type: string
-    JsonObject:
-      type: object
-      additionalProperties: true
-    CompleteWarmTransferRequest:
-      type: object
-      properties:
-        recipientParticipantIdentity:
-          type: string
-        summary:
-          type: string
     PhoneNumber:
       type: object
       required:
@@ -1538,6 +1182,445 @@ components:
         updatedAt:
           type: string
           format: date-time
+    CallTransferResponse:
+      allOf:
+      - $ref: '#/components/schemas/CallTransfer'
+      - type: object
+        properties:
+          routing_attempts:
+            type: array
+            items:
+              $ref: '#/components/schemas/CallTransfer'
+          next_transfer:
+            $ref: '#/components/schemas/CallTransfer'
+          fallback:
+            $ref: '#/components/schemas/JsonObject'
+    CancelWarmTransferRequest:
+      type: object
+      properties:
+        reason:
+          type: string
+        summary:
+          type: string
+        tryNext:
+          type: boolean
+        voicemailDetected:
+          type: boolean
+    E164:
+      type: string
+      pattern: ^\+[1-9]\d{6,14}$
+      examples:
+      - '+12015551234'
+    ScheduledCallbackStatus:
+      type: string
+      enum:
+      - scheduled
+      - dispatching
+      - dispatched
+      - cancelled
+      - failed
+    BlindTransferRequest:
+      type: object
+      required:
+      - to
+      properties:
+        to:
+          type: string
+        participantIdentity:
+          type: string
+        playDialtone:
+          type: boolean
+        ringingTimeout:
+          type: integer
+          minimum: 1
+          maximum: 120
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+    Error:
+      type: object
+      required:
+      - error
+      - code
+      properties:
+        error:
+          type: string
+          description: Human-readable message.
+        code:
+          type: string
+          description: Machine-readable code.
+    AgentCallListPage:
+      type: object
+      required:
+      - calls
+      - entries
+      - next_cursor
+      properties:
+        calls:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentCallListEntry'
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentCallListEntry'
+        next_cursor:
+          type: string
+          format: date-time
+          nullable: true
+    PhoneNumberUpdateRequest:
+      type: object
+      properties:
+        direction:
+          $ref: '#/components/schemas/PhoneNumberDirection'
+        dispatchMetadataTemplate:
+          type: object
+          additionalProperties: true
+          nullable: true
+        label:
+          type: string
+          nullable: true
+          maxLength: 120
+        agentId:
+          type: string
+          nullable: true
+    CallTranscriptEntry:
+      type: object
+      required:
+      - id
+      - index
+      - source
+      - text
+      - started_at
+      - metadata
+      properties:
+        id:
+          type: string
+        index:
+          type: integer
+        source:
+          type: string
+          enum:
+          - user
+          - agent
+          - system
+        text:
+          type: string
+        started_at:
+          type: string
+          format: date-time
+        ended_at:
+          type: string
+          format: date-time
+          nullable: true
+        provider:
+          type: string
+          nullable: true
+        model:
+          type: string
+          nullable: true
+        metadata:
+          $ref: '#/components/schemas/JsonObject'
+    CompleteWarmTransferRequest:
+      type: object
+      properties:
+        recipientParticipantIdentity:
+          type: string
+        summary:
+          type: string
+    PhoneNumberKybBusinessProfile:
+      type: object
+      required:
+      - legalName
+      - displayName
+      - entityType
+      - country
+      - website
+      - address
+      - useCase
+      - expectedUsage
+      properties:
+        legalName:
+          type: string
+        displayName:
+          type: string
+        entityType:
+          type: string
+        country:
+          type: string
+        registrationId:
+          type: string
+        website:
+          type: string
+          format: uri
+        address:
+          $ref: '#/components/schemas/JsonObject'
+        useCase:
+          type: string
+        expectedUsage:
+          type: string
+    PhoneNumberKybAuthorizedRepresentative:
+      type: object
+      required:
+      - name
+      - title
+      - email
+      properties:
+        name:
+          type: string
+        title:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          $ref: '#/components/schemas/E164'
+    PhoneNumberKybDraftRequest:
+      type: object
+      required:
+      - businessProfile
+      - authorizedRepresentative
+      properties:
+        businessProfile:
+          $ref: '#/components/schemas/PhoneNumberKybBusinessProfile'
+        authorizedRepresentative:
+          $ref: '#/components/schemas/PhoneNumberKybAuthorizedRepresentative'
+        attestationAccepted:
+          type: boolean
+          default: false
+    VoiceDialRequest:
+      type: object
+      required:
+      - to
+      properties:
+        to:
+          $ref: '#/components/schemas/E164'
+        from:
+          $ref: '#/components/schemas/E164'
+        agentId:
+          type: string
+          description: Persisted agent to run. Required unless `intent` is supplied.
+        intent:
+          $ref: '#/components/schemas/RoutingIntent'
+        constraints:
+          $ref: '#/components/schemas/PipelineConstraints'
+        voice:
+          type: string
+        systemPrompt:
+          type: string
+        firstMessage:
+          type: string
+        llm:
+          $ref: '#/components/schemas/JsonObject'
+        ttsOptions:
+          $ref: '#/components/schemas/JsonObject'
+        sttOptions:
+          $ref: '#/components/schemas/JsonObject'
+        telephony:
+          $ref: '#/components/schemas/TelephonyOptions'
+        metadata:
+          $ref: '#/components/schemas/JsonObject'
+    CallEvent:
+      type: object
+      required:
+      - id
+      - organization_id
+      - provider
+      - event_type
+      - occurred_at
+      - payload
+      - created_at
+      properties:
+        id:
+          type: string
+        session_id:
+          type: string
+          nullable: true
+        organization_id:
+          type: string
+        provider:
+          type: string
+        event_type:
+          type: string
+        status:
+          type: string
+          nullable: true
+        failure_cause:
+          type: string
+          nullable: true
+        sip_status_code:
+          type: integer
+          nullable: true
+        sip_status:
+          type: string
+          nullable: true
+        occurred_at:
+          type: string
+          format: date-time
+        payload:
+          $ref: '#/components/schemas/JsonObject'
+        created_at:
+          type: string
+          format: date-time
+    PhoneNumberCreateRequest:
+      type: object
+      required:
+      - e164
+      properties:
+        e164:
+          $ref: '#/components/schemas/E164'
+        direction:
+          $ref: '#/components/schemas/PhoneNumberDirection'
+        dispatchMetadataTemplate:
+          $ref: '#/components/schemas/JsonObject'
+        label:
+          type: string
+          maxLength: 120
+        agentId:
+          type: string
+    AvailablePhoneNumber:
+      type: object
+      required:
+      - e164
+      - friendlyName
+      - monthlyCostUsd
+      - upfrontCostUsd
+      - features
+      - region
+      properties:
+        e164:
+          $ref: '#/components/schemas/E164'
+        friendlyName:
+          type: string
+        monthlyCostUsd:
+          type: number
+        upfrontCostUsd:
+          type: number
+        features:
+          type: array
+          items:
+            type: string
+        region:
+          $ref: '#/components/schemas/JsonObject'
+    PipelineConstraints:
+      type: object
+      properties:
+        allowedProviders:
+          type: object
+          description: Restrict candidate pool per modality. Router still ranks by score. Each entry is either `"<vendor>"` (vendor wildcard — allow any model from that vendor) or `"<vendor>:<model>"` (allow only that specific model). Failover stays active across all entries in the layer.
+          properties:
+            stt:
+              type: array
+              items:
+                type: string
+                description: Allowed STT provider entry. Either a vendor id (e.g. `"deepgram"` — any Deepgram model) or `"<vendor>:<model>"` (e.g. `"deepgram:nova-3"` — only Nova-3, no fallback to other Deepgram models within the vendor). Both forms can be mixed in the same array.
+                examples:
+                - deepgram
+                - deepgram:nova-3
+                - assemblyai
+            llm:
+              type: array
+              items:
+                type: string
+                description: Allowed LLM provider entry. Either a vendor id (e.g. `"openai"` — any OpenAI model) or `"<vendor>:<model>"` (e.g. `"openai:gpt-5"` — only that model). Both forms can be mixed in the same array.
+                examples:
+                - openai
+                - openai:gpt-5
+                - anthropic
+            tts:
+              type: array
+              items:
+                type: string
+                description: Allowed TTS provider entry. Either a vendor id (e.g. `"elevenlabs"` — any ElevenLabs model) or `"<vendor>:<model>"` (e.g. `"elevenlabs:eleven_flash_v2_5"` — only that model). Both forms can be mixed in the same array.
+                examples:
+                - elevenlabs
+                - elevenlabs:eleven_flash_v2_5
+                - cartesia
+            s2s:
+              type: array
+              items:
+                type: string
+                description: Allowed S2S provider entry. Either a vendor id (e.g. `"openai"` — any OpenAI realtime model) or `"<vendor>:<model>"` (e.g. `"openai:gpt-realtime"` — only that model). Both forms can be mixed in the same array.
+                examples:
+                - openai
+                - openai:gpt-realtime
+    PhoneNumberKybSubmission:
+      type: object
+      required:
+      - id
+      - organizationId
+      - status
+      - attestationAccepted
+      - createdAt
+      - updatedAt
+      properties:
+        id:
+          type: string
+        organizationId:
+          type: string
+        status:
+          type: string
+          enum:
+          - draft
+          - submitted
+          - approved
+          - rejected
+          - revoked
+        businessProfile:
+          $ref: '#/components/schemas/PhoneNumberKybBusinessProfile'
+        authorizedRepresentative:
+          $ref: '#/components/schemas/PhoneNumberKybAuthorizedRepresentative'
+        attestationAccepted:
+          type: boolean
+        attestedAt:
+          type: string
+          format: date-time
+          nullable: true
+        submittedAt:
+          type: string
+          format: date-time
+          nullable: true
+        rejectionReason:
+          type: string
+          nullable: true
+        slackNotificationStatus:
+          type: string
+          enum:
+          - not_queued
+          - queued
+          - enqueue_failed
+        slackNotificationJobId:
+          type: string
+          nullable: true
+        slackNotificationError:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    JsonObject:
+      type: object
+      additionalProperties: true
+    ScheduledCallbacksResponse:
+      type: object
+      required:
+      - callbacks
+      properties:
+        callbacks:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScheduledCallback'
+    FinalizeCallReportRequest:
+      type: object
+      properties:
+        forceAnalysis:
+          type: boolean
+        retryWebhook:
+          type: boolean
     CallReport:
       type: object
       required:
@@ -1588,89 +1671,6 @@ components:
         updated_at:
           type: string
           format: date-time
-    PhoneNumberDirection:
-      type: string
-      enum:
-      - inbound
-      - outbound
-      - both
-    VoiceDialRequest:
-      type: object
-      required:
-      - to
-      properties:
-        to:
-          $ref: '#/components/schemas/E164'
-        from:
-          $ref: '#/components/schemas/E164'
-        agentId:
-          type: string
-          description: Persisted agent to run. Required unless `intent` is supplied.
-        intent:
-          $ref: '#/components/schemas/RoutingIntent'
-        constraints:
-          $ref: '#/components/schemas/PipelineConstraints'
-        voice:
-          type: string
-        systemPrompt:
-          type: string
-        firstMessage:
-          type: string
-        llm:
-          $ref: '#/components/schemas/JsonObject'
-        ttsOptions:
-          $ref: '#/components/schemas/JsonObject'
-        sttOptions:
-          $ref: '#/components/schemas/JsonObject'
-        telephony:
-          $ref: '#/components/schemas/TelephonyOptions'
-        metadata:
-          $ref: '#/components/schemas/JsonObject'
-    BlindTransferRequest:
-      type: object
-      required:
-      - to
-      properties:
-        to:
-          type: string
-        participantIdentity:
-          type: string
-        playDialtone:
-          type: boolean
-        ringingTimeout:
-          type: integer
-          minimum: 1
-          maximum: 120
-        headers:
-          type: object
-          additionalProperties:
-            type: string
-    VoiceDialResponse:
-      type: object
-      required:
-      - sessionId
-      - callControlId
-      - roomName
-      - status
-      - to
-      - from
-      properties:
-        sessionId:
-          type: string
-        callControlId:
-          type: string
-          description: LiveKit SIP participant identity for the outbound leg.
-        roomName:
-          type: string
-        status:
-          type: string
-          enum:
-          - dialing
-          - dialing-stub
-        to:
-          $ref: '#/components/schemas/E164'
-        from:
-          $ref: '#/components/schemas/E164'
   responses:
     ValidationError:
       description: Request body or query parameters failed validation.

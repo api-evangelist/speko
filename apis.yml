@@ -159,6 +159,8 @@ apis:
   - type: Webhooks
     url: asyncapi/speko-webhooks.yml
 common:
+- type: Plans
+  url: plans/speko-plans-pricing.yml
 - type: Website
   url: https://speko.dev
 - type: Overlay

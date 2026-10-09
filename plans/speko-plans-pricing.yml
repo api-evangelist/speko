@@ -1,0 +1,89 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-07'
+method: searched
+source: https://speko.ai/pricing
+sources:
+- https://speko.ai/pricing
+provenance:
+  tool: all/0-working/economics/harvest_pricing.py
+  run: 20261007T104522
+  grounding: every price_text was found verbatim in the fetched page text
+audience: developer-api
+pricing_basis: usage-other
+delivery:
+  delivery: managed
+  method: page
+  read: '2026-10-07'
+published: true
+note: Per-minute voice usage pricing plus a 5% markup routing option; model rate boards cited (STT $/minute,
+  LLM $/M output tokens, TTS $/M characters). Enterprise is custom.
+plan_count: 4
+currency: USD
+plans:
+- name: Router
+  price_text: +5% on the provider's rate
+  price: 5
+  period: per-use
+  unit: percent on provider rate
+  included_quota: 'Speech-to-text, LLM, TTS: The provider''s published rate; Measured selection and pre-response
+    failover; Public preview; Email support; No SLA during preview; No commitment'
+- name: Speko infra
+  price_text: $0.09 per minute
+  price: 0.09
+  currency: USD
+  period: per-use
+  unit: minute
+  included_quota: Speech-to-text, LLM, TTS included; Measured selection and pre-response failover; Public
+    preview; Email support
+- name: Enterprise
+  price_text: Custom locked for the term
+  period: none
+  included_quota: Included STT/LLM/TTS; plus deployment reviews; access by contract; dedicated support;
+    SLA in the contract; committed monthly minimum
+- name: Signup credit
+  price_text: $10 in signup credit applies to every account.
+  price: 10
+  currency: USD
+  period: one-time
+  unit: account credit
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - hybrid
+  - subscription
+  units:
+  - compute
+  - credit
+  plans:
+  - name: Router
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - other
+  - name: Speko infra
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - compute
+    periods:
+    - other
+  - name: Enterprise
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - none
+  - name: Signup credit
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - credit
+    periods:
+    - one-time

@@ -204,31 +204,33 @@ components:
                 - elevenlabs:eleven_flash_v2_5
                 - cartesia
               description: Allowed TTS provider entries. Empty / absent = no constraint.
-    CreateAgentRequest:
+    AgentLlmOptions:
+      type: object
+      description: Optional LLM tuning defaults stored on an agent. Strict object — only these three keys are accepted.
+      additionalProperties: false
+      properties:
+        temperature:
+          type: number
+          minimum: 0
+          maximum: 2
+        maxTokens:
+          type: integer
+          minimum: 1
+        model:
+          type: string
+          description: Pin a specific LLM model id. When omitted, the router picks per intent.
+    Error:
       type: object
       required:
-      - name
-      - systemPrompt
-      - intent
+      - error
+      - code
       properties:
-        name:
+        error:
           type: string
-          minLength: 1
-          maxLength: 120
-          description: Human-readable display name. Does not need to be unique — agents are identified by `id`.
-        systemPrompt:
+          description: Human-readable message.
+        code:
           type: string
-          minLength: 1
-          description: Initial agent instructions used as the session-level `systemPrompt` default.
-        voice:
-          type: string
-          description: Default TTS voice id. Omit to let the router pick per provider.
-        intent:
-          $ref: '#/components/schemas/AgentIntent'
-        llmOptions:
-          $ref: '#/components/schemas/AgentLlmOptions'
-        stackPreferences:
-          $ref: '#/components/schemas/AgentStackPreferences'
+          description: Machine-readable code.
     Agent:
       type: object
       description: Reusable voice persona — `systemPrompt` + optional `voice` + routing `intent` defaults, plus optional `llmOptions`. Pass the `id` as `agentId` on `POST /v1/sessions` to seed a session from this agent.
@@ -284,33 +286,6 @@ components:
           - $ref: '#/components/schemas/AgentStackPreferences'
           - type: 'null'
           description: Per-agent stack preferences. `null` when the agent has no preferences set.
-    AgentLlmOptions:
-      type: object
-      description: Optional LLM tuning defaults stored on an agent. Strict object — only these three keys are accepted.
-      additionalProperties: false
-      properties:
-        temperature:
-          type: number
-          minimum: 0
-          maximum: 2
-        maxTokens:
-          type: integer
-          minimum: 1
-        model:
-          type: string
-          description: Pin a specific LLM model id. When omitted, the router picks per intent.
-    Error:
-      type: object
-      required:
-      - error
-      - code
-      properties:
-        error:
-          type: string
-          description: Human-readable message.
-        code:
-          type: string
-          description: Machine-readable code.
     UpdateAgentRequest:
       type: object
       description: Partial update — every field is optional. Only supplied keys are written.
@@ -331,29 +306,32 @@ components:
           $ref: '#/components/schemas/AgentLlmOptions'
         stackPreferences:
           $ref: '#/components/schemas/AgentStackPreferences'
+    CreateAgentRequest:
+      type: object
+      required:
+      - name
+      - systemPrompt
+      - intent
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+          description: Human-readable display name. Does not need to be unique — agents are identified by `id`.
+        systemPrompt:
+          type: string
+          minLength: 1
+          description: Initial agent instructions used as the session-level `systemPrompt` default.
+        voice:
+          type: string
+          description: Default TTS voice id. Omit to let the router pick per provider.
+        intent:
+          $ref: '#/components/schemas/AgentIntent'
+        llmOptions:
+          $ref: '#/components/schemas/AgentLlmOptions'
+        stackPreferences:
+          $ref: '#/components/schemas/AgentStackPreferences'
   responses:
-    AgentDeleteConflict:
-      description: The organization's only remaining agent cannot be deleted.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            default:
-              value:
-                error: Cannot delete the only agent in this organization
-                code: LAST_AGENT
-    Unauthorized:
-      description: Missing or invalid bearer token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            default:
-              value:
-                error: Unauthorized
-                code: UNAUTHORIZED
     ValidationError:
       description: Request body or query parameters failed validation.
       content:
@@ -365,6 +343,28 @@ components:
               value:
                 error: Invalid request body
                 code: VALIDATION_ERROR
+    Unauthorized:
+      description: Missing or invalid bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              value:
+                error: Unauthorized
+                code: UNAUTHORIZED
+    AgentDeleteConflict:
+      description: The organization's only remaining agent cannot be deleted.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              value:
+                error: Cannot delete the only agent in this organization
+                code: LAST_AGENT
     AgentNotFound:
       description: No agent with this id exists in the authenticated organization.
       content:

@@ -64,6 +64,139 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Speko is a company surfaced as a portfolio company of y-combinator and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+Speko is a voice-AI gateway - "one API for the whole voice stack." It continuously benchmarks speech-to-text, LLM, and text-to-speech providers and routes every call to the best provider for your language, latency, and cost intent, with transparent server-side failover. Developers ship voice agents in minutes over one REST API (no provider keys required, or bring your own), deploying to phone numbers, web widgets, or one-shot transcribe/synthesize/ complete calls. Speko is a Y Combinator (S26) company based in San Francisco, founded by Beknazar Abdikamalov. The platform advertises SOC 2 Type II, HIPAA, and GDPR posture and ships TypeScript and Python SDKs, a browser SDK, a LiveKit adapter, and a hosted MCP server.
 
-Backed by: y-combinator
+**Areas:** Voice · Voice AI · Speech-to-Text · Text-to-Speech · LLM · Telephony · API Gateway · Conversational AI · Developer Tools · AI Infrastructure
+
+## Speko on APIs.io
+
+Everything profiled for Speko is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/speko/](https://apis.io/providers/speko/)** — or go straight to one of the APIs or properties below.
+
+### APIs (4)
+
+- [Speko Agents API](https://apis.io/apis/speko/speko-agents-api/) — The Agents API from Speko — 2 operation(s) for agents.
+- [Speko Providers API](https://apis.io/apis/speko/speko-providers-api/) — The Providers API from Speko — 1 operation(s) for providers.
+- [Speko Telephony API](https://apis.io/apis/speko/speko-telephony-api/) — The Telephony API from Speko — 22 operation(s) for telephony.
+- [Speko Voice API](https://apis.io/apis/speko/speko-voice-api/) — The Voice API from Speko — 8 operation(s) for voice.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Speko Webhooks](https://apis.io/asyncapis/speko/speko-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [speko](https://apis.io/servers/speko/speko/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Speko Agentic Access](https://apis.io/agentic-access/speko/speko-agentic-access/)
+
+#### Collections (4)
+
+Postman and Open Collection request collections.
+
+- [Speko Agents API](https://apis.io/collections/speko/open-speko-agents-api/)
+- [Speko Agents Providers API](https://apis.io/collections/speko/open-speko-providers-api/)
+- [Speko Agents Telephony API](https://apis.io/collections/speko/open-speko-telephony-api/)
+- [Speko Agents Voice API](https://apis.io/collections/speko/open-speko-voice-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Speko Openapi Overlay](https://apis.io/overlays/speko/speko-openapi-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Speko Authentication](https://apis.io/security/speko/speko-authentication/)
+- [Speko Domain Security](https://apis.io/security/speko/speko-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Speko Plans Pricing](https://apis.io/plans/speko/speko-plans-pricing/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://speko.dev)
+- [Documentation](https://docs.speko.dev)
+- [Getting started](https://docs.speko.dev/quickstart)
+- [API reference](https://docs.speko.dev/api-reference/introduction)
+- [Pricing](https://speko.ai/pricing)
+- [Sign up](https://platform.speko.dev/sign-in)
+- [Blog](https://speko.ai/blog)
+- [Compliance](https://speko.ai/)
+- [Terms of service](https://speko.ai/terms-of-service)
+- [Privacy policy](https://speko.ai/privacy-policy)
+- [GitHub](https://github.com/SpekoAI)
+- [Status](https://status.speko.ai)
+
+## API Evangelist rating
+
+**Kin Score 56.5** — strong · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 61.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 26.3 |
+| Developer ergonomics | 66.1 |
+| Access clarity | 71.1 |
+
+**Agent readiness 61.0** — agent-native
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | documented (partial credit) |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | — |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | partial |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 27.3** — AI & Biometrics
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/speko/](https://apis.io/providers/speko/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Speko: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/speko/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
